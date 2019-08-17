@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% from "macros.html" import post_article %}
+
+{% set cover_image = "ktk.jpg" %}
+
+{% block body %}
+  {% for post in posts %}
+    {% if is_event(post) %}
+      {{ event_article(post, True) }}
+    {% else %}
+      {{ post_article(post, True) }}
+    {% endif %}
+  {% endfor %}
+{% endblock %}

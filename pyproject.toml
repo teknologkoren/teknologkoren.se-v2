@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "teknologkoren.se-v2"
+version = "0.1.0"
+description = ""
+authors = ["Rupus Reinefjord <rupus@reinefjord.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+flask = "^1.1"
+flask-sqlalchemy = "^2.4"
+flask-bcrypt = "^0.7.1"
+flask-wtf = "^0.14.2"
+slugify = "^0.0.1"
+markdown = "^3.1"
+phonenumbers = "^8.10"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

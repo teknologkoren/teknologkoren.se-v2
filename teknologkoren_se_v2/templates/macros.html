@@ -1,0 +1,134 @@
+{% macro post_article(post, overview, classes) %}
+<article class="{{ classes }}">
+  <header>
+    <h1>
+      {% if overview %}
+      <a href="{{ url_for('blog.view_post', post_id=post.id, slug=post.slug) }}" class="inverted-link">{{ post.title }}</a>
+      {% else %}
+      {% if not post.published %}[Not published] {% endif %}{{ post.title }}
+      {% endif %}
+    </h1>
+    {{ _('Published') }}
+    <time class="pubdate" datetime="{{ format_datetime(post.timestamp, "yyyy-MM-ddTHH:mmZ") }}">
+      {{ format_date(post.timestamp, "dd MMMM yyyy") }}
+    </time>
+  </header>
+  {% if post.image %}
+
+  {% set img_class='post-image' %}
+
+  {% if overview %}
+  {% set img_class = img_class + ' truncate' %}
+  {% endif %}
+
+  <img class="{{ img_class }}"
+      srcset="{{ image_dest() }}img600/{{ post.image }},
+              {{ image_dest() }}img800/{{ post.image }} 1.5x,
+              {{ image_dest() }}img1200/{{ post.image }} 2x"
+      src="{{ image_dest() }}img600/{{ post.image }}"
+      alt="">
+
+  {% endif %}
+
+  {{ post.content_to_html(post.content)|safe }}
+
+
+  {% set readmore = post.readmore %}
+  {% if readmore %}
+
+  {% if overview %}
+  <p><a href="{{ url_for('blog.view_post', post_id=post.id, slug=post.slug) }}">{{ _('Read more') }}</a></p>
+  {% else %}
+  {{ post.content_to_html(readmore)|safe }}
+  {% endif %}
+
+  {% endif %}
+
+</article>
+{% endmacro %}
+
+{% macro event_article(event, overview, classes) %}
+<article class="{{ classes }}">
+  <header>
+    <h1>
+      {% if overview %}
+      <a href="{{ url_for('events.view_event', event_id=event.id, slug=event.slug) }}" class="inverted-link">{{ event.title }}</a>
+      {% else %}
+      {% if not event.published %}[Not published] {% endif %}{{ event.title }}
+      {% endif %}
+    </h1>
+    {{ _('Published') }}
+    <time class="pubdate" datetime="{{ format_datetime(event.timestamp, "yyyy-MM-ddTHH:mmZ") }}">
+      {{ format_date(event.timestamp, "dd MMMM yyyy") }}
+    </time>
+  </header>
+  {% if event.image %}
+  <a class="event-image" href="{{ image_dest() }}img1200/{{ event.image }}">
+    <img srcset="{{ image_dest() }}img200/{{ event.image }},
+                 {{ image_dest() }}img400/{{ event.image }} 2x"
+         src="{{ image_dest() }}img200/{{ event.image }}"
+         alt="">
+  </a>
+  {% endif %}
+  {{ event.content_to_html(event.content)|safe }}
+
+  {% set readmore = event.readmore %}
+  {% if readmore and overview %}
+  <p><a href="{{ url_for('events.view_event', event_id=event.id, slug=event.slug) }}">{{ _('Read more') }}</a></p>
+  {% endif %}
+
+  <dl class="event-detail">
+    <dt>{{ _('Time') }}:</dt>
+    <dd>
+      <time datetime="{{ format_datetime(event.start_time, "yyyy-MM-ddTHH:mmZ") }}">
+        {{ format_datetime(event.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
+      </time>
+    </dd>
+    <dt>{{ _('Place') }}:</dt>
+    <dd><a href="https://www.google.se/maps/search/{{ event.location|urlencode }}/">{{ event.location }}</a></dd>
+  </dl>
+
+  {% if readmore and not overview %}
+  {{ event.content_to_html(readmore)|safe }}
+  {% endif %}
+
+</article>
+{% endmacro %}
+
+{% macro pager(has_next, page, ascending=False) %}
+<nav class="pager">
+  {% if not reverse %}
+
+  {% if has_next %}
+  <a class="older inverted-link" href="{{ url_for_other_page(page + 1) }}">
+    &larr; {{ _('Older') }}
+  </a>
+  {% endif %}
+
+  {% if page > 1 %}
+  <a class="newer inverted-link" href="{{ url_for_other_page(page - 1) }}">
+    {{ _('Newer') }} &rarr;
+  </a>
+  {% endif %}
+
+  {% else %}
+
+  {% if page > 1 %}
+  <a class="older inverted-link" href="{{ url_for_other_page(page - 1) }}">
+    &larr; {{ _('Previous') }}
+  </a>
+  {% endif %}
+
+  {% if has_next %}
+  <a class="newer inverted-link" href="{{ url_for_other_page(page + 1) }}">
+    {{ _('Next') }} &rarr;
+  </a>
+  {% endif %}
+
+  {% endif %}
+</nav>
+{% endmacro %}
+
+{% macro img(image, size, class) %}
+<img {% if class %}class="{{ class }}"{% endif %} src="{{ image_dest() }}img{{ size }}/{{ image }}" alt="">
+{% endmacro %}
