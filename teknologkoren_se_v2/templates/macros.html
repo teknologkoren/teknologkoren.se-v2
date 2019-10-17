@@ -3,14 +3,12 @@
   <header>
     <h1>
       {% if overview %}
-      <a href="{{ url_for('blog.view_post', post_id=post.id, slug=post.slug) }}" class="inverted-link">{{ post.title }}</a>
-      {% else %}
-      {% if not post.published %}[Not published] {% endif %}{{ post.title }}
+      <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.content.slug) }}" class="inverted-link">{{ post.content.title }}</a>
       {% endif %}
     </h1>
     {{ _('Published') }}
-    <time class="pubdate" datetime="{{ format_datetime(post.timestamp, "yyyy-MM-ddTHH:mmZ") }}">
-      {{ format_date(post.timestamp, "dd MMMM yyyy") }}
+    <time class="pubdate" datetime="{{ format_datetime(post.published, "yyyy-MM-ddTHH:mmZ") }}">
+      {{ format_date(post.published, "dd MMMM yyyy") }}
     </time>
   </header>
   {% if post.image %}
@@ -30,20 +28,7 @@
 
   {% endif %}
 
-  {{ post.content_to_html(post.content)|safe }}
-
-
-  {% set readmore = post.readmore %}
-  {% if readmore %}
-
-  {% if overview %}
-  <p><a href="{{ url_for('blog.view_post', post_id=post.id, slug=post.slug) }}">{{ _('Read more') }}</a></p>
-  {% else %}
-  {{ post.content_to_html(readmore)|safe }}
-  {% endif %}
-
-  {% endif %}
-
+  {{ post.content.html|safe }}
 </article>
 {% endmacro %}
 
@@ -52,14 +37,12 @@
   <header>
     <h1>
       {% if overview %}
-      <a href="{{ url_for('events.view_event', event_id=event.id, slug=event.slug) }}" class="inverted-link">{{ event.title }}</a>
-      {% else %}
-      {% if not event.published %}[Not published] {% endif %}{{ event.title }}
+      <a href="{{ url_for('public.view_post', post_id=event.id, slug=event.content.slug) }}" class="inverted-link">{{ event.content.title }}</a>
       {% endif %}
     </h1>
     {{ _('Published') }}
-    <time class="pubdate" datetime="{{ format_datetime(event.timestamp, "yyyy-MM-ddTHH:mmZ") }}">
-      {{ format_date(event.timestamp, "dd MMMM yyyy") }}
+    <time class="pubdate" datetime="{{ format_datetime(event.published, "yyyy-MM-ddTHH:mmZ") }}">
+      {{ format_date(event.published, "dd MMMM yyyy") }}
     </time>
   </header>
   {% if event.image %}
@@ -70,27 +53,19 @@
          alt="">
   </a>
   {% endif %}
-  {{ event.content_to_html(event.content)|safe }}
 
-  {% set readmore = event.readmore %}
-  {% if readmore and overview %}
-  <p><a href="{{ url_for('events.view_event', event_id=event.id, slug=event.slug) }}">{{ _('Read more') }}</a></p>
-  {% endif %}
+  {{ event.content.html|safe }}
 
   <dl class="event-detail">
     <dt>{{ _('Time') }}:</dt>
     <dd>
-      <time datetime="{{ format_datetime(event.start_time, "yyyy-MM-ddTHH:mmZ") }}">
-        {{ format_datetime(event.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
+      <time datetime="{{ format_datetime(event.content.start_time, "yyyy-MM-ddTHH:mmZ") }}">
+        {{ format_datetime(event.content.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
       </time>
     </dd>
     <dt>{{ _('Place') }}:</dt>
-    <dd><a href="https://www.google.se/maps/search/{{ event.location|urlencode }}/">{{ event.location }}</a></dd>
+    <dd><a href="{{ event.content.location_link }}">{{ event.location }}</a></dd>
   </dl>
-
-  {% if readmore and not overview %}
-  {{ event.content_to_html(readmore)|safe }}
-  {% endif %}
 
 </article>
 {% endmacro %}

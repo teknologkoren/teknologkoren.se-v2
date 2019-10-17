@@ -1,7 +1,7 @@
 translations = {
     'no translation': {
-        'en': "No translation available.",
-        'sv': "Översättning saknas.",
+        'en': "[No translation available.]",
+        'sv': "[Översättning saknas.]",
     },
     'news feed': {
         'en': "News feed",
@@ -29,7 +29,7 @@ translations = {
     },
     'nav-apply': {
         'en': "Apply",
-        'sv': "Ansök",
+        'sv': "Gå med",
     },
     'nav-contact': {
         'en': "Contact",

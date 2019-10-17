@@ -17,27 +17,17 @@ class Post(db.Model):
 
     @property
     def content(self):
-        """Return localized content.
-        If not available, prepend notice about missing translation.
-        """
-        not_available = get_string('no translation')
-        lang = get_locale().language
-
-        if lang == 'sv':
-            return self.content_sv or not_available + self.content_en
-
-        if lang == 'en':
-            return self.content_en or not_available + self.content_sv
+        content = (PostContent.query
+                   .filter(PostContent.post_id == self.id)
+                   .order_by(PostContent.timestamp.desc())
+                   .first()
+                   )
+        return content
 
     @property
     def url(self):
         """Return the path to the post."""
         return flask.url_for('public.post', id=self.id)
-
-    @staticmethod
-    def content_to_html(content):
-        """Return content formatted as HTML."""
-        return markdown.markdown(content)
 
     def __str__(self):
         """String representation of the post."""
@@ -46,7 +36,6 @@ class Post(db.Model):
 
 class PostContent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
     title_sv = db.Column(db.String(100), nullable=False)
     title_en = db.Column(db.String(100), nullable=True)
     slug_sv = db.Column(db.String(200), nullable=False)
@@ -64,6 +53,48 @@ class PostContent(db.Model):
         'polymorphic_on': type
     }
 
+    @property
+    def title(self):
+        lang = get_locale()
+        print(self.title_sv)
+
+        if lang == 'sv':
+            return self.title_sv
+
+        if lang == 'en':
+            return self.title_en
+
+        flask.abort(500)
+
+    @property
+    def text(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.text_sv
+
+        if lang == 'en':
+            return (self.content.text_en
+                    or get_string('no translation') + self.text_sv)
+
+        flask.abort(500)
+
+    @property
+    def html(self):
+        return markdown.markdown(self.text)
+
+    @property
+    def slug(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.slug_sv
+
+        if lang == 'en':
+            return self.slug_en or self.slug_sv
+
+        flask.abort(500)
+
 
 class EventContent(PostContent):
     # Tell flask-sqlalchemy not to create a table for this class.
@@ -72,9 +103,21 @@ class EventContent(PostContent):
     __table_name__ = None
 
     start_time = db.Column(db.DateTime)
-    location_sv = db.Column(db.String(100), nullable=False)
-    location_en = db.Column(db.String(100), nullable=False)
+    location_sv = db.Column(db.String(100))
+    location_en = db.Column(db.String(100))
     location_link = db.Column(db.String(500), nullable=True)
+
+    @property
+    def location(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.location_sv
+
+        if lang == 'en':
+            return self.location_en or self.location_en
+
+        flask.abort(500)
 
     __mapper_args__ = {
         'polymorphic_identity': 'event_content'
@@ -100,10 +143,9 @@ def create_slug_en(target, value, oldvalue, initiator):
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(256), nullable=False)
-
-    post_id = db.Column(db.Integer,
-                        db.ForeignKey('post_content.id'),
+    post_id = db.Column(db.Integer, db.ForeignKey('post_content.id'),
                         nullable=False)
+
     post = db.relationship('PostContent',
                            foreign_keys=post_id,
                            backref='images')

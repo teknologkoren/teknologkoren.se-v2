@@ -33,8 +33,6 @@ def fix_missing_lang_code():
         flask.current_app.config['SERVER_NAME']
     )
 
-    print(flask.request.path)
-
     # Get whatever lang get_locale() decides (cookie or, if no cookie,
     # default), and prepend it to the requested path.
     proposed_lang = get_locale()

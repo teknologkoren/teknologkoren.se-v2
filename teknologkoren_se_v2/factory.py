@@ -61,11 +61,8 @@ def register_cli(app):
 
 def populate_testdb():
     import datetime
+    import random
     from teknologkoren_se_v2 import models
-
-    with open('lorem.txt') as lorem:
-        def 
-
 
     contacts = [
         models.Contact(
@@ -123,12 +120,94 @@ def populate_testdb():
     for contact in contacts:
         models.db.session.add(contact)
 
-    posts = [
-        models.Post(
-            title="A test post",
-        )
-    ]
+    with open('teknologkoren_se_v2/lorem_lines.txt') as f:
+        lorem_lines = [l.strip() for l in f.readlines()]
 
+    with open('teknologkoren_se_v2/lorem_paragraphs.txt') as f:
+        lorem_paragraphs = [l.strip() for l in f.readlines()]
+
+    def lipsum_line():
+        return random.choice(lorem_lines)
+
+    def lipsum_paragraphs(n):
+        return '\n\n'.join(random.sample(lorem_paragraphs, n))
+
+    post_contents = []
+    for i in range(5):
+        text_len = random.choice([1]*2 + [2]*3 + [3])
+        timestamp = (
+            datetime.datetime.utcnow()
+            - datetime.timedelta(days=random.randint(-30, 0))
+        )
+        post_contents.append(
+            models.PostContent(
+                title_sv=lipsum_line().replace('.', ''),
+                title_en=lipsum_line().replace('.', ''),
+                text_sv=lipsum_paragraphs(text_len),
+                text_en=lipsum_paragraphs(text_len),
+                timestamp=timestamp
+            )
+        )
+
+    event_contents = []
+    for i in range(6):
+        timestamp = (
+            datetime.datetime.utcnow()
+            - datetime.timedelta(days=random.randint(-30, 0))
+        )
+
+        if 6 - i > 2:
+            start_days = random.randint(-120, -1)
+        else:
+            start_days = random.randint(1, 90)
+
+        start_time = timestamp + datetime.timedelta(days=start_days)
+
+        text_len = random.choice([1]*2 + [2]*3 + [3])
+
+        location = lipsum_line().replace('.', '')
+
+        event_contents.append(
+            models.EventContent(
+                title_sv=lipsum_line().replace('.', ''),
+                title_en=lipsum_line().replace('.', ''),
+                text_sv=lipsum_paragraphs(text_len),
+                text_en=lipsum_paragraphs(text_len),
+                timestamp=timestamp,
+                start_time=start_time,
+                location_sv=location,
+                location_en=location,
+                location_link=(
+                    "https://{}.dev/".format(
+                        lipsum_line()
+                        .replace(' ', '')
+                        .replace(',', '.')
+                        .replace('.', '')
+                        .lower()
+                    )
+                )
+            )
+        )
+
+    for post_content in post_contents:
+        post = models.Post(published=post_content.timestamp, is_event=False)
+        models.db.session.add(post)
+        models.db.session.commit()
+
+        post_content.post_id = post.id
+        models.db.session.add(post_content)
+        models.db.session.commit()
+
+    for event_content in event_contents:
+        post = models.Post(published=post_content.timestamp, is_event=True)
+        models.db.session.add(post)
+        models.db.session.commit()
+
+        event_content.post_id = post.id
+        models.db.session.add(event_content)
+        models.db.session.commit()
+
+    models.db.session.commit()
 
 
 def init_db(app):
@@ -146,10 +225,14 @@ def setup_flask_uploads(app):
 
 
 def setup_locale(app):
+    from babel.dates import format_date, format_datetime, format_time
     from teknologkoren_se_v2 import locale
     app.jinja_env.globals['locale'] = locale
     app.jinja_env.globals['_'] = locale.get_string
     app.jinja_env.globals['url_for_lang'] = locale.url_for_lang
+    app.jinja_env.globals['format_date'] = format_date
+    app.jinja_env.globals['format_datetime'] = format_datetime
+    app.jinja_env.globals['format_time'] = format_time
 
     app.before_request(locale.fix_missing_lang_code)
 
