@@ -76,4 +76,11 @@
       {% block body %}{% endblock %}
     </main>
   </body>
+  <footer>
+    <div class="wrapper">
+      <div class="dummy"></div>
+      <img class="footer-img" src="{{ url_for('static', filename='images/logo.svg') }}" alt="">
+      <div class="admin"><a href="#">{{ _('admin') }}</a></div>
+    </div>
+  </footer>
 </html>

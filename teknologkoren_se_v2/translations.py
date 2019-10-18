@@ -7,6 +7,10 @@ translations = {
         'en': "News feed",
         'sv': "Nyhetsflöde",
     },
+    'admin': {
+        'en': "Log in",
+        'sv': "Logga in",
+    },
 
     # Top nav
     'change language': {
