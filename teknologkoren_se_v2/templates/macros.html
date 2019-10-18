@@ -6,7 +6,7 @@
       <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.content.slug) }}" class="inverted-link">{{ post.content.title }}</a>
       {% endif %}
     </h1>
-    {{ _('Published') }}
+    {{ _('published') }}
     <time class="pubdate" datetime="{{ format_datetime(post.published, "yyyy-MM-ddTHH:mmZ") }}">
       {{ format_date(post.published, "dd MMMM yyyy") }}
     </time>
@@ -40,7 +40,7 @@
       <a href="{{ url_for('public.view_post', post_id=event.id, slug=event.content.slug) }}" class="inverted-link">{{ event.content.title }}</a>
       {% endif %}
     </h1>
-    {{ _('Published') }}
+    {{ _('published') }}
     <time class="pubdate" datetime="{{ format_datetime(event.published, "yyyy-MM-ddTHH:mmZ") }}">
       {{ format_date(event.published, "dd MMMM yyyy") }}
     </time>
@@ -57,50 +57,36 @@
   {{ event.content.html|safe }}
 
   <dl class="event-detail">
-    <dt>{{ _('Time') }}:</dt>
+    <dt>{{ _('time') }}:</dt>
     <dd>
       <time datetime="{{ format_datetime(event.content.start_time, "yyyy-MM-ddTHH:mmZ") }}">
         {{ format_datetime(event.content.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
       </time>
     </dd>
-    <dt>{{ _('Place') }}:</dt>
-    <dd><a href="{{ event.content.location_link }}">{{ event.location }}</a></dd>
+    <dt>{{ _('place') }}:</dt>
+    <dd><a href="{{ event.content.location_link }}">{{ event.content.location }}</a></dd>
   </dl>
 
 </article>
 {% endmacro %}
 
-{% macro pager(has_next, page, ascending=False) %}
+{% macro pager(pagination, prevnext=False) %}
 <nav class="pager">
-  {% if not reverse %}
+  <a class="left inverted-link{% if not pagination.has_prev %} hidden{% endif %}"
+     href="{{ url_for_other_page(pagination.prev_num) }}">
+    &larr; {{ _('newer') if not prevnext else _('next') }}
+  </a>
 
-  {% if has_next %}
-  <a class="older inverted-link" href="{{ url_for_other_page(page + 1) }}">
-    &larr; {{ _('Older') }}
+  {% if pagination.page != 1 %}
+  <a class="center inverted-link" href="{{ url_for_other_page(1) }}">
+    {{ _('home') }}
   </a>
   {% endif %}
 
-  {% if page > 1 %}
-  <a class="newer inverted-link" href="{{ url_for_other_page(page - 1) }}">
-    {{ _('Newer') }} &rarr;
+  <a class="right inverted-link{% if not pagination.has_next %} hidden{% endif %}"
+     href="{{ url_for_other_page(pagination.next_num) }}">
+    {{ _('older') if not prevnext else _('previous') }} &rarr;
   </a>
-  {% endif %}
-
-  {% else %}
-
-  {% if page > 1 %}
-  <a class="older inverted-link" href="{{ url_for_other_page(page - 1) }}">
-    &larr; {{ _('Previous') }}
-  </a>
-  {% endif %}
-
-  {% if has_next %}
-  <a class="newer inverted-link" href="{{ url_for_other_page(page + 1) }}">
-    {{ _('Next') }} &rarr;
-  </a>
-  {% endif %}
-
-  {% endif %}
 </nav>
 {% endmacro %}
 

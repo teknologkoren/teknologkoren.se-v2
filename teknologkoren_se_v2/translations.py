@@ -7,6 +7,8 @@ translations = {
         'en': "News feed",
         'sv': "Nyhetsflöde",
     },
+
+    # Top nav
     'change language': {
         'en': "Change language",
         'sv': "Byt språk",
@@ -28,11 +30,49 @@ translations = {
         'sv': "Boka oss",
     },
     'nav-apply': {
-        'en': "Apply",
-        'sv': "Gå med",
+        'en': "Sing with us",
+        'sv': "Sjung med",
     },
     'nav-contact': {
         'en': "Contact",
         'sv': "Kontakt",
+    },
+
+    # Pager
+    'next': {
+        'en': "Next",
+        'sv': "Nästa",
+    },
+    'previous': {
+        'en': "Previous",
+        'sv': "Föregående",
+    },
+    'older': {
+        'en': "Older",
+        'sv': "Äldre",
+    },
+    'newer': {
+        'en': "Newer",
+        'sv': "Nyare",
+    },
+    'home': {
+        'en': "Home",
+        'sv': "Hem",
+    },
+
+    # Posts
+    'published': {
+        'en': "Published",
+        'sv': "Publicerad",
+    },
+
+    # Events
+    'time': {
+        'en': "Time",
+        'sv': "Tid",
+    },
+    'place': {
+        'en': "Place",
+        'sv': "Plats",
     },
 }

@@ -23,13 +23,12 @@ def setup_jinja(app):
 def index(page):
     posts = (models.Post
              .query
-             .filter(models.Post.published > datetime.datetime.utcnow())
+             .filter(models.Post.published < datetime.datetime.utcnow())
              .order_by(models.Post.published.desc())
              )
 
     pagination = posts.paginate(page, 5)
     return flask.render_template('index.html',
-                                 posts=posts,
                                  pagination=pagination,
                                  page=page)
 

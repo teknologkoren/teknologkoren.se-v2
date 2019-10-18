@@ -56,13 +56,12 @@ class PostContent(db.Model):
     @property
     def title(self):
         lang = get_locale()
-        print(self.title_sv)
 
         if lang == 'sv':
             return self.title_sv
 
         if lang == 'en':
-            return self.title_en
+            return self.title_en or self.title_sv
 
         flask.abort(500)
 
@@ -74,8 +73,8 @@ class PostContent(db.Model):
             return self.text_sv
 
         if lang == 'en':
-            return (self.content.text_en
-                    or get_string('no translation') + self.text_sv)
+            return (self.text_en or
+                    get_string('no translation') + self.text_sv)
 
         flask.abort(500)
 

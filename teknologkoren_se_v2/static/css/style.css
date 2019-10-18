@@ -95,6 +95,15 @@ a:hover {
   padding: .3rem 1rem;
 }
 
+.pager {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pager .hidden {
+  visibility: hidden;
+}
+
 .inline-icon img {
   width: 1rem;
   margin-right: .25rem;
@@ -114,7 +123,7 @@ a:hover {
 }
 
 main {
-  max-width: 50rem;
+  max-width: 40rem;
   margin: 0 auto;
 }
 

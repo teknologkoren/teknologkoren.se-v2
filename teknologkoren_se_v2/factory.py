@@ -137,7 +137,7 @@ def populate_testdb():
         text_len = random.choice([1]*2 + [2]*3 + [3])
         timestamp = (
             datetime.datetime.utcnow()
-            - datetime.timedelta(days=random.randint(-30, 0))
+            - datetime.timedelta(days=random.randint(0, 30))
         )
         post_contents.append(
             models.PostContent(
@@ -153,7 +153,7 @@ def populate_testdb():
     for i in range(6):
         timestamp = (
             datetime.datetime.utcnow()
-            - datetime.timedelta(days=random.randint(-30, 0))
+            - datetime.timedelta(days=random.randint(0, 30))
         )
 
         if 6 - i > 2:
@@ -230,9 +230,18 @@ def setup_locale(app):
     app.jinja_env.globals['locale'] = locale
     app.jinja_env.globals['_'] = locale.get_string
     app.jinja_env.globals['url_for_lang'] = locale.url_for_lang
-    app.jinja_env.globals['format_date'] = format_date
-    app.jinja_env.globals['format_datetime'] = format_datetime
-    app.jinja_env.globals['format_time'] = format_time
+
+    # locale.get_locale() requires an application context, we either
+    # have to run get_locale() in the templates, or use lambdas here.
+    app.jinja_env.globals['format_date'] = (
+        lambda d, f: format_date(d, f, locale=locale.get_locale())
+    )
+    app.jinja_env.globals['format_datetime'] = (
+        lambda d, f: format_datetime(d, f, locale=locale.get_locale())
+    )
+    app.jinja_env.globals['format_time'] = (
+        lambda d, f: format_time(d, f, locale=locale.get_locale())
+    )
 
     app.before_request(locale.fix_missing_lang_code)
 

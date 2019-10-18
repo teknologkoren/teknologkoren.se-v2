@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% from "macros.html" import post_article, event_article %}
+{% from "macros.html" import post_article, event_article, pager %}
 
 {% set cover_image = "ktk.jpg" %}
 
 {% block body %}
-{% for post in posts %}
+{% for post in pagination.items %}
 
 {% if post.is_event %}
 {{ event_article(post, True) }}
@@ -14,4 +14,6 @@
 {% endif %}
 
 {% endfor %}
+
+{{ pager(pagination) }}
 {% endblock %}

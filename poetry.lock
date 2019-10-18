@@ -81,6 +81,19 @@ itsdangerous = ">=0.24"
 
 [[package]]
 category = "main"
+description = "Adds i18n/l10n support to Flask applications"
+name = "flask-babel"
+optional = false
+python-versions = "*"
+version = "0.12.2"
+
+[package.dependencies]
+Babel = ">=2.3"
+Flask = "*"
+Jinja2 = ">=2.5"
+
+[[package]]
+category = "main"
 description = "Brcrypt hashing for Flask."
 name = "flask-bcrypt"
 optional = false
@@ -293,7 +306,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "e48c6eb0371e6aa4caa10709f4ca23adb42400ea71f7929319120bb5f9afea6c"
+content-hash = "886a7fd834f7edba7dcf22aa58c22c5f5ca33a6e6ce0139527a756ea9542b3aa"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -305,6 +318,7 @@ cffi = ["041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774", "046
 click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"]
 colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", "f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"]
 flask = ["13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52", "45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6"]
+flask-babel = ["316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86"]
 flask-bcrypt = ["d71c8585b2ee1c62024392ebdbc447438564e2c8c02b4e57b56a4cafd8d13c5f"]
 flask-sqlalchemy = ["0c9609b0d72871c540a7945ea559c8fdf5455192d2db67219509aed680a3d45a", "8631bbea987bc3eb0f72b1f691d47bd37ceb795e73b59ab48586d76d75a7c605"]
 flask-wtf = ["5d14d55cfd35f613d99ee7cba0fc3fbbe63ba02f544d349158c14ca15561cc36", "d9a9e366b32dcbb98ef17228e76be15702cd2600675668bca23f63a7947fd5ac"]
