@@ -9,7 +9,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  text-decoration-skip: ink;
   margin: 0;
   padding: 0;
 }
@@ -23,12 +22,15 @@ img {
 a {
   color: #316bb1;
 }
+
 a:hover {
   color: #000;
 }
+
 .inverted-link {
   color: #000
 }
+
 .inverted-link:hover {
   color: #316bb1;
 }
@@ -52,11 +54,10 @@ a:hover {
     height: 5rem;
 }
 
-.logo-text h1 {
+.logo-text .name {
     margin: 0;
     line-height: 1.5;
     font-size: 1.8em;
-    font-weight: normal;
 }
 
 .logo .tagline {
@@ -126,6 +127,7 @@ main {
   max-width: 40rem;
   margin: 0 auto;
   margin-bottom: auto;
+  padding: 0 .5rem;
 }
 
 footer {

@@ -38,6 +38,7 @@ def create_app(config=None, instance_config=None):
 
 def register_blueprints(app):
     from teknologkoren_se_v2.views import public#, admin
+    public.init_dynamic_pages()
     app.register_blueprint(public.mod)
     #app.register_blueprint(admin.mod)
 
@@ -117,8 +118,7 @@ def populate_testdb():
         )
     ]
 
-    for contact in contacts:
-        models.db.session.add(contact)
+    models.db.session.add_all(contacts)
 
     with open('teknologkoren_se_v2/lorem_lines.txt') as f:
         lorem_lines = [l.strip() for l in f.readlines()]
@@ -132,10 +132,54 @@ def populate_testdb():
     def lipsum_paragraphs(n):
         return '\n\n'.join(random.sample(lorem_paragraphs, n))
 
+    pages = [
+        {
+            'path': 'om-oss',
+            'heading-sv': "Om oss",
+            'heading-en': "About us"
+        },
+        {
+            'path': 'boka',
+            'heading-sv': "Boka oss",
+            'heading-en': "Hire us"
+        },
+        {
+            'path': 'sjung',
+            'heading-sv': "Sjung med oss",
+            'heading-en': "Sing with us"
+        },
+        {
+            'path': 'lucia',
+            'heading-sv': "Boka luciatåg",
+            'heading-en': "Book a Lucia procession"
+        }
+    ]
+    page_objs = []
+    for page in pages:
+        text_sv = "# {}\n\n{}".format(
+            page['heading-sv'],
+            lipsum_paragraphs(4)
+        )
+        text_en = "# {}\n\n{}".format(
+            page['heading-en'],
+            lipsum_paragraphs(4)
+        )
+        page_objs.append(
+            models.Page(
+                path=page['path'],
+                text_sv=text_sv,
+                text_en=text_en,
+                revision=datetime.datetime.utcnow()
+            )
+        )
+
+    models.db.session.add_all(page_objs)
+    models.db.session.commit()
+
     post_contents = []
     for i in range(5):
         text_len = random.choice([1]*2 + [2]*3 + [3])
-        timestamp = (
+        revision = (
             datetime.datetime.utcnow()
             - datetime.timedelta(days=random.randint(0, 30))
         )
@@ -145,13 +189,13 @@ def populate_testdb():
                 title_en=lipsum_line().replace('.', ''),
                 text_sv=lipsum_paragraphs(text_len),
                 text_en=lipsum_paragraphs(text_len),
-                timestamp=timestamp
+                revision=revision
             )
         )
 
     event_contents = []
     for i in range(6):
-        timestamp = (
+        revision = (
             datetime.datetime.utcnow()
             - datetime.timedelta(days=random.randint(0, 30))
         )
@@ -161,7 +205,7 @@ def populate_testdb():
         else:
             start_days = random.randint(1, 90)
 
-        start_time = timestamp + datetime.timedelta(days=start_days)
+        start_time = revision + datetime.timedelta(days=start_days)
 
         text_len = random.choice([1]*2 + [2]*3 + [3])
 
@@ -173,7 +217,7 @@ def populate_testdb():
                 title_en=lipsum_line().replace('.', ''),
                 text_sv=lipsum_paragraphs(text_len),
                 text_en=lipsum_paragraphs(text_len),
-                timestamp=timestamp,
+                revision=revision,
                 start_time=start_time,
                 location_sv=location,
                 location_en=location,
@@ -190,7 +234,7 @@ def populate_testdb():
         )
 
     for post_content in post_contents:
-        post = models.Post(published=post_content.timestamp, is_event=False)
+        post = models.Post(published=post_content.revision, is_event=False)
         models.db.session.add(post)
         models.db.session.commit()
 
@@ -199,7 +243,7 @@ def populate_testdb():
         models.db.session.commit()
 
     for event_content in event_contents:
-        post = models.Post(published=post_content.timestamp, is_event=True)
+        post = models.Post(published=post_content.revision, is_event=True)
         models.db.session.add(post)
         models.db.session.commit()
 
@@ -225,22 +269,36 @@ def setup_flask_uploads(app):
 
 
 def setup_locale(app):
-    from babel.dates import format_date, format_datetime, format_time
+    from babel.dates import (format_date, format_datetime, format_time,
+                             get_timezone)
     from teknologkoren_se_v2 import locale
     app.jinja_env.globals['locale'] = locale
     app.jinja_env.globals['_'] = locale.get_string
     app.jinja_env.globals['url_for_lang'] = locale.url_for_lang
 
+    cet = get_timezone('Europe/Stockholm')
+
     # locale.get_locale() requires an application context, we either
     # have to run get_locale() in the templates, or use lambdas here.
     app.jinja_env.globals['format_date'] = (
-        lambda d, f: format_date(d, f, locale=locale.get_locale())
+        lambda d, f: format_date(
+            d, f,
+            locale=locale.get_locale()
+        )
     )
     app.jinja_env.globals['format_datetime'] = (
-        lambda d, f: format_datetime(d, f, locale=locale.get_locale())
+        lambda d, f: format_datetime(
+            d, f,
+            tzinfo=cet,
+            locale=locale.get_locale()
+        )
     )
     app.jinja_env.globals['format_time'] = (
-        lambda d, f: format_time(d, f, locale=locale.get_locale())
+        lambda d, f: format_time(
+            d, f,
+            tzinfo=cet,
+            locale=locale.get_locale()
+        )
     )
 
     app.before_request(locale.fix_missing_lang_code)

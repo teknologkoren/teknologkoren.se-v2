@@ -1,11 +1,11 @@
 {% macro post_article(post, overview, classes) %}
 <article class="{{ classes }}">
   <header>
-    <h1>
+    <h2>
       {% if overview %}
       <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.content.slug) }}" class="inverted-link">{{ post.content.title }}</a>
       {% endif %}
-    </h1>
+    </h2>
     {{ _('published') }}
     <time class="pubdate" datetime="{{ format_datetime(post.published, "yyyy-MM-ddTHH:mmZ") }}">
       {{ format_date(post.published, "dd MMMM yyyy") }}
@@ -35,11 +35,11 @@
 {% macro event_article(event, overview, classes) %}
 <article class="{{ classes }}">
   <header>
-    <h1>
+    <h2>
       {% if overview %}
       <a href="{{ url_for('public.view_post', post_id=event.id, slug=event.content.slug) }}" class="inverted-link">{{ event.content.title }}</a>
       {% endif %}
-    </h1>
+    </h2>
     {{ _('published') }}
     <time class="pubdate" datetime="{{ format_datetime(event.published, "yyyy-MM-ddTHH:mmZ") }}">
       {{ format_date(event.published, "dd MMMM yyyy") }}
@@ -71,7 +71,7 @@
 {% endmacro %}
 
 {% macro pager(pagination, prevnext=False) %}
-<nav class="pager">
+<div class="pager">
   <a class="left inverted-link{% if not pagination.has_prev %} hidden{% endif %}"
      href="{{ url_for_other_page(pagination.prev_num) }}">
     &larr; {{ _('newer') if not prevnext else _('next') }}
@@ -87,7 +87,7 @@
      href="{{ url_for_other_page(pagination.next_num) }}">
     {{ _('older') if not prevnext else _('previous') }} &rarr;
   </a>
-</nav>
+</div>
 {% endmacro %}
 
 {% macro img(image, size, class) %}

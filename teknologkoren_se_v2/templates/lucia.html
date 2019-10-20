@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% if page.image %}
+{% set cover_image = page.image %}
+{% endif %}
+
+{% block body %}
+
+{{ page.html|safe }}
+
+{% endblock %}

@@ -19,41 +19,43 @@
     {% endblock %}
   </head>
   <body>
-    <div class="logo">
-      <a href="{{ url_for('public.index') }}" class="inverted-link">
-        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="">
-        <div class="logo-text">
-          <h1>
-            Kongl. Teknologkören
-          </h1>
-          <p class="tagline">
-            I takt &mdash; med tiden
-          </p>
-        </div>
-      </a>
-    </div>
-    <nav class="nav">
-      {% set active_page = active_page %}
-      <ul>
-        <li><a class="inverted-link" href="{{ url_for('public.index') }}">{{ _('nav-home') }}</a></li>
-        <li><a class="inverted-link" href="#">{{ _('nav-about') }}</a></li>
-        <li><a class="inverted-link" href="#">{{ _('nav-events') }}</a></li>
-        <li><a class="inverted-link" href="#">{{ _('nav-hire') }}</a></li>
-        <li><a class="inverted-link" href="#">{{ _('nav-apply') }}</a></li>
-        <li><a class="inverted-link" href="#">{{ _('nav-contact') }}</a></li>
-        <li>
-          {% if locale.get_locale() == 'sv' %}
-          <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'en', request.view_args) }}">
-            <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">English
-          </a>
-          {% else %}
-          <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'sv', request.view_args) }}">
-            <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">Svenska
-          </a>
-          {% endif %}
-        </li>
-      </ul>
-    </nav>
+    <header>
+      <div class="logo">
+        <a href="{{ url_for('public.index') }}" class="inverted-link">
+          <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="">
+          <div class="logo-text">
+            <div class="name">
+              Kongl. Teknologkören
+            </div>
+            <p class="tagline">
+              I takt &mdash; med tiden
+            </p>
+          </div>
+        </a>
+      </div>
+      <nav class="nav">
+        {% set active_page = active_page %}
+        <ul>
+          <li><a class="inverted-link" href="{{ url_for('public.index') }}">{{ _('nav-home') }}</a></li>
+          <li><a class="inverted-link" href="{{ url_for('public.about_us') }}">{{ _('nav-about') }}</a></li>
+          <li><a class="inverted-link" href="#">{{ _('nav-events') }}</a></li>
+          <li><a class="inverted-link" href="{{ url_for('public.hire') }}">{{ _('nav-hire') }}</a></li>
+          <li><a class="inverted-link" href="{{ url_for('public.apply') }}">{{ _('nav-apply') }}</a></li>
+          <li><a class="inverted-link" href="#">{{ _('nav-contact') }}</a></li>
+          <li>
+            {% if locale.get_locale() == 'sv' %}
+            <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'en', request.view_args) }}">
+              <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">English
+            </a>
+            {% else %}
+            <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'sv', request.view_args) }}">
+              <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">Svenska
+            </a>
+            {% endif %}
+          </li>
+        </ul>
+      </nav>
+    </header>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <ul class="flashes">

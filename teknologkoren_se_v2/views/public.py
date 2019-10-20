@@ -19,7 +19,7 @@ def setup_jinja(app):
 
 
 @mod.route('/', defaults={'page': 1})
-@mod.route('/page/<int:page>/')
+@mod.route('/blogg/sida/<int:page>/')
 def index(page):
     posts = (models.Post
              .query
@@ -33,8 +33,8 @@ def index(page):
                                  page=page)
 
 
-@mod.route('/post/<int:post_id>/')
-@mod.route('/post/<int:post_id>/<slug>/')
+@mod.route('/blogg/<int:post_id>/')
+@mod.route('/blogg/<int:post_id>/<slug>/')
 def view_post(post_id, slug=None):
     post = models.Post.query.get_or_404(post_id)
 
@@ -51,4 +51,31 @@ def view_post(post_id, slug=None):
             )
         )
 
-    return flask.render_template('public/view-post.html', post=post)
+    return flask.render_template('view-post.html', post=post)
+
+
+def view_page_factory(path, endpoint):
+    def view_page():
+        page = (models.Page.query
+                .filter_by(path=path)
+                .order_by(models.Page.revision.desc())
+                .first_or_404()
+                )
+
+        template = '{}.html'.format(endpoint)
+        return flask.render_template(template, page=page)
+
+    return (path, endpoint, view_page)
+
+
+def init_dynamic_pages():
+    pages = [
+        ('om-oss', 'about_us'),
+        ('boka', 'hire'),
+        ('sjung', 'apply'),
+        ('lucia', 'lucia'),
+    ]
+
+    for page in pages:
+        view_func = view_page_factory(*page)
+        mod.add_url_rule(*view_func)

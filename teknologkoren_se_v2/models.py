@@ -15,11 +15,14 @@ class Post(db.Model):
     published = db.Column(db.DateTime, nullable=True)
     is_event = db.Column(db.Boolean, nullable=False)
 
+    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    image = db.relationship('Image', foreign_keys=image_id)
+
     @property
     def content(self):
         content = (PostContent.query
                    .filter(PostContent.post_id == self.id)
-                   .order_by(PostContent.timestamp.desc())
+                   .order_by(PostContent.revision.desc())
                    .first()
                    )
         return content
@@ -42,7 +45,7 @@ class PostContent(db.Model):
     slug_en = db.Column(db.String(200), nullable=True)
     text_sv = db.Column(db.Text, nullable=False)
     text_en = db.Column(db.Text, nullable=True)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    revision = db.Column(db.DateTime, nullable=False)
 
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     post = db.relationship('Post', foreign_keys=post_id, backref='contents')
@@ -80,7 +83,15 @@ class PostContent(db.Model):
 
     @property
     def html(self):
-        return markdown.markdown(self.text)
+        return markdown.markdown(
+            self.text,
+            extensions=['teknologkoren_se_v2.lib.mdx_headdown'],
+            extension_configs={
+                'mdx_headdown': {
+                    'offset': 2
+                }
+            }
+        )
 
     @property
     def slug(self):
@@ -139,15 +150,37 @@ def create_slug_en(target, value, oldvalue, initiator):
     target.slug_en = slugify.slugify(value)
 
 
+class Page(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(50), nullable=False)
+    text_sv = db.Column(db.Text, nullable=False)
+    text_en = db.Column(db.Text, nullable=False)
+    revision = db.Column(db.DateTime, nullable=False)
+
+    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    image = db.relationship('Image', foreign_keys=image_id)
+
+    @property
+    def text(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.text_sv
+
+        if lang == 'en':
+            return (self.text_en or
+                    get_string('no translation') + self.text_sv)
+
+        flask.abort(500)
+
+    @property
+    def html(self):
+        return markdown.markdown(self.text)
+
+
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(256), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post_content.id'),
-                        nullable=False)
-
-    post = db.relationship('PostContent',
-                           foreign_keys=post_id,
-                           backref='images')
 
 
 class Contact(db.Model):
