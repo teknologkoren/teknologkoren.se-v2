@@ -11,6 +11,14 @@ translations = {
         'en': "Log in",
         'sv': "Logga in",
     },
+    'blog and events': {
+        'en': "Blog and events",
+        'sv': "Blogg och händelser"
+    },
+    'events': {
+        'en': "Concerts and events",
+        'sv': "Konserter och händelser",
+    },
 
     # Top nav
     'change language': {

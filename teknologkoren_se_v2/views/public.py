@@ -38,7 +38,7 @@ def index(page):
 def view_post(post_id, slug=None):
     post = models.Post.query.get_or_404(post_id)
 
-    if not post.published or post.published < datetime.datetime.utcnow():
+    if not post.published or post.published > datetime.datetime.utcnow():
         return flask.abort(404)
 
     # Redirect to url with correct slug if missing or incorrect
@@ -52,6 +52,24 @@ def view_post(post_id, slug=None):
         )
 
     return flask.render_template('view-post.html', post=post)
+
+
+@mod.route('/konserter/', defaults={'page': 1})
+@mod.route('/konserter/sida/<int:page>')
+def events(page):
+    events = (models.Post
+              .query
+              .filter(
+                  models.Post.published < datetime.datetime.utcnow(),
+                  models.Post.is_event.is_(True)
+              )
+              .order_by(models.Post.published.desc())
+              )
+
+    pagination = events.paginate(page, 5)
+    return flask.render_template('events.html',
+                                 pagination=pagination,
+                                 page=page)
 
 
 def view_page_factory(path, endpoint):
