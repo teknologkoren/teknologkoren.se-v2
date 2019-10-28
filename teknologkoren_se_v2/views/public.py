@@ -28,7 +28,7 @@ def index(page):
              )
 
     pagination = posts.paginate(page, 5)
-    return flask.render_template('index.html',
+    return flask.render_template('public/index.html',
                                  pagination=pagination,
                                  page=page)
 
@@ -51,7 +51,7 @@ def view_post(post_id, slug=None):
             )
         )
 
-    return flask.render_template('view-post.html', post=post)
+    return flask.render_template('public/view_post.html', post=post)
 
 
 @mod.route('/konserter/', defaults={'page': 1})
@@ -67,7 +67,7 @@ def events(page):
               )
 
     pagination = events.paginate(page, 5)
-    return flask.render_template('events.html',
+    return flask.render_template('public/events.html',
                                  pagination=pagination,
                                  page=page)
 
@@ -80,7 +80,7 @@ def view_page_factory(path, endpoint):
                 .first_or_404()
                 )
 
-        template = '{}.html'.format(endpoint)
+        template = 'public/{}.html'.format(endpoint)
         return flask.render_template(template, page=page)
 
     return (path, endpoint, view_page)

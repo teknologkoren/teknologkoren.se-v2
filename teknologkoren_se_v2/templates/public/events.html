@@ -1,0 +1,13 @@
+{% extends "public/base.html" %}
+
+{% from "public/macros.html" import event_article, pager %}
+
+{% block body %}
+<h1 class="index-heading"> {{ _("events") }}</h1>
+
+{% for event in pagination.items %}
+{{ event_article(event, True) }}
+{% endfor %}
+
+{{ pager(pagination) }}
+{% endblock %}

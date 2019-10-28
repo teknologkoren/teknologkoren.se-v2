@@ -1,15 +1,21 @@
 {% macro post_article(post, overview, classes) %}
-<article class="{{ classes }}">
+<article class="post {{ classes }}">
   <header>
+    {% if overview %}
     <h2>
-      {% if overview %}
       <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.content.slug) }}" class="inverted-link">{{ post.content.title }}</a>
-      {% endif %}
     </h2>
-    {{ _('published') }}
-    <time class="pubdate" datetime="{{ format_datetime(post.published, "yyyy-MM-ddTHH:mmZ") }}">
-      {{ format_date(post.published, "dd MMMM yyyy") }}
-    </time>
+    {% else %}
+    <h1>
+      {{ post.content.title }}
+    </h1>
+    {% endif %}
+    <span class="published">
+      {{ _('published') }}
+      <time class="pubdate" datetime="{{ format_datetime(post.published, "yyyy-MM-ddTHH:mmZ") }}">
+        {{ format_date(post.published, "dd MMMM yyyy") }}
+      </time>
+    </span>
   </header>
   {% if post.image %}
 
@@ -33,17 +39,23 @@
 {% endmacro %}
 
 {% macro event_article(event, overview, classes) %}
-<article class="{{ classes }}">
+<article class="post event {{ classes }}">
   <header>
+    {% if overview %}
     <h2>
-      {% if overview %}
       <a href="{{ url_for('public.view_post', post_id=event.id, slug=event.content.slug) }}" class="inverted-link">{{ event.content.title }}</a>
-      {% endif %}
     </h2>
-    {{ _('published') }}
-    <time class="pubdate" datetime="{{ format_datetime(event.published, "yyyy-MM-ddTHH:mmZ") }}">
-      {{ format_date(event.published, "dd MMMM yyyy") }}
-    </time>
+    {% else %}
+    <h1>
+      {{ event.content.title }}
+    </h1>
+    {% endif %}
+    <span class="published">
+      {{ _('published') }}
+      <time class="pubdate" datetime="{{ format_datetime(event.published, "yyyy-MM-ddTHH:mmZ") }}">
+        {{ format_date(event.published, "dd MMMM yyyy") }}
+      </time>
+    </span>
   </header>
   {% if event.image %}
   <a class="event-image" href="{{ image_dest() }}img1200/{{ event.image }}">

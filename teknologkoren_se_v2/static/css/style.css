@@ -161,3 +161,37 @@ footer .dummy {
 footer .admin a {
   color: #bbb;
 }
+
+.post h1,
+.post h2,
+.post h3,
+.post h4 {
+  font-family: sans-serif;
+}
+
+.post header h1,
+.post header h2 {
+  margin: 0;
+}
+
+.post header h2 a {
+  text-decoration: none;
+}
+
+.published {
+  font-size: .9em;
+}
+
+article.post ~ article.post {
+  border-top: 1px solid #ddd;
+}
+
+article.post > header, article.post > h1 {
+  margin: 1rem 0;
+}
+
+.event-detail {
+  padding: .5rem;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+}

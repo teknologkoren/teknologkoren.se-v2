@@ -1,0 +1,13 @@
+{% extends "public/base.html" %}
+
+{% from "public/macros.html" import post_article, event_article %}
+
+{% block body %}
+
+{% if post.is_event %}
+{{ event_article(post) }}
+{% else %}
+{{ post_article(post) }}
+{% endif %}
+
+{% endblock %}
