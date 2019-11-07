@@ -87,4 +87,32 @@ translations = {
         'en': "Place",
         'sv': "Plats",
     },
+
+    # Contacts
+    'contact': {
+        'en': "Contact",
+        'sv': "Kontakt",
+    },
+    'contacts-below': {
+        'en': "You can find email adresses to our board members below:",
+        'sv': "Du kan hitta e-postadresser till våra styrelsemedlemmar nedan:",
+    },
+    'contact-chairman': {
+        'en': ("Feel free to contact our chairman, {name}, phone {phone}, "
+               "if you have any questions."),
+        'sv': ("Kontakta gärna vår ordförande, {name}, telefon {phone}, "
+               "om du har någon fråga."),
+    },
+    'reach-us-by-mail': {
+        'en': "You can also reach us by regular mail",
+        'sv': "Du kan även nå oss via snigelpost",
+    },
+    'organisation-number': {
+        'en': "Organisation number",
+        'sv': "Organisationsnummer",
+    },
+    'pg-number': {
+        'en': "PlusGiro",
+        'sv': "PlusGiro",
+    },
 }

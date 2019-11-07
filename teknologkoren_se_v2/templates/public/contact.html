@@ -1,0 +1,49 @@
+{% extends "public/base.html" %}
+
+{% set title = _('contact') %}
+{% set active_page = "contact" %}
+
+{% block body %}
+
+<h1>{{ _('contact') }}</h1>
+<address class="contact">
+  <p>{{ _('contacts-below') }}</p>
+  <div class="table contacts">
+    <table>
+      {% for person in contacts %}
+      <tr>
+        <td>{{ person.title }}</td>
+        <td>{{ person.first_name }} {{ person.last_name }}</td>
+        <td><a href="mailto:{{ person.email }}">{{ person.email }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  {% if ordf is defined %}
+  <p>
+  {% autoescape false %}
+    {{ _('contact-chairman').format(
+          name=ordf.full_name,
+          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone
+          ) }}
+  {% endautoescape %}
+  </p>
+  {% endif %}
+
+  <p>{{ _('reach-us-by-mail') }}:</p>
+  <p translate="no" class="postal-address">
+  Kongl. Teknologkören<br>
+  Fack vid THS<br>
+  100 44 Stockholm
+  </p>
+
+  <hr>
+
+  <p class="payment-info">
+    {{ _('organisation-number') }}: 802010-8646</br>
+    {{ _('pg-number') }}: 20 63 73-3
+  </p>
+</address>
+
+{% endblock %}

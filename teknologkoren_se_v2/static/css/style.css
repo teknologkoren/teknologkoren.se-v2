@@ -197,3 +197,48 @@ article.post > header, article.post > h1 {
   border: 1px solid #ddd;
   border-radius: 7px;
 }
+
+address.contact {
+  font-style: normal;
+}
+
+address hr {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    width: 75%;
+    max-width: 30rem;
+}
+
+.postal-address {
+  font-style: italic;
+}
+
+.postal-address,
+.payment-info {
+  text-align: center;
+}
+
+.table {
+    overflow-x: auto;
+    border-radius: 7px;
+    background-color: #f3f3f3;
+    border: 1px solid #ddd;
+}
+
+.table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    white-space: nowrap;
+    height: 2rem;
+    padding: 0 10px 0 10px;
+}

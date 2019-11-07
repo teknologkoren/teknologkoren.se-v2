@@ -72,6 +72,16 @@ def events(page):
                                  page=page)
 
 
+@mod.route('/contact')
+def contact():
+    contacts = models.Contact.query.order_by(models.Contact.weight.desc()).all()
+    ordf = models.Contact.query.filter_by(title='Ordförande').first()
+
+    return flask.render_template('public/contact.html',
+                                 contacts=contacts,
+                                 ordf=ordf)
+
+
 def view_page_factory(endpoint):
     def view_page():
         page = (models.Page.query
