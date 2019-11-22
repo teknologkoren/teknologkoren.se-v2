@@ -22,26 +22,23 @@
 
   {% if ordf is defined %}
   <p>
-  {% autoescape false %}
     {{ _('contact-chairman').format(
           name=ordf.full_name,
-          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone
-          ) }}
-  {% endautoescape %}
+          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone) }}
   </p>
   {% endif %}
 
   <p>{{ _('reach-us-by-mail') }}:</p>
   <p translate="no" class="postal-address">
-  Kongl. Teknologkören<br>
-  Fack vid THS<br>
-  100 44 Stockholm
+    Kongl. Teknologkören<br>
+    Fack vid THS<br>
+    100 44 Stockholm
   </p>
 
   <hr>
 
   <p class="payment-info">
-    {{ _('organisation-number') }}: 802010-8646</br>
+    {{ _('organisation-number') }}: 802010-8646<br>
     {{ _('pg-number') }}: 20 63 73-3
   </p>
 </address>
