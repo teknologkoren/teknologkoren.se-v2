@@ -24,7 +24,8 @@
   <p>
     {{ _('contact-chairman').format(
           name=ordf.full_name,
-          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone) }}
+          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone
+          )|safe }}
   </p>
   {% endif %}
 
