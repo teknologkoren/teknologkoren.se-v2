@@ -1,0 +1,11 @@
+babel
+flask
+flask-babel
+flask-bcrypt
+flask-login
+flask-sqlalchemy
+flask-uploads
+flask-wtf
+markdown
+phonenumbers
+python-slugify

@@ -1,6 +1,33 @@
 # teknologkoren.se-v2
 ## Setup a development environment
-Uses [Poetry](https://poetry.eustace.io/docs/) for dependency management.
-Install it and run `poetry install` to install the dependencies. As the
-`poetry.lock` file is present, the exact versions specified there will be
-installed.
+Create a virtual environment:
+
+```sh
+python3 -m venv venv
+```
+
+Activate the environment:
+
+```sh
+. venv/bin/activate
+```
+
+Now you may either use `pip` directly to install the dependencies, or
+you can install `pip-tools`. The latter is recommended.
+
+### pip
+
+```sh
+pip install -r requirements.txt
+```
+
+
+### pip-tools
+[pip-tools](https://github.com/jazzband/pip-tools) can keep your virtual
+environment in sync with the `requirements.txt` file, as well as compiling a
+new `requirements.txt` when adding a new dependency.
+
+```sh
+pip install pip-tools
+pip-tools sync
+```
