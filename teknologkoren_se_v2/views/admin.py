@@ -65,4 +65,9 @@ def logout():
 @mod.route('/')
 @flask_login.login_required
 def index():
-    return "Inloggad!"
+    pages = models.Page.query.all()
+    posts = models.Post.query.filter_by(is_event=False)
+    events = models.Post.query.filter_by(is_event=True)
+    return flask.render_template(
+        'admin/index.html', pages=pages, posts=posts, events=events
+    )

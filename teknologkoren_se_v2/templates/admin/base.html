@@ -2,7 +2,7 @@
 <html lang="{{ locale.get_locale() }}">
   <head>
     {% block head %}
-    <title>{{ title }} | Kongl. Teknologkören</title>
+    <title>{{ title }} | Kongl. Adminsidorna</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
@@ -10,27 +10,13 @@
     {% endblock %}
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <a href="{{ url_for('public.index') }}" class="inverted-link">
-          <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="">
-          <div class="logo-text">
-            <div class="name">
-              Kongl. Teknologkören
-            </div>
-            <p class="tagline">
-              Ur takt &mdash; med webben
-            </p>
-          </div>
-        </a>
-      </div>
-      <nav class="nav">
-        {% set active_page = active_page %}
-        <ul>
-          <li><a class="inverted-link" href="{{ url_for('admin.index') }}">{{ _('admin-nav-home') }}</a></li>
-        </ul>
-      </nav>
-    </header>
+    <nav class="nav">
+      <ul>
+        <li><a class="inverted-link" href="{{ url_for('admin.index') }}">{{ _('admin-nav-home') }}</a></li>
+        <li><a class="inverted-link" href="#posts">{{ _('admin-nav-posts') }}</a></li>
+        <li><a class="inverted-link" href="#events">{{ _('admin-nav-events') }}</a></li>
+      </ul>
+    </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <ul class="flashes">
@@ -40,24 +26,8 @@
     </ul>
     {% endif %}
     {% endwith %}
-    {% if cover_image %}
-    <img srcset="/static/images/img600/{{ cover_image }} 600w,
-                 /static/images/img1200/{{ cover_image }} 1200w,
-                 /static/images/img1600/{{ cover_image }} 1600w"
-         sizes="(min-width: 69em) 67em, 100vw"
-         src="/static/images/img1200/{{ cover_image }}"
-         class="cover-image"
-         alt="">
-    {% endif %}
     <main>
       {% block body %}{% endblock %}
     </main>
   </body>
-  <footer>
-    <div class="wrapper">
-      <div class="dummy"></div>
-      <img class="footer-img" src="{{ url_for('static', filename='images/logo.svg') }}" alt="">
-      <div class="admin"><a href="#">{{ _('admin') }}</a></div>
-    </div>
-  </footer>
 </html>
