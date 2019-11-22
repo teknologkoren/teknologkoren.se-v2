@@ -24,7 +24,7 @@ def create_app(config=None, instance_config=None):
 
     util.bcrypt.init_app(app)
 
-    #views.auth.login_manager.init_app(app)
+    views.admin.login_manager.init_app(app)
     views.public.setup_jinja(app)
 
     setup_flask_uploads(app)
@@ -37,10 +37,10 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from teknologkoren_se_v2.views import public#, admin
+    from teknologkoren_se_v2.views import public, admin
     public.init_dynamic_pages()
     app.register_blueprint(public.mod)
-    #app.register_blueprint(admin.mod)
+    app.register_blueprint(admin.mod)
 
 
 def register_cli(app):
@@ -58,6 +58,20 @@ def register_cli(app):
     @app.cli.command('populatetestdb')
     def populatetestdb_command():
         populate_testdb()
+
+    @app.cli.command('createadmin')
+    def createadmin_command():
+        from teknologkoren_se_v2 import models
+        print("Creating a new admin user...")
+        username = click.prompt("Username")
+        password = click.prompt("Password", hide_input=True)
+        user = models.AdminUser(
+            username=username,
+            password=password,
+        )
+
+        models.db.session.add(user)
+        models.db.session.commit()
 
 
 def populate_testdb():

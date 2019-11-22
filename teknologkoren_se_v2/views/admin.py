@@ -28,7 +28,7 @@ def setup_jinja(app):
 @login_manager.user_loader
 def load_user(user_id):
     """Tell flask-login how to get logged in user."""
-    return models.User.query.get(user_id)
+    return models.AdminUser.query.get(user_id)
 
 
 @mod.route('/login', methods=['GET', 'POST'])
@@ -36,10 +36,13 @@ def login():
     form = forms.LoginForm()
 
     if flask_login.current_user.is_authenticated:
-        return form.redirect('admin.index')
+        return flask.redirect(flask.url_for('admin.index'))
 
     if form.validate_on_submit():
-        user = models.User.authenticate(form.username.data, form.password.data)
+        user = models.AdminUser.authenticate(
+            form.username.data,
+            form.password.data
+        )
 
         if not user:
             flask.flash(get_string('wrong-login'), 'error')
@@ -51,6 +54,15 @@ def login():
     return flask.render_template('admin/login.html', form=form)
 
 
+@mod.route('/logout')
+def logout():
+    if flask_login.current_user.is_authenticated:
+        flask_login.logout_user()
+
+    return flask.redirect(flask.url_for('public.index'))
+
+
 @mod.route('/')
+@flask_login.login_required
 def index():
     return "Inloggad!"

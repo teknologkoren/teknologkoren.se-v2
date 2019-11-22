@@ -1,0 +1,25 @@
+{% extends "public/base.html" %}
+
+{% from "macros.html" import form_entry, form_entry_row %}
+
+{% set title = _("sign in") %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+<form method="POST">
+  {{ form.csrf_token }}
+  <h2>{{ _("sign in") }}</h2>
+
+  {{ form_entry(form.username, description=False, autofocus=true) }}
+  {{ form_entry(form.password, description=False) }}
+  {{ form_entry_row(form.remember) }}
+
+  <div class="form-field">
+    <button>{{ _("sign in") }}</button>
+  </div>
+</form>
+{% endblock %}

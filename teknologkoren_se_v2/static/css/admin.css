@@ -1,0 +1,44 @@
+input[type=number] {
+  height: 1rem;
+}
+
+.form-entry {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-entry label.error {
+  padding: 3px;
+  border-radius: 3px;
+  background-color: #FFD9D0;
+}
+
+.form-field label+input,
+.form-field label+textarea {
+  display: block;
+}
+
+.field-description {
+  font-size: 0.7em;
+  padding-left: 0;
+  margin-top: 0.2rem;
+  max-width: 16rem;
+}
+
+.field-description:before {
+  content: "- ";
+}
+
+.field-description.error {
+  color: red;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  margin-top: 0.3rem;
+}
+
+.required {
+  color: red;
+}

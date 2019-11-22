@@ -3,6 +3,9 @@
   overflow-wrap: break-word;
   word-wrap: break-word; /* legacy */
   word-break: break-word; /* for WebKit/Chrome */
+
+  max-width: 100%;
+  min-width: 0;
 }
 
 body {
@@ -242,3 +245,39 @@ hr {
     height: 2rem;
     padding: 0 10px 0 10px;
 }
+
+.flashes {
+  max-width: 40rem;
+  align-self: center;
+  text-align: center;
+  list-style: none;
+  margin: 1rem 1rem;
+  padding: 0;
+}
+.flash {
+  min-width: 10rem;
+  padding: .5rem 1rem;
+  margin: .5rem auto;
+  border-radius: 7px;
+}
+.flash.success {
+  background-color: #C9F7DD;
+  border: 1px solid #62D895;
+  color: #004D21;
+}
+.flash.info {
+  background-color: #CBDEF5;
+  border: 1px solid #6797D0;
+  color: #042246;
+}
+.flash.warning {
+  background-color: #FFF3CC;
+  border: 1px solid #FFCF32;
+  color: #332700;
+}
+.flash.error {
+  background-color: #FFD9D0;
+  border: 1px solid #FF9073;
+  color: #6C1600;
+}
+

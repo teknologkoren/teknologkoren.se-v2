@@ -7,10 +7,6 @@ translations = {
         'en': "News feed",
         'sv': "Nyhetsflöde",
     },
-    'admin': {
-        'en': "Log in",
-        'sv': "Logga in",
-    },
     'blog and events': {
         'en': "Blog and events",
         'sv': "Blogg och händelser"
@@ -114,5 +110,27 @@ translations = {
     'pg-number': {
         'en': "PlusGiro",
         'sv': "PlusGiro",
+    },
+
+    # Admin
+    'sign in': {
+        'en': "Sign in",
+        'sv': "Logga in",
+    },
+    'username': {
+        'en': "Username",
+        'sv': "Användarnamn",
+    },
+    'password': {
+        'en': "Password",
+        'sv': "Lösenord",
+    },
+    'remember-me': {
+        'en': "Keep me signed in",
+        'sv': "Håll mig inloggad",
+    },
+    'wrong-login': {
+        'en': "Wrong username or password.",
+        'sv': "Fel användarnamn eller lösenord.",
     },
 }

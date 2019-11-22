@@ -1,9 +1,13 @@
+import datetime
 import flask
 import phonenumbers
 import sqlalchemy as sqla
+from sqlalchemy.ext.hybrid import hybrid_property
 import flask_sqlalchemy
 import slugify
 import markdown
+import flask_login
+from teknologkoren_se_v2 import util
 from teknologkoren_se_v2.locale import get_string, get_locale
 
 db = flask_sqlalchemy.SQLAlchemy()
@@ -216,3 +220,48 @@ class Contact(db.Model):
         )
 
         return formatted
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class AdminUser(flask_login.UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+
+    # Do not change the following directly, use AdminUser.password
+    _password_hash = db.Column(db.String(256), nullable=False)
+    _password_timestamp = db.Column(db.DateTime)
+
+    @hybrid_property
+    def password(self):
+        return self._password_hash
+
+    @password.setter
+    def password(self, plaintext):
+        self._password_hash = (
+            util.bcrypt
+            .generate_password_hash(plaintext, 12)
+            .decode()
+        )
+
+        self._password_timestamp = datetime.datetime.utcnow()
+
+    def verify_password(self, plaintext):
+        """Return True if plaintext matches password, else False."""
+        correct = util.bcrypt.check_password_hash(
+            self._password_hash,
+            plaintext
+        )
+
+        return correct
+
+    @staticmethod
+    def authenticate(username, password):
+        user = AdminUser.query.filter_by(username=username).first()
+
+        if user and user.verify_password(password):
+            return user
+
+        return None

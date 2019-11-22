@@ -3,10 +3,30 @@ import werkzeug
 from teknologkoren_se_v2.translations import translations
 
 
-def get_string(name):
+class LazyTranslation:
+    """For use in things working outside application context.
+
+    Forms are initialized before an application context has been
+    created which means we can't use get_locale() as that fetches
+    the locale from g or the session (which require an application
+    context). By putting get_locale() in __str__(), we postpone the
+    call to get_locale() until the string is actually rendered.
+    """
+
+    def __init__(self, translation):
+        self.translation = translation
+
+    def __str__(self):
+        return self.translation[get_locale()]
+
+
+def get_string(name, lazy=False):
     translation = translations.get(name)
     if translation:
-        return translations[name][get_locale()]
+        if lazy:
+            return LazyTranslation(translation)
+        else:
+            return translations[name][get_locale()]
     else:
         return name
 

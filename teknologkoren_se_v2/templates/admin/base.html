@@ -6,13 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-
-    {% if 'sv' in locale.get_locale() %}
-    <link rel="alternate" hreflang="en" href="{{ url_for_lang(request.endpoint, 'en', request.view_args, _external=True) }}" />
-    {% else %}
-    <link rel="alternate" hreflang="sv" href="{{ url_for_lang(request.endpoint, 'sv', request.view_args, _external=True) }}" />
-    {% endif %}
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     {% endblock %}
   </head>
@@ -26,7 +19,7 @@
               Kongl. Teknologkören
             </div>
             <p class="tagline">
-              I takt &mdash; med tiden
+              Ur takt &mdash; med webben
             </p>
           </div>
         </a>
@@ -35,17 +28,6 @@
         {% set active_page = active_page %}
         <ul>
           <li><a class="inverted-link" href="{{ url_for('admin.index') }}">{{ _('admin-nav-home') }}</a></li>
-          <li>
-            {% if locale.get_locale() == 'sv' %}
-            <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'en', request.view_args) }}">
-              <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">English
-            </a>
-            {% else %}
-            <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'sv', request.view_args) }}">
-              <img src="{{ url_for('static', filename='images/lang_icon.png') }}" alt="{{ _('Change language') }}">Svenska
-            </a>
-            {% endif %}
-          </li>
         </ul>
       </nav>
     </header>

@@ -1,0 +1,37 @@
+{% macro form_entry(field, description=True) %}
+<div class="form-entry">
+  <div>{{ field.label(class='error' if field.errors else '') }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</div>
+  {% for error in field.errors %}
+  <div class="field-description error">
+    {{ _("Fel:") }} {{ error }}
+  </div>
+  {% endfor %}
+  {% if description and field.description %}
+  <div class="field-description">
+    {{ field.description }}
+  </div>
+  {% endif %}
+  <div class="form-field">
+    <span>{{ field(*varargs, **kwargs) }}</span>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro form_entry_row(field, description=True) %}
+<div class="form-entry">
+  <span class="form-field">
+    <span>{{ field(*varargs, **kwargs) }}</span>
+  </span>
+  <span>{{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</span>
+  {% if description and field.description %}
+  <div class="field-description">
+    {{ field.description }}
+  </div>
+  {% endif %}
+  {% for error in field.errors %}
+  <div class="field-error">
+    {{ error }}
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
