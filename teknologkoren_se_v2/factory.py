@@ -211,7 +211,9 @@ def populate_testdb():
     for i in range(6):
         revision = (
             datetime.datetime.utcnow()
-            - datetime.timedelta(days=random.randint(0, 30))
+            + datetime.timedelta(
+                hours=random.randint(0, 23), minutes=random.randint(0, 59)
+            )
         )
 
         if 6 - i > 2:

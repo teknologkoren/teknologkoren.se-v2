@@ -19,17 +19,24 @@ class Post(db.Model):
     published = db.Column(db.DateTime, nullable=True)
     is_event = db.Column(db.Boolean, nullable=False)
 
-    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
-    image = db.relationship('Image', foreign_keys=image_id)
-
     @property
     def content(self):
-        content = (PostContent.query
-                   .filter(PostContent.post_id == self.id)
-                   .order_by(PostContent.revision.desc())
-                   .first()
-                   )
+        content = (
+            PostContent.query
+            .filter(PostContent.post_id == self.id)
+            .order_by(PostContent.revision.desc())
+            .first()
+        )
         return content
+
+    @property
+    def revisions(self):
+        revisions = (
+            PostContent.query
+            .filter(PostContent.post_id == self.id)
+            .order_by(PostContent.revision.desc())
+        )
+        return revisions
 
     @property
     def url(self):
@@ -38,7 +45,9 @@ class Post(db.Model):
 
     def __str__(self):
         """String representation of the post."""
-        return "<{} {}/{}>".format(self.__class__.__name__, self.id, self.slug)
+        return "<{} {}/{}>".format(
+            self.__class__.__name__, self.id, self.content.slug
+        )
 
 
 class PostContent(db.Model):
@@ -49,6 +58,10 @@ class PostContent(db.Model):
     slug_en = db.Column(db.String(200), nullable=True)
     text_sv = db.Column(db.Text, nullable=False)
     text_en = db.Column(db.Text, nullable=True)
+
+    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    image = db.relationship('Image', foreign_keys=image_id)
+
     revision = db.Column(db.DateTime, nullable=False)
 
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
@@ -117,9 +130,11 @@ class EventContent(PostContent):
     __table_name__ = None
 
     start_time = db.Column(db.DateTime)
+    time_text_sv = db.Column(db.Text)
+    time_text_en = db.Column(db.Text)
     location_sv = db.Column(db.String(100))
     location_en = db.Column(db.String(100))
-    location_link = db.Column(db.String(500), nullable=True)
+    location_link = db.Column(db.String(500))
 
     @property
     def location(self):
@@ -132,6 +147,31 @@ class EventContent(PostContent):
             return self.location_en or self.location_en
 
         flask.abort(500)
+
+    @property
+    def time_text(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.text_sv
+
+        if lang == 'en':
+            return (self.text_en or
+                    get_string('no translation') + self.text_sv)
+
+        flask.abort(500)
+
+    @property
+    def time_html(self):
+        return markdown.markdown(
+            self.time_text,
+            extensions=['teknologkoren_se_v2.lib.mdx_headdown'],
+            extension_configs={
+                'mdx_headdown': {
+                    'offset': 2
+                }
+            }
+        )
 
     __mapper_args__ = {
         'polymorphic_identity': 'event_content'
@@ -148,9 +188,6 @@ def create_slug_sv(target, value, oldvalue, initiator):
 
 @sqla.event.listens_for(PostContent.title_en, 'set', propagate=True)
 def create_slug_en(target, value, oldvalue, initiator):
-    """Create slug when new title is set.
-    Listens for PostContent and subclasses of PostContent.
-    """
     target.slug_en = slugify.slugify(value)
 
 

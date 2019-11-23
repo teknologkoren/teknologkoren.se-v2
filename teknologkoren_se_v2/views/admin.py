@@ -71,3 +71,43 @@ def index():
     return flask.render_template(
         'admin/index.html', pages=pages, posts=posts, events=events
     )
+
+
+@mod.route('/post/<int:post_id>')
+@mod.route('/post/<int:post_id>/<int:content_id>')
+def post(post_id, content_id=None):
+    post = models.Post.query.get(post_id)
+
+    if content_id:
+        content = models.PostContent.query.get(content_id)
+        if content.post_id != post_id:
+            flask.abort(404)
+    else:
+        content = post.content
+
+    form = forms.EditPostForm(obj=content)
+    form.published.data = post.published
+
+    return flask.render_template(
+        'admin/post.html', post=post, content=content, form=form
+    )
+
+
+@mod.route('/event/<int:post_id>')
+@mod.route('/event/<int:post_id>/<int:content_id>')
+def event(post_id, content_id=None):
+    event = models.Post.query.get(post_id)
+
+    if content_id:
+        content = models.PostContent.query.get(content_id)
+        if content.post_id != post_id:
+            flask.abort(404)
+    else:
+        content = event.content
+
+    form = forms.EditEventForm(obj=content)
+    form.published.data = event.published
+
+    return flask.render_template(
+        'admin/event.html', event=event, content=content, form=form
+    )

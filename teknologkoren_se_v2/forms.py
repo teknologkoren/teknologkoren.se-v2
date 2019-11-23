@@ -1,6 +1,7 @@
 import flask
 import flask_wtf
 from wtforms import fields, validators
+from wtforms.fields import html5 as html5_fields
 from teknologkoren_se_v2 import models, util
 from teknologkoren_se_v2.locale import get_string
 
@@ -72,3 +73,65 @@ class LoginForm(RedirectForm):
         get_string('password', lazy=True),
         validators=[validators.InputRequired()]
     )
+
+
+class UploadForm(flask_wtf.FlaskForm):
+    upload = fields.FileField('Image') #, validators=[
+    #    flask_wtf.FileAllowed(images, 'Images only!')
+    #])
+
+
+class EditPostForm(UploadForm):
+    text_sv = fields.TextAreaField('Text', validators=[
+        validators.InputRequired()
+    ])
+    text_en = fields.TextAreaField('Text')
+
+    title_sv = fields.StringField('Titel', validators=[
+        validators.InputRequired()
+    ])
+    title_en = fields.StringField('Titel')
+
+    published = html5_fields.DateTimeField(
+        'Publicerad',
+        description=(
+            "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
+            "publicera."
+        )
+    )
+
+
+class EditEventForm(EditPostForm):
+    start_time = html5_fields.DateTimeField(
+        'Tid',
+        description=(
+            "Om tidsbeskrivning lämnas tomt så syns denna som tid, annars "
+            "göms den och används bara för att sortera händelserna."
+        ),
+        format='%Y-%m-%d %H:%M',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+
+    time_text_sv = fields.TextAreaField(
+        'Tidsbeskrivning',
+        description=(
+            "Beskrivning av tid i fritext (markdown). Om denna fylls i syns "
+            "den istället för \"Tid\"."
+        )
+    )
+    time_text_en = fields.TextAreaField(
+        'Tidsbeskrivning',
+        description=(
+            "Beskrivning av tid i fritext (markdown). Om denna fylls i syns "
+            "den istället för \"Tid\"."
+        )
+    )
+
+    location_sv = fields.StringField('Plats', validators=[
+        validators.InputRequired()
+    ])
+    location_en = fields.StringField('Plats')
+
+    location_link = fields.StringField('Länk till plats')

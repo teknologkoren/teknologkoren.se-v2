@@ -15,7 +15,7 @@
 {% if posts %}
 <ul>
 {% for post in posts %}
-  <li><a href="#">{{ post.content.title_sv }}</a></li>
+  <li><a href="{{ url_for('admin.post', post_id=post.id) }}">{{ post.content.title_sv }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -24,7 +24,7 @@
 {% if events %}
 <ul>
 {% for event in events %}
-  <li><a href="#">{{ event.content.title_sv }}</a></li>
+  <li><a href="{{ url_for('admin.event', post_id=event.id) }}">{{ event.content.title_sv }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}

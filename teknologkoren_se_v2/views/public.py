@@ -21,11 +21,11 @@ def setup_jinja(app):
 @mod.route('/', defaults={'page': 1})
 @mod.route('/blog/page/<int:page>/')
 def index(page):
-    posts = (models.Post
-             .query
-             .filter(models.Post.published < datetime.datetime.utcnow())
-             .order_by(models.Post.published.desc())
-             )
+    posts = (
+        models.Post.query
+        .filter(models.Post.published < datetime.datetime.utcnow())
+        .order_by(models.Post.published.desc())
+    )
 
     pagination = posts.paginate(page, 5)
     return flask.render_template('public/index.html',
@@ -57,14 +57,14 @@ def view_post(post_id, slug=None):
 @mod.route('/events/', defaults={'page': 1})
 @mod.route('/events/page/<int:page>')
 def events(page):
-    events = (models.Post
-              .query
-              .filter(
-                  models.Post.published < datetime.datetime.utcnow(),
-                  models.Post.is_event.is_(True)
-              )
-              .order_by(models.Post.published.desc())
-              )
+    events = (
+        models.Post.query
+        .filter(
+            models.Post.published < datetime.datetime.utcnow(),
+            models.Post.is_event.is_(True)
+        )
+        .order_by(models.Event.start_time.desc())
+    )
 
     pagination = events.paginate(page, 5)
     return flask.render_template('public/events.html',
@@ -74,7 +74,11 @@ def events(page):
 
 @mod.route('/contact')
 def contact():
-    contacts = models.Contact.query.order_by(models.Contact.weight.desc()).all()
+    contacts = (
+        models.Contact.query.
+        order_by(models.Contact.weight.desc())
+        .all()
+    )
     ordf = models.Contact.query.filter_by(title='Ordförande').first()
 
     return flask.render_template('public/contact.html',
@@ -84,11 +88,12 @@ def contact():
 
 def view_page_factory(endpoint):
     def view_page():
-        page = (models.Page.query
-                .filter_by(path=endpoint)
-                .order_by(models.Page.revision.desc())
-                .first_or_404()
-                )
+        page = (
+            models.Page.query
+            .filter_by(path=endpoint)
+            .order_by(models.Page.revision.desc())
+            .first_or_404()
+        )
 
         template = 'public/{}.html'.format(endpoint)
         return flask.render_template(template, page=page)

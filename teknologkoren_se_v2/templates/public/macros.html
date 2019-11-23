@@ -71,9 +71,12 @@
   <dl class="event-detail">
     <dt>{{ _('time') }}:</dt>
     <dd>
-      <time datetime="{{ format_datetime(event.content.start_time, "yyyy-MM-ddTHH:mmZ") }}">
+      <time{% if event.content.time_text %}class="hidden"{% endif %} datetime="{{ format_datetime(event.content.start_time, "yyyy-MM-ddTHH:mmZ") }}">
         {{ format_datetime(event.content.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
       </time>
+      {% if event.content.time_text %}
+      {{ event.content.time_html }}
+      {% endif %}
     </dd>
     <dt>{{ _('place') }}:</dt>
     <dd><a href="{{ event.content.location_link }}">{{ event.content.location }}</a></dd>
