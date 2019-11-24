@@ -153,11 +153,10 @@ class EventContent(PostContent):
         lang = get_locale()
 
         if lang == 'sv':
-            return self.text_sv
+            return self.time_text_sv
 
         if lang == 'en':
-            return (self.text_en or
-                    get_string('no translation') + self.text_sv)
+            return (self.time_text_en + self.time_text_sv)
 
         flask.abort(500)
 
