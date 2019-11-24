@@ -75,7 +75,7 @@
         {{ format_datetime(event.content.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
       </time>
       {% if event.content.time_text %}
-      {{ event.content.time_html }}
+      {{ event.content.time_html|safe }}
       {% endif %}
     </dd>
     <dt>{{ _('place') }}:</dt>
