@@ -201,6 +201,10 @@ article.post > header, article.post > h1 {
   border-radius: 7px;
 }
 
+.event-detail time.hidden {
+  display: none;
+}
+
 address.contact {
   font-style: normal;
 }
