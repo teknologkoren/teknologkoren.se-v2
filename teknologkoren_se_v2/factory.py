@@ -190,50 +190,60 @@ def populate_testdb():
     models.db.session.add_all(page_objs)
     models.db.session.commit()
 
-    post_contents = []
+    posts = []
     for i in range(5):
-        text_len = random.choice([1]*2 + [2]*3 + [3])
-        revision = (
+        published = (
             datetime.datetime.utcnow()
-            - datetime.timedelta(days=random.randint(0, 30))
+            - datetime.timedelta(
+                days=random.randint(0, 60),
+                hours=random.randint(0, 23),
+                minutes=random.randint(0, 59)
+            )
         )
-        post_contents.append(
-            models.PostContent(
+
+        text_len = random.choice([1]*2 + [2]*3 + [3])
+
+        posts.append(
+            models.BlogPost(
+                published=published,
                 title_sv=lipsum_line().replace('.', ''),
                 title_en=lipsum_line().replace('.', ''),
                 text_sv=lipsum_paragraphs(text_len),
                 text_en=lipsum_paragraphs(text_len),
-                revision=revision
             )
         )
 
-    event_contents = []
+    events = []
     for i in range(6):
-        revision = (
+        published = (
             datetime.datetime.utcnow()
-            + datetime.timedelta(
-                hours=random.randint(0, 23), minutes=random.randint(0, 59)
+            - datetime.timedelta(
+                days=random.randint(0, 60),
+                hours=random.randint(0, 23),
+                minutes=random.randint(0, 59)
             )
         )
 
-        if 6 - i > 2:
-            start_days = random.randint(-120, -1)
-        else:
-            start_days = random.randint(1, 90)
-
-        start_time = revision + datetime.timedelta(days=start_days)
+        start_time = (
+            published
+            + datetime.timedelta(
+                days=random.randint(10, 120),
+                hours=random.randint(0, 23),
+                minutes=random.randint(0, 59)
+            )
+        )
 
         text_len = random.choice([1]*2 + [2]*3 + [3])
 
         location = lipsum_line().replace('.', '')
 
-        event_contents.append(
-            models.EventContent(
+        events.append(
+            models.Event(
+                published=published,
                 title_sv=lipsum_line().replace('.', ''),
                 title_en=lipsum_line().replace('.', ''),
                 text_sv=lipsum_paragraphs(text_len),
                 text_en=lipsum_paragraphs(text_len),
-                revision=revision,
                 start_time=start_time,
                 location_sv=location,
                 location_en=location,
@@ -249,24 +259,8 @@ def populate_testdb():
             )
         )
 
-    for post_content in post_contents:
-        post = models.Post(published=post_content.revision, is_event=False)
-        models.db.session.add(post)
-        models.db.session.commit()
-
-        post_content.post_id = post.id
-        models.db.session.add(post_content)
-        models.db.session.commit()
-
-    for event_content in event_contents:
-        post = models.Post(published=post_content.revision, is_event=True)
-        models.db.session.add(post)
-        models.db.session.commit()
-
-        event_content.post_id = post.id
-        models.db.session.add(event_content)
-        models.db.session.commit()
-
+    models.db.session.add_all(posts)
+    models.db.session.add_all(events)
     models.db.session.commit()
 
 

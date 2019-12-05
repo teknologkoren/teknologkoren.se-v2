@@ -6,20 +6,12 @@
 
 <h1>Admin</h1>
 
-<h2>Inlägg</h2>
-<h3>Versioner</h3>
-<ul>
-{% for revision in event.revisions %}
-  <li><a href="{{ url_for('admin.event', post_id=event.id, content_id=revision.id) }}">{{ revision.title_sv }}</a></li>
-{% endfor %}
-</ul>
-
-<h3>Innehåll</h3>
+<h2>Händelse</h2>
 <form method="POST">
   {{ form.csrf_token }}
 
   <div>
-    <h4>Svenska</h4>
+    <h3>Svenska</h3>
     {{ form_entry(form.title_sv) }}
     {{ form_entry(form.text_sv) }}
     {{ form_entry(form.time_text_sv) }}
@@ -27,7 +19,7 @@
   </div>
 
   <div>
-    <h4>Engelska</h4>
+    <h3>Engelska</h3>
     {{ form_entry(form.title_en) }}
     {{ form_entry(form.text_en) }}
     {{ form_entry(form.time_text_en) }}
@@ -35,7 +27,7 @@
   </div>
 
   <div>
-    <h4>Språklöst</h4>
+    <h3>Språklöst</h3>
     {{ form_entry(form.start_time) }}
     {{ form_entry(form.location_link) }}
     {{ form_entry(form.published) }}

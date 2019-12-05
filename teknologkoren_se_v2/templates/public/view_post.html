@@ -4,7 +4,7 @@
 
 {% block body %}
 
-{% if post.is_event %}
+{% if post.type == 'event' %}
 {{ event_article(post) }}
 {% else %}
 {{ post_article(post) }}

@@ -20,6 +20,12 @@ def flash_errors(form):
             )
 
 
+def none_if_space(data):
+    if data.isspace():
+        return None
+    return data
+
+
 class Unique:
     """Validate that field is unique in model."""
     def __init__(self, model, field,
@@ -85,19 +91,26 @@ class EditPostForm(UploadForm):
     text_sv = fields.TextAreaField('Text', validators=[
         validators.InputRequired()
     ])
-    text_en = fields.TextAreaField('Text')
+    text_en = fields.TextAreaField('Text', validators=[
+        validators.Optional()
+    ])
 
     title_sv = fields.StringField('Titel', validators=[
         validators.InputRequired()
     ])
-    title_en = fields.StringField('Titel')
+    title_en = fields.StringField('Titel', validators=[
+        validators.Optional()
+    ])
 
     published = html5_fields.DateTimeField(
         'Publicerad',
         description=(
             "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
             "publicera."
-        )
+        ),
+        validators=[
+            validators.Optional()
+        ]
     )
 
 
@@ -119,19 +132,29 @@ class EditEventForm(EditPostForm):
         description=(
             "Beskrivning av tid i fritext (markdown). Om denna fylls i syns "
             "den istället för \"Tid\"."
-        )
+        ),
+        validators=[
+            validators.Optional()
+        ]
     )
     time_text_en = fields.TextAreaField(
         'Tidsbeskrivning',
         description=(
             "Beskrivning av tid i fritext (markdown). Om denna fylls i syns "
             "den istället för \"Tid\"."
-        )
+        ),
+        validators=[
+            validators.Optional()
+        ]
     )
 
     location_sv = fields.StringField('Plats', validators=[
         validators.InputRequired()
     ])
-    location_en = fields.StringField('Plats')
+    location_en = fields.StringField('Plats', validators=[
+        validators.Optional()
+    ])
 
-    location_link = fields.StringField('Länk till plats')
+    location_link = fields.StringField('Länk till plats', validators=[
+        validators.Optional()
+    ])

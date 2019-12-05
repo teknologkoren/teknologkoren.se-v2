@@ -33,43 +33,61 @@ def index(page):
                                  page=page)
 
 
-@mod.route('/blog/<int:post_id>/')
-@mod.route('/blog/<int:post_id>/<slug>/')
-def view_post(post_id, slug=None):
-    post = models.Post.query.get_or_404(post_id)
-
-    if not post.published or post.published > datetime.datetime.utcnow():
-        return flask.abort(404)
-
-    # Redirect to url with correct slug if missing or incorrect
-    if slug != post.content.slug:
-        return flask.redirect(
-            flask.url_for(
-                'public.view_post',
-                post_id=post.id,
-                slug=post.content.slug
-            )
-        )
-
-    return flask.render_template('public/view_post.html', post=post)
-
-
 @mod.route('/events/', defaults={'page': 1})
 @mod.route('/events/page/<int:page>')
 def events(page):
     events = (
-        models.Post.query
-        .filter(
-            models.Post.published < datetime.datetime.utcnow(),
-            models.Post.is_event.is_(True)
-        )
-        .order_by(models.Event.start_time.desc())
+        models.Event.query
+        .filter(models.Event.published < datetime.datetime.utcnow())
+        .order_by(models.Event.published.desc())
     )
 
     pagination = events.paginate(page, 5)
     return flask.render_template('public/events.html',
                                  pagination=pagination,
                                  page=page)
+
+
+@mod.route('/blog/<int:post_id>/')
+@mod.route('/blog/<int:post_id>/<slug>/')
+def view_post(post_id, slug=None):
+    post = models.BlogPost.query.get_or_404(post_id)
+
+    if not post.published or post.published > datetime.datetime.utcnow():
+        return flask.abort(404)
+
+    # Redirect to url with correct slug if missing or incorrect
+    if slug != post.slug:
+        return flask.redirect(
+            flask.url_for(
+                'public.view_post',
+                post_id=post_id,
+                slug=post.slug
+            )
+        )
+
+    return flask.render_template('public/view_post.html', post=post)
+
+
+@mod.route('/events/<int:event_id>/')
+@mod.route('/events/<int:event_id>/<slug>/')
+def view_event(event_id, slug=None):
+    event = models.Event.query.get_or_404(event_id)
+
+    if not event.published or event.published > datetime.datetime.utcnow():
+        return flask.abort(404)
+
+    # Redirect to url with correct slug if missing or incorrect
+    if slug != event.slug:
+        return flask.redirect(
+            flask.url_for(
+                'public.view_event',
+                event_id=event_id,
+                slug=event.slug
+            )
+        )
+
+    return flask.render_template('public/view_post.html', post=event)
 
 
 @mod.route('/contact')

@@ -10,7 +10,7 @@
 <h1 class="index-heading"> {{ _("blog and events") }}</h1>
 {% for post in pagination.items %}
 
-{% if post.is_event %}
+{% if post.type == 'event' %}
 {{ event_article(post, True) }}
 {% else %}
 {{ post_article(post, True) }}

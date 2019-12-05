@@ -3,11 +3,11 @@
   <header>
     {% if overview %}
     <h2>
-      <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.content.slug) }}" class="inverted-link">{{ post.content.title }}</a>
+      <a href="{{ url_for('public.view_post', post_id=post.id, slug=post.slug) }}" class="inverted-link">{{ post.title }}</a>
     </h2>
     {% else %}
     <h1>
-      {{ post.content.title }}
+      {{ post.title }}
     </h1>
     {% endif %}
     <span class="published">
@@ -34,7 +34,11 @@
 
   {% endif %}
 
-  {{ post.content.html|safe }}
+  {% if overview %}
+  {{ post.html(offset=3)|safe }}
+  {% else %}
+  {{ post.html()|safe }}
+  {% endif %}
 </article>
 {% endmacro %}
 
@@ -43,11 +47,11 @@
   <header>
     {% if overview %}
     <h2>
-      <a href="{{ url_for('public.view_post', post_id=event.id, slug=event.content.slug) }}" class="inverted-link">{{ event.content.title }}</a>
+      <a href="{{ url_for('public.view_event', event_id=event.id, slug=event.slug) }}" class="inverted-link">{{ event.title }}</a>
     </h2>
     {% else %}
     <h1>
-      {{ event.content.title }}
+      {{ event.title }}
     </h1>
     {% endif %}
     <span class="published">
@@ -66,20 +70,24 @@
   </a>
   {% endif %}
 
-  {{ event.content.html|safe }}
+  {% if overview %}
+  {{ event.html(offset=3)|safe }}
+  {% else %}
+  {{ event.html()|safe }}
+  {% endif %}
 
   <dl class="event-detail">
     <dt>{{ _('time') }}:</dt>
     <dd>
-      <time{% if event.content.time_text %}class="hidden"{% endif %} datetime="{{ format_datetime(event.content.start_time, "yyyy-MM-ddTHH:mmZ") }}">
-        {{ format_datetime(event.content.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
+      <time{% if event.time_text %}class="hidden"{% endif %} datetime="{{ format_datetime(event.start_time, "yyyy-MM-ddTHH:mmZ") }}">
+        {{ format_datetime(event.start_time, "EEEE dd MMMM yyyy, HH:mm") }}
       </time>
-      {% if event.content.time_text %}
-      {{ event.content.time_html|safe }}
+      {% if event.time_text %}
+      {{ event.time_html|safe }}
       {% endif %}
     </dd>
     <dt>{{ _('place') }}:</dt>
-    <dd><a href="{{ event.content.location_link }}">{{ event.content.location }}</a></dd>
+    <dd><a href="{{ event.location_link }}">{{ event.location }}</a></dd>
   </dl>
 
 </article>

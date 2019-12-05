@@ -62,52 +62,87 @@ def logout():
     return flask.redirect(flask.url_for('public.index'))
 
 
-@mod.route('/')
 @flask_login.login_required
+@mod.route('/')
 def index():
     pages = models.Page.query.all()
-    posts = models.Post.query.filter_by(is_event=False)
-    events = models.Post.query.filter_by(is_event=True)
+    posts = models.BlogPost.query.all()
+    events = models.Event.query.all()
     return flask.render_template(
-        'admin/index.html', pages=pages, posts=posts, events=events
+        'admin/index.html',
+        pages=pages,
+        posts=posts,
+        events=events
     )
 
 
-@mod.route('/post/<int:post_id>')
-@mod.route('/post/<int:post_id>/<int:content_id>')
-def post(post_id, content_id=None):
+@flask_login.login_required
+@mod.route('/post/<int:post_id>', methods=['GET', 'POST'])
+def post(post_id):
     post = models.Post.query.get(post_id)
 
-    if content_id:
-        content = models.PostContent.query.get(content_id)
-        if content.post_id != post_id:
-            flask.abort(404)
+    form = forms.EditPostForm(obj=post)
+
+    if form.validate_on_submit():
+        post.published = form.published.data
+        post.title_sv = form.title_sv.data
+        post.title_en = (
+            form.title_en.data
+            if form.title_en.data and not form.title_en.data.isspace()
+            else None
+        )
+        post.text_sv = form.text_sv.data
+        post.text_en = (
+            form.text_en.data
+            if form.text_en.data and not form.text_en.data.isspace()
+            else None
+        )
+
+        models.db.session.commit()
+
+        flask.flash("Uppdaterad!", 'success')
+
+        flask.redirect(flask.url_for('admin.post', post_id=post.id))
+
     else:
-        content = post.content
+        forms.flash_errors(form)
 
-    form = forms.EditPostForm(obj=content)
-    form.published.data = post.published
-
-    return flask.render_template(
-        'admin/post.html', post=post, content=content, form=form
-    )
+    return flask.render_template('admin/post.html', post=post, form=form)
 
 
-@mod.route('/event/<int:post_id>')
-@mod.route('/event/<int:post_id>/<int:content_id>')
-def event(post_id, content_id=None):
-    event = models.Post.query.get(post_id)
+@flask_login.login_required
+@mod.route('/event/<int:event_id>', methods=['GET', 'POST'])
+def event(event_id):
+    event = models.Event.query.get(event_id)
 
-    if content_id:
-        content = models.PostContent.query.get(content_id)
-        if content.post_id != post_id:
-            flask.abort(404)
+    form = forms.EditEventForm(obj=event)
+
+    if form.validate_on_submit():
+        event.published = form.published.data
+
+        event.title_sv = form.title_sv.data
+        event.title_en = forms.none_if_space(form.title_en.data)
+
+        event.text_sv = form.text_sv.data
+        event.text_en = forms.none_if_space(form.text_en.data)
+
+        event.start_time = form.start_time.data
+
+        event.time_text_sv = forms.none_if_space(form.time_text_sv.data)
+        event.time_text_en = forms.none_if_space(form.time_text_en.data)
+
+        event.location_sv = form.location_sv.data
+        event.location_en = forms.none_if_space(form.location_en.data)
+
+        event.location_link = forms.none_if_space(form.location_link.data)
+
+        models.db.session.commit()
+
+        flask.flash("Uppdaterad!", 'success')
+
+        flask.redirect(flask.url_for('admin.event', event_id=event.id))
+
     else:
-        content = event.content
+        forms.flash_errors(form)
 
-    form = forms.EditEventForm(obj=content)
-    form.published.data = event.published
-
-    return flask.render_template(
-        'admin/event.html', event=event, content=content, form=form
-    )
+    return flask.render_template('admin/event.html', event=event, form=form)

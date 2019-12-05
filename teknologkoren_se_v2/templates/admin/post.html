@@ -7,27 +7,19 @@
 <h1>Admin</h1>
 
 <h2>Inlägg</h2>
-<h3>Versioner</h3>
-<ul>
-{% for revision in post.revisions %}
-  <li><a href="{{ url_for('admin.post', post_id=post.id, content_id=revision.id) }}">{{ revision.title_sv }}</a></li>
-{% endfor %}
-</ul>
-
-<h3>Innehåll</h3>
 <form method="POST">
   {{ form.csrf_token }}
 
   {{ form_entry(form.published) }}
 
   <div>
-    <h4>Svenska</h4>
+    <h3>Svenska</h3>
     {{ form_entry(form.title_sv) }}
     {{ form_entry(form.text_sv) }}
   </div>
 
   <div>
-    <h4>Engelska</h4>
+    <h3>Engelska</h3>
     {{ form_entry(form.title_en) }}
     {{ form_entry(form.text_en) }}
   </div>
