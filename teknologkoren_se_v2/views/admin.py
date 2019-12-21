@@ -84,19 +84,13 @@ def post(post_id):
     form = forms.EditPostForm(obj=post)
 
     if form.validate_on_submit():
-        post.published = form.published.data
+        event.published = forms.none_if_space(form.published.data)
+
         post.title_sv = form.title_sv.data
-        post.title_en = (
-            form.title_en.data
-            if form.title_en.data and not form.title_en.data.isspace()
-            else None
-        )
+        post.title_en = forms.none_if_space(form.title_en.data)
+
         post.text_sv = form.text_sv.data
-        post.text_en = (
-            form.text_en.data
-            if form.text_en.data and not form.text_en.data.isspace()
-            else None
-        )
+        post.text_en = forms.none_if_space(form.text_en.data)
 
         models.db.session.commit()
 
@@ -118,7 +112,7 @@ def event(event_id):
     form = forms.EditEventForm(obj=event)
 
     if form.validate_on_submit():
-        event.published = form.published.data
+        event.published = forms.none_if_space(form.published.data)
 
         event.title_sv = form.title_sv.data
         event.title_en = forms.none_if_space(form.title_en.data)
