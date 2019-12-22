@@ -7,8 +7,18 @@
 <h1>Admin</h1>
 
 <h2>Händelse</h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
+
+  <div>
+    <h3>Bild</h3>
+    {% if event and event.image %}
+    <p>Nuvarande bild:</p>
+    <img class="edit-post-current-img" src="{{ url_for_image(event.image.filename, 400) }}" alt="">
+    {% endif %}
+    {{ form_entry(form.image) }}
+    {{ form_entry(form.portrait) }}
+  </div>
 
   <div>
     <h3>Svenska</h3>
@@ -27,7 +37,7 @@
   </div>
 
   <div>
-    <h3>Språklöst</h3>
+    <h3>Meta</h3>
     {{ form_entry(form.start_time) }}
     {{ form_entry(form.location_link) }}
     {{ form_entry(form.published) }}

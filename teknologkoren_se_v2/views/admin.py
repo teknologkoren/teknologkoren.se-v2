@@ -77,14 +77,21 @@ def index():
 
 
 @flask_login.login_required
+@mod.route('/post/new', methods=['GET', 'POST'])
 @mod.route('/post/<int:post_id>', methods=['GET', 'POST'])
-def post(post_id):
-    post = models.Post.query.get(post_id)
+def post(post_id=None):
+    if post_id:
+        post = models.Post.query.get_or_404(post_id)
+    else:
+        post = None
 
     form = forms.EditPostForm(obj=post)
 
     if form.validate_on_submit():
-        event.published = forms.none_if_space(form.published.data)
+        if not post:
+            post = models.Post()
+
+        post.published = forms.none_if_space(form.published.data)
 
         post.title_sv = form.title_sv.data
         post.title_en = forms.none_if_space(form.title_en.data)
@@ -92,14 +99,34 @@ def post(post_id):
         post.text_sv = form.text_sv.data
         post.text_en = forms.none_if_space(form.text_en.data)
 
+        if form.image.data:
+            filename = util.image_uploads.save(form.image.data)
+            image = models.Image(filename=filename)
+            models.db.session.add(image)
+
+            image.portrait = form.portrait.data
+            post.image = image
+
+        elif post.image:
+            post.image.portrait = form.portrait.data
+
+        if not post_id:
+            models.db.session.add(post)
+
         models.db.session.commit()
 
-        flask.flash("Uppdaterad!", 'success')
+        if post_id:
+            flask.flash("Uppdaterad!", 'success')
+        else:
+            flask.flash("Inlägg skapat!", 'success')
 
         flask.redirect(flask.url_for('admin.post', post_id=post.id))
 
     else:
         forms.flash_errors(form)
+
+    if post.image:
+        form.portrait.data = post.image.portrait
 
     return flask.render_template('admin/post.html', post=post, form=form)
 
@@ -130,6 +157,17 @@ def event(event_id):
 
         event.location_link = forms.none_if_space(form.location_link.data)
 
+        if form.image.data:
+            filename = util.image_uploads.save(form.image.data)
+            image = models.Image(filename=filename)
+            models.db.session.add(image)
+
+            image.portrait = form.portrait.data
+            event.image = image
+
+        elif event.image:
+            event.image.portrait = form.portrait.data
+
         models.db.session.commit()
 
         flask.flash("Uppdaterad!", 'success')
@@ -138,5 +176,8 @@ def event(event_id):
 
     else:
         forms.flash_errors(form)
+
+    if event.image:
+        form.portrait.data = event.image.portrait
 
     return flask.render_template('admin/event.html', event=event, form=form)

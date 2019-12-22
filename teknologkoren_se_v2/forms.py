@@ -1,5 +1,6 @@
 import flask
 import flask_wtf
+from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 from wtforms.fields import html5 as html5_fields
 from teknologkoren_se_v2 import models, util
@@ -21,7 +22,7 @@ def flash_errors(form):
 
 
 def none_if_space(data):
-    if data.isspace():
+    if isinstance(data, str) and data.isspace():
         return None
     return data
 
@@ -82,9 +83,13 @@ class LoginForm(RedirectForm):
 
 
 class UploadForm(flask_wtf.FlaskForm):
-    upload = fields.FileField('Image') #, validators=[
-    #    flask_wtf.FileAllowed(images, 'Images only!')
-    #])
+    image = fields.FileField('Ladda upp ny bild', validators=[
+        FileAllowed(util.image_uploads, 'Endast bilder!')
+    ])
+    portrait = fields.BooleanField(
+        'Porträttläge',
+        description="Bilden hamnar till höger om texten istället för ovanför"
+    )
 
 
 class EditPostForm(UploadForm):

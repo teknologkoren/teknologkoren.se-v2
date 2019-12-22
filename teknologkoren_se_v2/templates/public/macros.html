@@ -19,19 +19,31 @@
   </header>
   {% if post.image %}
 
-  {% set img_class='post-image' %}
+  {% if post.image.portrait %}
+
+  {% set img_class='portrait-image' %}
+  <img class="{{ img_class }}"
+      srcset="{{ url_for_image(post.image.filename, 200) }},
+              {{ url_for_image(post.image.filename, 400) }} 2x"
+      src="{{ url_for_image(post.image.filename, 200) }}"
+      alt="">
+
+  {% else %}
+
+  {% set img_class='landscape-image' %}
 
   {% if overview %}
   {% set img_class = img_class + ' truncate' %}
   {% endif %}
 
   <img class="{{ img_class }}"
-      srcset="{{ image_dest() }}img600/{{ post.image }},
-              {{ image_dest() }}img800/{{ post.image }} 1.5x,
-              {{ image_dest() }}img1200/{{ post.image }} 2x"
-      src="{{ image_dest() }}img600/{{ post.image }}"
+      srcset="{{ url_for_image(post.image.filename, 600)  }},
+              {{ url_for_image(post.image.filename, 800)  }} 1.5x,
+              {{ url_for_image(post.image.filename, 1200) }} 2x"
+      src="{{ url_for_image(post.image.filename, 600) }}"
       alt="">
 
+  {% endif %}
   {% endif %}
 
   {% if overview %}
@@ -61,13 +73,36 @@
       </time>
     </span>
   </header>
+  </header>
   {% if event.image %}
-  <a class="event-image" href="{{ image_dest() }}img1200/{{ event.image }}">
-    <img srcset="{{ image_dest() }}img200/{{ event.image }},
-                 {{ image_dest() }}img400/{{ event.image }} 2x"
-         src="{{ image_dest() }}img200/{{ event.image }}"
-         alt="">
+
+  {% if event.image.portrait %}
+
+  {% set img_class='portrait-image' %}
+  <a class="event-image" href="{{ url_for_image(event.image.filename, 1200) }}">
+    <img class="{{ img_class }}"
+        srcset="{{ url_for_image(event.image.filename, 200) }},
+                {{ url_for_image(event.image.filename, 400) }} 2x"
+        src="{{ url_for_image(event.image.filename, 200) }}"
+        alt="">
   </a>
+
+  {% else %}
+
+  {% set img_class='landscape-image' %}
+
+  {% if overview %}
+  {% set img_class = img_class + ' truncate' %}
+  {% endif %}
+
+  <img class="{{ img_class }}"
+      srcset="{{ url_for_image(event.image.filename, 600)  }},
+              {{ url_for_image(event.image.filename, 800)  }} 1.5x,
+              {{ url_for_image(event.image.filename, 1200) }} 2x"
+      src="{{ url_for_image(event.image.filename, 600) }}"
+      alt="">
+
+  {% endif %}
   {% endif %}
 
   {% if overview %}

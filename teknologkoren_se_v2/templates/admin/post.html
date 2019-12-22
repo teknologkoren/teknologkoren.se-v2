@@ -7,10 +7,20 @@
 <h1>Admin</h1>
 
 <h2>Inlägg</h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   {{ form_entry(form.published) }}
+
+  <div>
+    <h3>Bild</h3>
+    {% if post and post.image %}
+    <p>Nuvarande bild:</p>
+    <img class="edit-post-current-img" src="{{ url_for_image(post.image.filename, 400) }}" alt="">
+    {% endif %}
+    {{ form_entry(form.image) }}
+    {{ form_entry(form.portrait) }}
+  </div>
 
   <div>
     <h3>Svenska</h3>

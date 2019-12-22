@@ -201,6 +201,7 @@ class Page(db.Model):
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(256), nullable=False)
+    portrait = db.Column(db.Boolean, nullable=False)
 
 
 class Contact(db.Model):

@@ -42,3 +42,7 @@ input[type=number] {
 .required {
   color: red;
 }
+
+.edit-post-current-img {
+  max-height: 20rem;
+}
