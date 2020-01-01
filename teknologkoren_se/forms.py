@@ -123,8 +123,9 @@ class EditEventForm(EditPostForm):
     start_time = html5_fields.DateTimeField(
         'Tid',
         description=(
-            "Om tidsbeskrivning lämnas tomt så syns denna som tid, annars "
-            "göms den och används bara för att sortera händelserna."
+            "Om tidsbeskrivning lämnas tomt så syns denna som tid "
+            "(automatiskt formaterat), annars göms den och används bara för "
+            "att sortera händelserna."
         ),
         format='%Y-%m-%d %H:%M',
         validators=[

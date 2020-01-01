@@ -23,16 +23,26 @@
   <div>
     <h3>Svenska</h3>
     {{ form_entry(form.title_sv) }}
-    {{ form_entry(form.text_sv) }}
-    {{ form_entry(form.time_text_sv) }}
+    {{ form_entry(form.text_sv, cols=60, rows=10) }}
+    {{ form_entry(form.time_text_sv, cols=40, rows=7, placeholder=(
+      "Exempelvis vid flera konserter:\n"
+      "* Lördag den 13e december, klockan 15\n"
+      "* Lördag den 13e december, klockan 17\n"
+      "* Söndag den 14e december, klockan 15"
+    )) }}
     {{ form_entry(form.location_sv) }}
   </div>
 
   <div>
     <h3>Engelska</h3>
     {{ form_entry(form.title_en) }}
-    {{ form_entry(form.text_en) }}
-    {{ form_entry(form.time_text_en) }}
+    {{ form_entry(form.text_en, cols=60, rows=10) }}
+    {{ form_entry(form.time_text_en, cols=40, rows=7, placeholder=(
+      "Exempelvis vid flera konserter:\n"
+      "* Saturday the 13th of December, 3pm\n"
+      "* Saturday the 13th of December, 5pm\n"
+      "* Sunday the 14th of December, 3pm"
+    )) }}
     {{ form_entry(form.location_en) }}
   </div>
 

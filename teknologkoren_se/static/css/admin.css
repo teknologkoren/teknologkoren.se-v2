@@ -1,3 +1,7 @@
+main {
+  margin-bottom: 1rem;
+}
+
 input[type=number] {
   height: 1rem;
 }
