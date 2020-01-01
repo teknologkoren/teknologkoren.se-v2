@@ -1,7 +1,7 @@
 import flask
 import flask_login
-from teknologkoren_se_v2 import models, util, locale, forms
-from teknologkoren_se_v2.locale import get_string
+from teknologkoren_se import models, util, locale, forms
+from teknologkoren_se.locale import get_string
 
 mod = flask.Blueprint(
     'admin',

@@ -7,8 +7,8 @@ import flask_sqlalchemy
 import slugify
 import markdown
 import flask_login
-from teknologkoren_se_v2 import util
-from teknologkoren_se_v2.locale import get_string, get_locale
+from teknologkoren_se import util
+from teknologkoren_se.locale import get_string, get_locale
 
 db = flask_sqlalchemy.SQLAlchemy()
 
@@ -64,7 +64,7 @@ class Post(db.Model):
     def html(self, offset=2):
         return markdown.markdown(
             self.text,
-            extensions=['teknologkoren_se_v2.lib.mdx_headdown'],
+            extensions=['teknologkoren_se.lib.mdx_headdown'],
             extension_configs={
                 'mdx_headdown': {
                     'offset': offset
@@ -149,7 +149,7 @@ class Event(Post):
     def time_html(self):
         return markdown.markdown(
             self.time_text,
-            extensions=['teknologkoren_se_v2.lib.mdx_headdown'],
+            extensions=['teknologkoren_se.lib.mdx_headdown'],
             extension_configs={
                 'mdx_headdown': {
                     'offset': 2

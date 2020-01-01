@@ -17,7 +17,7 @@ def create_app(config=None, instance_config=None):
     register_blueprints(app)
     register_cli(app)
 
-    from teknologkoren_se_v2 import models, views, util
+    from teknologkoren_se import models, views, util
 
     models.db.init_app(app)
     init_db(app)
@@ -37,7 +37,7 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from teknologkoren_se_v2.views import public, admin
+    from teknologkoren_se.views import public, admin
     public.init_dynamic_pages()
     app.register_blueprint(public.mod)
     app.register_blueprint(admin.mod)
@@ -50,7 +50,7 @@ def register_cli(app):
 
     @app.cli.command('dropdb')
     def dropdb_command():
-        from teknologkoren_se_v2 import models
+        from teknologkoren_se import models
         if click.confirm("You are about to DROP *ALL* tables, are you sure "
                          "you want to do this?", abort=True):
             models.db.drop_all()
@@ -61,7 +61,7 @@ def register_cli(app):
 
     @app.cli.command('createadmin')
     def createadmin_command():
-        from teknologkoren_se_v2 import models
+        from teknologkoren_se import models
         print("Creating a new admin user...")
         username = click.prompt("Username")
         password = click.prompt("Password", hide_input=True)
@@ -77,7 +77,7 @@ def register_cli(app):
 def populate_testdb():
     import datetime
     import random
-    from teknologkoren_se_v2 import models
+    from teknologkoren_se import models
 
     contacts = [
         models.Contact(
@@ -134,10 +134,10 @@ def populate_testdb():
 
     models.db.session.add_all(contacts)
 
-    with open('teknologkoren_se_v2/lorem_lines.txt') as f:
+    with open('teknologkoren_se/lorem_lines.txt') as f:
         lorem_lines = [l.strip() for l in f.readlines()]
 
-    with open('teknologkoren_se_v2/lorem_paragraphs.txt') as f:
+    with open('teknologkoren_se/lorem_paragraphs.txt') as f:
         lorem_paragraphs = [l.strip() for l in f.readlines()]
 
     def lipsum_line():
@@ -265,13 +265,13 @@ def populate_testdb():
 
 
 def init_db(app):
-    from teknologkoren_se_v2 import models
+    from teknologkoren_se import models
     models.db.create_all(app=app)
 
 
 def setup_flask_uploads(app):
     import flask_uploads
-    from teknologkoren_se_v2 import util
+    from teknologkoren_se import util
 
     flask_uploads.configure_uploads(app, util.image_uploads)
 
@@ -281,7 +281,7 @@ def setup_flask_uploads(app):
 def setup_locale(app):
     from babel.dates import (format_date, format_datetime, format_time,
                              get_timezone)
-    from teknologkoren_se_v2 import locale
+    from teknologkoren_se import locale
     app.jinja_env.globals['locale'] = locale
     app.jinja_env.globals['_'] = locale.get_string
     app.jinja_env.globals['url_for_lang'] = locale.url_for_lang

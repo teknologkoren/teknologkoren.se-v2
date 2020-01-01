@@ -1,6 +1,6 @@
 import flask
 import werkzeug
-from teknologkoren_se_v2.translations import translations
+from teknologkoren_se.translations import translations
 
 
 class LazyTranslation:

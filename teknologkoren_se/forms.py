@@ -3,8 +3,8 @@ import flask_wtf
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 from wtforms.fields import html5 as html5_fields
-from teknologkoren_se_v2 import models, util
-from teknologkoren_se_v2.locale import get_string
+from teknologkoren_se import models, util
+from teknologkoren_se.locale import get_string
 
 
 def flash_errors(form):

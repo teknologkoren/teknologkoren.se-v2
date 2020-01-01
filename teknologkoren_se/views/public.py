@@ -1,6 +1,6 @@
 import datetime
 import flask
-from teknologkoren_se_v2 import models, util, locale
+from teknologkoren_se import models, util, locale
 
 mod = flask.Blueprint(
     'public',

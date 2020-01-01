@@ -1,5 +1,5 @@
 from pathlib import Path
-from teknologkoren_se_v2 import factory
+from teknologkoren_se import factory
 
 path = Path(__file__).parent.resolve()
 
