@@ -35,7 +35,7 @@
   </div>
 
   <div class="form-field">
-    <button>Spara</button> | <a href="{{ url_for('admin.delete_post', post_id=post.id) }}">Ta bort</a>
+    <button>Spara</button>{% if post %} | <a href="{{ url_for('admin.delete_post', post_id=post.id) }}">Ta bort</a>{% endif %}
   </div>
 </form>
 

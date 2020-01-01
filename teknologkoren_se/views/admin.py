@@ -229,7 +229,7 @@ def delete_post(post_id):
     models.db.session.delete(post)
     models.db.session.commit()
 
-    flask.flash("Inlägg {} borttaget!".format(post_title))
+    flask.flash("Inlägg {} borttaget!".format(post_title), 'success')
     return flask.redirect(flask.url_for('admin.index'))
 
 
@@ -241,7 +241,7 @@ def delete_event(event_id):
     models.db.session.delete(event)
     models.db.session.commit()
 
-    flask.flash("Händelse {} borttagen!".format(event_title))
+    flask.flash("Händelse {} borttagen!".format(event_title), 'success')
     return flask.redirect(flask.url_for('admin.index'))
 
 
