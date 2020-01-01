@@ -31,3 +31,19 @@ new `requirements.txt` when adding a new dependency.
 pip install pip-tools
 pip-tools sync
 ```
+
+
+### Populating a mock database
+```sh
+flask populatetestdb
+```
+This will populate the database with some mock data. Posts, events and pages
+are generated from some paragraphs of "lorem ipsum" and a bit of random
+"logic".
+
+
+### Create an admin user
+```sh
+flask createadmin
+```
+You will be prompted for a username and password.
