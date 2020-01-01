@@ -133,4 +133,8 @@ translations = {
         'en': "Wrong username or password.",
         'sv': "Fel användarnamn eller lösenord.",
     },
+    'field-error': {
+        'en': "Error in field: {}",
+        'sv': "Fel i fält: {}"
+    }
 }

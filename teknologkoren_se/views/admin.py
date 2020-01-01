@@ -1,5 +1,6 @@
 import flask
 import flask_login
+import pytz
 from teknologkoren_se import models, util, locale, forms
 from teknologkoren_se.locale import get_string
 
@@ -23,6 +24,18 @@ def setup_jinja(app):
                                                    .image_uploads
                                                    .config
                                                    .base_url)
+
+
+def cet_to_utc(dt):
+    tz = pytz.timezone('Europe/Stockholm')
+    utc = tz.localize(dt, is_dst=None).astimezone(pytz.utc)
+    return utc
+
+
+def utc_to_cet(dt):
+    tz = pytz.timezone('Europe/Stockholm')
+    cet = pytz.utc.localize(dt, is_dst=None).astimezone(tz)
+    return cet
 
 
 @login_manager.user_loader
@@ -81,7 +94,7 @@ def index():
 @mod.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id=None):
     if post_id:
-        post = models.Post.query.get_or_404(post_id)
+        post = models.BlogPost.query.get_or_404(post_id)
     else:
         post = None
 
@@ -89,9 +102,15 @@ def post(post_id=None):
 
     if form.validate_on_submit():
         if not post:
-            post = models.Post()
+            post = models.BlogPost()
 
-        post.published = forms.none_if_space(form.published.data)
+        published_cet = forms.none_if_space(form.published.data)
+        if published_cet:
+            published = cet_to_utc(published_cet)
+        else:
+            published = None
+
+        post.published = published
 
         post.title_sv = form.title_sv.data
         post.title_en = forms.none_if_space(form.title_en.data)
@@ -125,21 +144,34 @@ def post(post_id=None):
     else:
         forms.flash_errors(form)
 
-    if post.image:
+    if post and post.image:
         form.portrait.data = post.image.portrait
 
     return flask.render_template('admin/post.html', post=post, form=form)
 
 
 @flask_login.login_required
+@mod.route('/event/new', methods=['GET', 'POST'])
 @mod.route('/event/<int:event_id>', methods=['GET', 'POST'])
-def event(event_id):
-    event = models.Event.query.get(event_id)
+def event(event_id=None):
+    if event_id:
+        event = models.Event.query.get(event_id)
+    else:
+        event = None
 
     form = forms.EditEventForm(obj=event)
 
     if form.validate_on_submit():
-        event.published = forms.none_if_space(form.published.data)
+        if not event:
+            event = models.Event()
+
+        published_cet = forms.none_if_space(form.published.data)
+        if published_cet:
+            published = cet_to_utc(published_cet)
+        else:
+            published = None
+
+        event.published = published
 
         event.title_sv = form.title_sv.data
         event.title_en = forms.none_if_space(form.title_en.data)
@@ -147,7 +179,7 @@ def event(event_id):
         event.text_sv = form.text_sv.data
         event.text_en = forms.none_if_space(form.text_en.data)
 
-        event.start_time = form.start_time.data
+        event.start_time = cet_to_utc(form.start_time.data)
 
         event.time_text_sv = forms.none_if_space(form.time_text_sv.data)
         event.time_text_en = forms.none_if_space(form.time_text_en.data)
@@ -168,16 +200,115 @@ def event(event_id):
         elif event.image:
             event.image.portrait = form.portrait.data
 
+        if not event_id:
+            models.db.session.add(event)
+
         models.db.session.commit()
 
-        flask.flash("Uppdaterad!", 'success')
+        if event_id:
+            flask.flash("Uppdaterad!", 'success')
+        else:
+            flask.flash("Händelse skapad!", 'success')
 
         flask.redirect(flask.url_for('admin.event', event_id=event.id))
 
     else:
         forms.flash_errors(form)
 
-    if event.image:
+    if event and event.image:
         form.portrait.data = event.image.portrait
 
     return flask.render_template('admin/event.html', event=event, form=form)
+
+
+@flask_login.login_required
+@mod.route('/post/<int:post_id>/remove')
+def delete_post(post_id):
+    post = models.BlogPost.query.get_or_404(post_id)
+    post_title = post.title_sv
+    models.db.session.delete(post)
+    models.db.session.commit()
+
+    flask.flash("Inlägg {} borttaget!".format(post_title))
+    return flask.redirect(flask.url_for('admin.index'))
+
+
+@flask_login.login_required
+@mod.route('/event/<int:event_id>/remove')
+def delete_event(event_id):
+    event = models.Event.query.get_or_404(event_id)
+    event_title = event.title_sv
+    models.db.session.delete(event)
+    models.db.session.commit()
+
+    flask.flash("Händelse {} borttagen!".format(event_title))
+    return flask.redirect(flask.url_for('admin.index'))
+
+
+@flask_login.login_required
+@mod.route('/page/<int:page_id>', methods=['GET', 'POST'])
+def page(page_id=None):
+    if page_id:
+        page = models.Page.query.get_or_404(page_id)
+    else:
+        page = None
+
+    form = forms.EditPageForm(obj=page)
+
+    if form.validate_on_submit():
+        page.text_sv = form.text_sv.data
+        page.text_en = form.text_en.data
+
+        if form.image.data:
+            filename = util.image_uploads.save(form.image.data)
+            image = models.Image(
+                filename=filename,
+                portrait=form.portrait.data
+            )
+            models.db.session.add(image)
+
+            page.image = image
+
+        models.db.session.commit()
+
+        flask.flash("Uppdaterad!", 'success')
+
+        flask.redirect(flask.url_for('admin.page', page_id=page.id))
+
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/page.html', page=page, form=form)
+
+
+@flask_login.login_required
+@mod.route('/config', methods=['GET', 'POST'])
+def config():
+    config = models.Config.query.first()
+
+    form = forms.EditConfigForm(obj=config)
+
+    if form.validate_on_submit():
+        if form.frontpage_image.image.data:
+            filename = util.image_uploads.save(form.frontpage_image.image.data)
+            image = models.Image(
+                filename=filename,
+                portrait=False
+            )
+            models.db.session.add(image)
+
+            config.frontpage_image = image
+
+        config.flash = forms.none_if_space(form.flash.data)
+        config.flash_type = form.flash_type.data
+
+        models.db.session.commit()
+
+        flask.flash("Uppdaterad!", 'success')
+
+        flask.redirect(flask.url_for('admin.config'))
+
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/config.html', config=config, form=form)

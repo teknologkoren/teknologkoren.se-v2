@@ -13,9 +13,7 @@
   <body>
     <nav class="nav">
       <ul>
-        <li><a class="inverted-link" href="{{ url_for('admin.index') }}">{{ _('admin-nav-home') }}</a></li>
-        <li><a class="inverted-link" href="#posts">{{ _('admin-nav-posts') }}</a></li>
-        <li><a class="inverted-link" href="#events">{{ _('admin-nav-events') }}</a></li>
+        <li><a class="inverted-link" href="{{ url_for('admin.index') }}">Gå till index</a></li>
       </ul>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}

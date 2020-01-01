@@ -218,6 +218,7 @@ article.post > header, article.post > h1 {
   padding: .5rem;
   border: 1px solid #ddd;
   border-radius: 7px;
+  clear: both;
 }
 
 .event-detail time.hidden {

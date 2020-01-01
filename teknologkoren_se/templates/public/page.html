@@ -1,7 +1,7 @@
 {% extends "public/base.html" %}
 
 {% if page.image %}
-{% set cover_image = page.image %}
+{% set cover_image = page.image.filename %}
 {% endif %}
 
 {% block body %}

@@ -7,11 +7,12 @@
 <h2>Sidor</h2>
 <ul>
 {% for page in pages %}
-  <li><a href="#">{{ page.path }}</a></li>
+  <li><a href="{{ url_for('admin.page', page_id=page.id) }}">{{ page.path }}</a></li>
 {% endfor %}
 </ul>
 
 <h2 id="posts">Inlägg</h2>
+<a href="{{ url_for('admin.post') }}">Nytt inlägg</a>
 {% if posts %}
 <ul>
 {% for post in posts %}
@@ -21,6 +22,7 @@
 {% endif %}
 
 <h2 id="events">Händelser</h2>
+<a href="{{ url_for('admin.event') }}">Ny händelse</a>
 {% if events %}
 <ul>
 {% for event in events %}

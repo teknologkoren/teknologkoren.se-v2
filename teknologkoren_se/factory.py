@@ -20,7 +20,8 @@ def create_app(config=None, instance_config=None):
     from teknologkoren_se import models, views, util
 
     models.db.init_app(app)
-    init_db(app)
+    with app.app_context():
+        init_db(app)
 
     util.bcrypt.init_app(app)
 
@@ -267,6 +268,28 @@ def populate_testdb():
 def init_db(app):
     from teknologkoren_se import models
     models.db.create_all(app=app)
+
+    pages = ['about', 'hire', 'apply', 'lucia']
+    for path in pages:
+        page = (
+            models.Page.query
+            .filter_by(path=path)
+            .first()
+        )
+
+        if not page:
+            page = models.Page(
+                path=path,
+                text_sv='',
+                text_en=''
+            )
+            models.db.session.add(page)
+            models.db.session.commit()
+
+    if not models.Config.query.first():
+        config = models.Config()
+        models.db.session.add(config)
+        models.db.session.commit()
 
 
 def setup_flask_uploads(app):

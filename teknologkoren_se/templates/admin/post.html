@@ -35,7 +35,7 @@
   </div>
 
   <div class="form-field">
-    <button>{{ _("submit") }}</button>
+    <button>Spara</button> | <a href="{{ url_for('admin.delete_post', post_id=post.id) }}">Ta bort</a>
   </div>
 </form>
 

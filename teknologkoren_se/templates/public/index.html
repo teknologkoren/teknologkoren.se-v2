@@ -3,7 +3,9 @@
 {% from "public/macros.html" import post_article, event_article, pager %}
 
 {% if pagination.page == 1 %}
-{% set cover_image = "ktk.jpg" %}
+{% if image %}
+{% set cover_image = image.filename %}
+{% endif %}
 {% endif %}
 
 {% block body %}

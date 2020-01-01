@@ -13,6 +13,16 @@ from teknologkoren_se.locale import get_string, get_locale
 db = flask_sqlalchemy.SQLAlchemy()
 
 
+class Config(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    frontpage_image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    frontpage_image = db.relationship('Image', foreign_keys=frontpage_image_id)
+
+    flash = db.Column(db.String(100), nullable=True)
+    flash_type = db.Column(db.String(10), nullable=True)
+
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -176,7 +186,6 @@ class Page(db.Model):
     path = db.Column(db.String(50), nullable=False)
     text_sv = db.Column(db.Text, nullable=False)
     text_en = db.Column(db.Text, nullable=False)
-    revision = db.Column(db.DateTime, nullable=False)
 
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
     image = db.relationship('Image', foreign_keys=image_id)

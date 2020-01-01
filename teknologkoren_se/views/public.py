@@ -27,8 +27,13 @@ def index(page):
         .order_by(models.Post.published.desc())
     )
 
+    config = models.Config.query.first()
+    if config.flash:
+        flask.flash(config.flash, config.flash_type)
+
     pagination = posts.paginate(page, 5)
     return flask.render_template('public/index.html',
+                                 image=config.frontpage_image,
                                  pagination=pagination,
                                  page=page)
 
@@ -104,23 +109,22 @@ def contact():
                                  ordf=ordf)
 
 
-def view_page_factory(endpoint):
+def view_page_factory(path):
     def view_page():
         page = (
             models.Page.query
-            .filter_by(path=endpoint)
-            .order_by(models.Page.revision.desc())
+            .filter_by(path=path)
             .first_or_404()
         )
 
-        template = 'public/{}.html'.format(endpoint)
+        template = 'public/page.html'
         return flask.render_template(template, page=page)
 
-    return (endpoint, endpoint, view_page)
+    return (path, path, view_page)
 
 
 def init_dynamic_pages():
     pages = ['about', 'hire', 'apply', 'lucia']
-    for page in pages:
-        view_func = view_page_factory(page)
+    for path in pages:
+        view_func = view_page_factory(path)
         mod.add_url_rule(*view_func)

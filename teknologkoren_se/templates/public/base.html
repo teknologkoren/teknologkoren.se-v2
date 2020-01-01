@@ -66,11 +66,11 @@
     {% endif %}
     {% endwith %}
     {% if cover_image %}
-    <img srcset="/static/images/img600/{{ cover_image }} 600w,
-                 /static/images/img1200/{{ cover_image }} 1200w,
-                 /static/images/img1600/{{ cover_image }} 1600w"
+    <img srcset="{{ url_for_image(cover_image, 600)  }} 600w,
+                 {{ url_for_image(cover_image, 1200) }} 1200w,
+                 {{ url_for_image(cover_image, 1600) }} 1600w"
          sizes="(min-width: 69em) 67em, 100vw"
-         src="/static/images/img1200/{{ cover_image }}"
+         src="{{ url_for_image(cover_image, 1200) }}"
          class="cover-image"
          alt="">
     {% endif %}

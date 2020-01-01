@@ -54,8 +54,7 @@
   </div>
 
   <div class="form-field">
-    <button>{{ _("submit") }}</button>
+    <button>Spara</button> | <a href="{{ url_for('admin.delete_event', event_id=event.id) }}">Ta bort</a>
   </div>
 </form>
-
 {% endblock %}

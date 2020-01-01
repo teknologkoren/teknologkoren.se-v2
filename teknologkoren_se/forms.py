@@ -113,6 +113,8 @@ class EditPostForm(UploadForm):
             "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
             "publicera."
         ),
+        format='%Y-%m-%d %H:%M',
+        render_kw={'placeholder': 'YYYY-mm-dd HH:MM'},
         validators=[
             validators.Optional()
         ]
@@ -128,6 +130,7 @@ class EditEventForm(EditPostForm):
             "att sortera händelserna."
         ),
         format='%Y-%m-%d %H:%M',
+        render_kw={'placeholder': 'YYYY-mm-dd HH:MM'},
         validators=[
             validators.InputRequired()
         ]
@@ -164,3 +167,28 @@ class EditEventForm(EditPostForm):
     location_link = fields.StringField('Länk till plats', validators=[
         validators.Optional()
     ])
+
+
+class EditPageForm(UploadForm):
+    text_sv = fields.TextAreaField('Text', validators=[
+        validators.InputRequired()
+    ])
+    text_en = fields.TextAreaField('Text', validators=[
+        validators.InputRequired()
+    ])
+
+
+class EditConfigForm(flask_wtf.FlaskForm):
+    frontpage_image = fields.FormField(UploadForm)
+
+    flash = fields.StringField('Flash')
+    flash_type = fields.SelectField(
+        'Flash-typ',
+        description='Vilken färg flashen har',
+        choices=[
+            ('success', 'Grön'),
+            ('warning', 'Gul'),
+            ('error', 'Röd'),
+            ('info', 'Blå')
+        ]
+    )
