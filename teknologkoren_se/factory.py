@@ -169,7 +169,6 @@ def populate_testdb():
             'heading-en': "Book a Lucia procession"
         }
     ]
-    page_objs = []
     for page in pages:
         text_sv = "# {}\n\n{}".format(
             page['heading-sv'],
@@ -179,16 +178,10 @@ def populate_testdb():
             page['heading-en'],
             lipsum_paragraphs(4)
         )
-        page_objs.append(
-            models.Page(
-                path=page['path'],
-                text_sv=text_sv,
-                text_en=text_en,
-                revision=datetime.datetime.utcnow()
-            )
-        )
+        page_obj = models.Page.query.filter_by(path=page['path']).first()
+        page_obj.text_sv=text_sv
+        page_obj.text_en=text_en
 
-    models.db.session.add_all(page_objs)
     models.db.session.commit()
 
     posts = []

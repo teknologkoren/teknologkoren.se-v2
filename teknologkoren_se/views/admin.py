@@ -114,7 +114,7 @@ def frontpage():
 
         flask.flash("Uppdaterad!", 'success')
 
-        flask.redirect(flask.url_for('admin.config'))
+        return flask.redirect(flask.url_for('admin.frontpage'))
 
     else:
         forms.flash_errors(form)

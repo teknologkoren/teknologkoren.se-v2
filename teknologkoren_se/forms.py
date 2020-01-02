@@ -185,7 +185,7 @@ class EditFrontpageForm(flask_wtf.FlaskForm):
         'Flash',
         description=(
             'Text i flashen. Kan innehålla html, som '
-            '<a href="example.com">en länk</a>.'
+            '<a href="https://example.com">en länk</a>.'
         )
     )
     flash_type = fields.SelectField(
