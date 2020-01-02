@@ -34,8 +34,10 @@
     {{ form_entry(form.text_en, cols=60, rows=10) }}
   </div>
 
+  {% if post %}<p><a class="confirm" href="{{ url_for('admin.delete_post', post_id=post.id) }}">Ta bort</a></p>{% endif %}
+
   <div class="form-field">
-    <button>Spara</button>{% if post %} | <a href="{{ url_for('admin.delete_post', post_id=post.id) }}">Ta bort</a>{% endif %}
+    <button>Spara</button> | <a href="{{ url_for('admin.index') }}">Avbryt</a>
   </div>
 </form>
 

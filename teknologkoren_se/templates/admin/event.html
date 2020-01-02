@@ -53,8 +53,10 @@
     {{ form_entry(form.published) }}
   </div>
 
+  {% if event %}<p><a class="confirm" href="{{ url_for('admin.delete_event', event_id=event.id) }}">Ta bort</a></p>{% endif %}
+
   <div class="form-field">
-    <button>Spara</button>{% if event %} | <a href="{{ url_for('admin.delete_event', event_id=event.id) }}">Ta bort</a>{% endif %}
+    <button>Spara</button> | <a href="{{ url_for('admin.index') }}">Avbryt</a>
   </div>
 </form>
 {% endblock %}
