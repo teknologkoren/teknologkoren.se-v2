@@ -29,15 +29,13 @@
       <th>Efternamn</th>
       <th>E-postadress</th>
       <th>Sorteringsvikt</th>
-      <th></th>
     {% for contact in contacts %}
     <tr>
-      <td>{{ contact.title }}</td>
+      <td><a href="{{ url_for('admin.edit_contact', contact_id=contact.id) }}">{{ contact.title }}</td>
       <td>{{ contact.first_name }}</td>
       <td>{{ contact.last_name }}</td>
       <td>{{ contact.email }}</td>
       <td>{{ contact.weight }}</td>
-      <td><a href="{{ url_for('admin.edit_contact', contact_id=contact.id) }}">Redigera</a></td>
     </tr>
     {% endfor %}
   </table>
