@@ -79,8 +79,8 @@ def logout():
 @mod.route('/')
 def index():
     pages = models.Page.query.all()
-    posts = models.BlogPost.query.all()
-    events = models.Event.query.all()
+    posts = models.BlogPost.query.order_by(models.BlogPost.id.desc()).all()
+    events = models.Event.query.order_by(models.Event.id.desc()).all()
     return flask.render_template(
         'admin/index.html',
         pages=pages,
