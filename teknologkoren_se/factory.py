@@ -262,8 +262,13 @@ def init_db(app):
     from teknologkoren_se import models
     models.db.create_all(app=app)
 
-    pages = ['about', 'hire', 'apply', 'lucia']
-    for path in pages:
+    pages = [
+        ('om-oss', 'Om oss', 'About us'),
+        ('boka', 'Boka oss', 'Hire us'),
+        ('sjung', 'Sjung med', 'Apply'),
+        ('lucia', 'Boka luciatåg', 'Boka luciatåg')
+    ]
+    for path, title_sv, title_en in pages:
         page = (
             models.Page.query
             .filter_by(path=path)
@@ -274,7 +279,9 @@ def init_db(app):
             page = models.Page(
                 path=path,
                 text_sv='',
-                text_en=''
+                text_en='',
+                title_sv=title_sv,
+                title_en=title_en,
             )
             models.db.session.add(page)
             models.db.session.commit()

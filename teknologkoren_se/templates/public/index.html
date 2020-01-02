@@ -1,5 +1,7 @@
 {% extends "public/base.html" %}
 
+{% set title = _('frontpage-title') %}
+
 {% from "public/macros.html" import post_article, event_article, pager %}
 
 {% if pagination.page == 1 %}

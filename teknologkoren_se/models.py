@@ -184,8 +184,12 @@ def create_slug_en(target, value, oldvalue, initiator):
 class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(50), nullable=False)
+
     text_sv = db.Column(db.Text, nullable=False)
     text_en = db.Column(db.Text, nullable=False)
+
+    title_sv = db.Column(db.String(50), nullable=False)
+    title_en = db.Column(db.String(50), nullable=False)
 
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
     image = db.relationship('Image', foreign_keys=image_id)
@@ -205,6 +209,19 @@ class Page(db.Model):
     @property
     def html(self):
         return markdown.markdown(self.text)
+
+
+    @property
+    def title(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.title_sv
+
+        if lang == 'en':
+            return self.title_en
+
+        flask.abort(500)
 
 
 class Image(db.Model):

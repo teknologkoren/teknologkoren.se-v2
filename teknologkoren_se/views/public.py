@@ -19,7 +19,7 @@ def setup_jinja(app):
 
 
 @mod.route('/', defaults={'page': 1})
-@mod.route('/blog/page/<int:page>/')
+@mod.route('/blogg/sida/<int:page>/')
 def index(page):
     posts = (
         models.Post.query
@@ -38,8 +38,8 @@ def index(page):
                                  page=page)
 
 
-@mod.route('/events/', defaults={'page': 1})
-@mod.route('/events/page/<int:page>')
+@mod.route('/konserter/', defaults={'page': 1})
+@mod.route('/konserter/sida/<int:page>')
 def events(page):
     events = (
         models.Event.query
@@ -53,8 +53,8 @@ def events(page):
                                  page=page)
 
 
-@mod.route('/blog/<int:post_id>/')
-@mod.route('/blog/<int:post_id>/<slug>/')
+@mod.route('/blogg/<int:post_id>/')
+@mod.route('/blogg/<int:post_id>/<slug>/')
 def view_post(post_id, slug=None):
     post = models.BlogPost.query.get_or_404(post_id)
 
@@ -74,8 +74,8 @@ def view_post(post_id, slug=None):
     return flask.render_template('public/view_post.html', post=post)
 
 
-@mod.route('/events/<int:event_id>/')
-@mod.route('/events/<int:event_id>/<slug>/')
+@mod.route('/konserter/<int:event_id>/')
+@mod.route('/konserter/<int:event_id>/<slug>/')
 def view_event(event_id, slug=None):
     event = models.Event.query.get_or_404(event_id)
 
@@ -95,7 +95,7 @@ def view_event(event_id, slug=None):
     return flask.render_template('public/view_post.html', post=event)
 
 
-@mod.route('/contact')
+@mod.route('/kontakt')
 def contact():
     contacts = (
         models.Contact.query.
@@ -109,7 +109,7 @@ def contact():
                                  ordf=ordf)
 
 
-def view_page_factory(path):
+def view_page_factory(path, endpoint):
     def view_page():
         page = (
             models.Page.query
@@ -120,11 +120,12 @@ def view_page_factory(path):
         template = 'public/page.html'
         return flask.render_template(template, page=page)
 
-    return (path, path, view_page)
+    return (path, endpoint, view_page)
 
 
 def init_dynamic_pages():
-    pages = ['about', 'hire', 'apply', 'lucia']
-    for path in pages:
-        view_func = view_page_factory(path)
+    pages = [('om-oss', 'about'), ('boka', 'hire'),
+             ('sjung', 'apply'), ('lucia', 'lucia')]
+    for endpoint, path in pages:
+        view_func = view_page_factory(endpoint, path)
         mod.add_url_rule(*view_func)

@@ -15,6 +15,10 @@ translations = {
         'en': "Concerts and events",
         'sv': "Konserter och händelser",
     },
+    'frontpage-title': {
+        'en': "I takt — med tiden",
+        'sv': "I takt — med tiden",
+    },
 
     # Top nav
     'change language': {
