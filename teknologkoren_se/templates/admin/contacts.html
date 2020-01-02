@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+
+{% block body %}
+
+<h1>Admin</h1>
+
+<h2>Kontakter</h2>
+
+<p>
+  Endast Ordförandes telefonnummer syns på hemsidan och Ordförande måste ha
+  titeln "Ordförande" för att det ska funka. Om Ordförande inte har ett giltigt
+  telefonnummer (om det saknas, är för kort, eller på annat sätt är ogiltigt)
+  så göms raden om att ringa ordf. Om numret saknar landskod (+46 för Sverige)
+  så antas numret vara svenskt och formateras med landskod ändå. Om numret är
+  utländskt <strong>måste</strong> landskod vara med (annars blir det svårt för
+  folk i Sverige att ringa det i vilket fall).
+</p>
+<p>
+  Högre sorteringsvikt stiger.
+</p>
+
+<p><a href="{{ url_for('admin.edit_contact') }}">Lägg till ny kontakt</a></p>
+
+<div class="table contacts">
+  <table>
+    <tr>
+      <th>Titel</th>
+      <th>Förnamn</th>
+      <th>Efternamn</th>
+      <th>E-postadress</th>
+      <th>Sorteringsvikt</th>
+      <th></th>
+    {% for contact in contacts %}
+    <tr>
+      <td>{{ contact.title }}</td>
+      <td>{{ contact.first_name }}</td>
+      <td>{{ contact.last_name }}</td>
+      <td>{{ contact.email }}</td>
+      <td>{{ contact.weight }}</td>
+      <td><a href="{{ url_for('admin.edit_contact', contact_id=contact.id) }}">Redigera</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

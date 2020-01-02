@@ -178,10 +178,16 @@ class EditPageForm(UploadForm):
     ])
 
 
-class EditConfigForm(flask_wtf.FlaskForm):
+class EditFrontpageForm(flask_wtf.FlaskForm):
     frontpage_image = fields.FormField(UploadForm)
 
-    flash = fields.StringField('Flash')
+    flash = fields.StringField(
+        'Flash',
+        description=(
+            'Text i flashen. Kan innehålla html, som '
+            '<a href="example.com">en länk</a>.'
+        )
+    )
     flash_type = fields.SelectField(
         'Flash-typ',
         description='Vilken färg flashen har',
@@ -192,3 +198,12 @@ class EditConfigForm(flask_wtf.FlaskForm):
             ('info', 'Blå')
         ]
     )
+
+
+class EditContactForm(flask_wtf.FlaskForm):
+    title = fields.StringField()
+    first_name = fields.StringField()
+    last_name = fields.StringField()
+    email = fields.StringField()
+    phone = fields.StringField()
+    weight = fields.IntegerField()

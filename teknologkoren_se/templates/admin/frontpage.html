@@ -6,12 +6,12 @@
 
 <h1>Admin</h1>
 
-<h2>Konfiguration</h2>
+<h2>Framsidan</h2>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   <div>
-    <h3>Bild på framsidan</h3>
+    <h3>Bild</h3>
     {{ form.frontpage_image.csrf_token }}
     {% if config.image %}
     <p>Nuvarande bild:</p>
@@ -20,12 +20,20 @@
     {{ form_entry(form.frontpage_image.image) }}
   </div>
 
-  <h3>Flash på framsidan</h3>
+  <h3>Flash</h3>
+
+  <ul class="flashes">
+    <li class="flash success">Grön flash (success)</li>
+    <li class="flash warning">Gul flash (warning)</li>
+    <li class="flash error">Röd flash (error)</li>
+    <li class="flash info">Blå flash (info)</li>
+  </ul>
+
   {{ form_entry(form.flash) }}
   {{ form_entry(form.flash_type) }}
 
   <div class="form-field">
-    <button>{{ _("submit") }}</button>
+    <button>Spara</button>
   </div>
 </form>
 

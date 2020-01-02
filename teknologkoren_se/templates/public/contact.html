@@ -20,7 +20,7 @@
     </table>
   </div>
 
-  {% if ordf is defined %}
+  {% if ordf is defined and ordf.formatted_phone %}
   <p>
     {{ _('contact-chairman').format(
           name=ordf.full_name,

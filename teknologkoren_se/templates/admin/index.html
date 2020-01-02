@@ -4,11 +4,14 @@
 
 <h1>Admin</h1>
 
+
 <h2>Sidor</h2>
 <ul>
-{% for page in pages %}
+  <li><a href="{{ url_for('admin.frontpage') }}">Framsidan</a></li>
+  <li><a href="{{ url_for('admin.contacts') }}">Kontakt</a></li>
+  {% for page in pages %}
   <li><a href="{{ url_for('admin.page', page_id=page.id) }}">{{ page.path }}</a></li>
-{% endfor %}
+  {% endfor %}
 </ul>
 
 <h2 id="posts">Inlägg</h2>

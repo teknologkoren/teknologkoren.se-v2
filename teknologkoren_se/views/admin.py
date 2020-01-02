@@ -90,6 +90,114 @@ def index():
 
 
 @flask_login.login_required
+@mod.route('/frontpage', methods=['GET', 'POST'])
+def frontpage():
+    config = models.Config.query.first()
+
+    form = forms.EditFrontpageForm(obj=config)
+
+    if form.validate_on_submit():
+        if form.frontpage_image.image.data:
+            filename = util.image_uploads.save(form.frontpage_image.image.data)
+            image = models.Image(
+                filename=filename,
+                portrait=False
+            )
+            models.db.session.add(image)
+
+            config.frontpage_image = image
+
+        config.flash = forms.none_if_space(form.flash.data)
+        config.flash_type = form.flash_type.data
+
+        models.db.session.commit()
+
+        flask.flash("Uppdaterad!", 'success')
+
+        flask.redirect(flask.url_for('admin.config'))
+
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template(
+        'admin/frontpage.html',
+        config=config,
+        form=form
+    )
+
+
+@flask_login.login_required
+@mod.route('/contacts', methods=['GET', 'POST'])
+def contacts():
+    contacts = (
+        models.Contact
+        .query
+        .order_by(models.Contact.weight.desc())
+        .all()
+    )
+
+    return flask.render_template(
+        'admin/contacts.html',
+        contacts=contacts,
+    )
+
+
+@flask_login.login_required
+@mod.route('/contacts/new', methods=['GET', 'POST'])
+@mod.route('/contacts/<int:contact_id>', methods=['GET', 'POST'])
+def edit_contact(contact_id=None):
+    if contact_id:
+        contact = models.Contact.query.get_or_404(contact_id)
+    else:
+        contact = None
+
+    form = forms.EditContactForm(obj=contact)
+
+    if form.validate_on_submit():
+        if not contact_id:
+            contact = models.Contact()
+
+        contact.title = form.title.data
+        contact.first_name = form.first_name.data
+        contact.last_name = form.last_name.data
+        contact.email = form.email.data
+        contact.phone = form.phone.data
+        contact.weight = form.weight.data
+
+        if not contact_id:
+            models.db.session.add(contact)
+
+        models.db.session.commit()
+
+        if not contact_id:
+            flask.flash("Kontakt tillagd!", 'success')
+        else:
+            flask.flash("Kontakt ändrad!", 'success')
+
+        return flask.redirect(flask.url_for('admin.contacts'))
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template(
+        'admin/edit_contact.html',
+        form=form,
+        contact=contact
+    )
+
+
+@flask_login.login_required
+@mod.route('/contacts/<int:contact_id>/remove')
+def delete_contact(contact_id):
+    contact = models.Contact.query.get_or_404(contact_id)
+    title = contact.title
+    models.db.session.delete(contact)
+    models.db.session.commit()
+
+    flask.flash("Kontakt {} borttagen!".format(title), 'success')
+    return flask.redirect(flask.url_for('admin.index'))
+
+
+@flask_login.login_required
 @mod.route('/post/new', methods=['GET', 'POST'])
 @mod.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id=None):
@@ -139,7 +247,7 @@ def post(post_id=None):
         else:
             flask.flash("Inlägg skapat!", 'success')
 
-        flask.redirect(flask.url_for('admin.post', post_id=post.id))
+        return flask.redirect(flask.url_for('admin.post', post_id=post.id))
 
     else:
         forms.flash_errors(form)
@@ -210,7 +318,7 @@ def event(event_id=None):
         else:
             flask.flash("Händelse skapad!", 'success')
 
-        flask.redirect(flask.url_for('admin.event', event_id=event.id))
+        return flask.redirect(flask.url_for('admin.event', event_id=event.id))
 
     else:
         forms.flash_errors(form)
@@ -273,42 +381,9 @@ def page(page_id=None):
 
         flask.flash("Uppdaterad!", 'success')
 
-        flask.redirect(flask.url_for('admin.page', page_id=page.id))
+        return flask.redirect(flask.url_for('admin.page', page_id=page.id))
 
     else:
         forms.flash_errors(form)
 
     return flask.render_template('admin/page.html', page=page, form=form)
-
-
-@flask_login.login_required
-@mod.route('/config', methods=['GET', 'POST'])
-def config():
-    config = models.Config.query.first()
-
-    form = forms.EditConfigForm(obj=config)
-
-    if form.validate_on_submit():
-        if form.frontpage_image.image.data:
-            filename = util.image_uploads.save(form.frontpage_image.image.data)
-            image = models.Image(
-                filename=filename,
-                portrait=False
-            )
-            models.db.session.add(image)
-
-            config.frontpage_image = image
-
-        config.flash = forms.none_if_space(form.flash.data)
-        config.flash_type = form.flash_type.data
-
-        models.db.session.commit()
-
-        flask.flash("Uppdaterad!", 'success')
-
-        flask.redirect(flask.url_for('admin.config'))
-
-    else:
-        forms.flash_errors(form)
-
-    return flask.render_template('admin/config.html', config=config, form=form)

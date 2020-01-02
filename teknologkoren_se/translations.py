@@ -117,6 +117,10 @@ translations = {
         'en': "Sign in",
         'sv': "Logga in",
     },
+    'admin': {
+        'en': "Admin",
+        'sv': "Admin",
+    },
     'username': {
         'en': "Username",
         'sv': "Användarnamn",

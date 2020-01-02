@@ -6,14 +6,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {# admin.css after style.css to allow override of rules #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     {% endblock %}
   </head>
   <body>
     <nav class="nav">
       <ul>
-        <li><a class="inverted-link" href="{{ url_for('admin.index') }}">Gå till index</a></li>
+        <li><a class="inverted-link" href="{{ url_for('admin.index') }}">Till start</a></li>
       </ul>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}
