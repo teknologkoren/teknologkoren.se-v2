@@ -194,7 +194,7 @@ def delete_contact(contact_id):
     models.db.session.commit()
 
     flask.flash("Kontakt {} borttagen!".format(title), 'success')
-    return flask.redirect(flask.url_for('admin.index'))
+    return flask.redirect(flask.url_for('admin.contacts'))
 
 
 @flask_login.login_required

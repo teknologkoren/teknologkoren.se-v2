@@ -201,9 +201,39 @@ class EditFrontpageForm(flask_wtf.FlaskForm):
 
 
 class EditContactForm(flask_wtf.FlaskForm):
-    title = fields.StringField('Titel')
-    first_name = fields.StringField('Förnamn')
-    last_name = fields.StringField('Efternamn')
-    email = fields.StringField('E-postadress')
-    phone = fields.StringField('Telefonnummer')
-    weight = fields.IntegerField('Sorteringsvikt')
+    title = fields.StringField(
+        'Titel',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    first_name = fields.StringField(
+        'Förnamn',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    last_name = fields.StringField(
+        'Efternamn',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    email = fields.StringField(
+        'E-postadress',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    phone = fields.StringField(
+        'Telefonnummer',
+        validators=[
+            validators.Optional()
+        ]
+    )
+    weight = fields.IntegerField(
+        'Sorteringsvikt',
+        validators=[
+            validators.InputRequired()
+        ]
+    )
