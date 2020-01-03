@@ -97,40 +97,40 @@ a:hover {
 }
 
 .logo {
-    text-align: center;
-    margin: .5rem;
-    text-decoration: none;
+  text-align: center;
+  margin: .5rem;
+  text-decoration: none;
 }
 
 .logo a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .logo img {
-    height: 5rem;
+  height: 5rem;
 }
 
 .logo-text .name {
-    margin: 0;
-    line-height: 1.5;
-    font-size: 1.8em;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 1.8em;
 }
 
 .logo .tagline {
-    margin: 0;
+  margin: 0;
 }
 
 @media screen and (min-width: 26rem) {
-    .logo img,
-    .logo-text {
-        display: inline-block;
-        vertical-align: middle;
-    }
+  .logo img,
+  .logo-text {
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-    .logo-text {
-        text-align: left;
-        margin-left: .5rem;
-    }
+  .logo-text {
+    text-align: left;
+    margin-left: .5rem;
+  }
 }
 
 .nav {
@@ -241,22 +241,22 @@ article.post > header, article.post > h1 {
 }
 
 .landscape-image {
-    border-radius: 7px;
-    width: 100%;
-    display: inline-block;
+  border-radius: 7px;
+  width: 100%;
+  display: inline-block;
 }
 
 .landscape-image.truncate {
-    max-height: 40vh;
-    object-fit: cover;
+  max-height: 40vh;
+  object-fit: cover;
 }
 
 .portrait-image {
-    float: right;
-    width: 30%;
-    min-width: 5rem;
-    border: 1px solid #ddd;
-    margin: 0 0 0.8rem 1rem;
+  float: right;
+  width: 30%;
+  min-width: 5rem;
+  border: 1px solid #ddd;
+  margin: 0 0 0.8rem 1rem;
 }
 
 .event-detail {
@@ -275,16 +275,16 @@ address.contact {
 }
 
 address hr {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 hr {
-    border: 0;
-    height: 1px;
-    background-color: #ddd;
-    width: 75%;
-    max-width: 30rem;
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  width: 75%;
+  max-width: 30rem;
 }
 
 .postal-address {
@@ -297,22 +297,22 @@ hr {
 }
 
 .table {
-    overflow-x: auto;
-    border-radius: 7px;
-    background-color: #f3f3f3;
-    border: 1px solid #ddd;
+  overflow-x: auto;
+  border-radius: 7px;
+  background-color: #f3f3f3;
+  border: 1px solid #ddd;
 }
 
 .table table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .table th,
 .table td {
-    white-space: nowrap;
-    height: 2rem;
-    padding: 0 10px 0 10px;
+  white-space: nowrap;
+  height: 2rem;
+  padding: 0 10px 0 10px;
 }
 
 .flashes {
