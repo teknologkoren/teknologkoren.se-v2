@@ -8,8 +8,8 @@ translations = {
         'sv': "Nyhetsflöde",
     },
     'blog and events': {
-        'en': "Blog and events",
-        'sv': "Blogg och händelser"
+        'en': "News",
+        'sv': "Nyheter"
     },
     'events': {
         'en': "Concerts and events",
