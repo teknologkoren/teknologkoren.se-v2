@@ -1,3 +1,43 @@
+@font-face {
+  font-family: 'Lato Heavy';
+  src: url('/static/fonts/lato/LatoLatin-Heavy.woff2') format('woff2'),
+       url('/static/fonts/lato/LatoLatin-Heavy.woff') format('woff');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: 'Lato Heavy';
+  src: url('/static/fonts/lato/LatoLatin-HeavyItalic.woff2') format('woff2'),
+       url('/static/fonts/lato/LatoLatin-HeavyItalic.woff') format('woff');
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/static/fonts/ebgaramond/EBGaramond12-Regular.woff2') format('woff2'),
+       url('/static/fonts/ebgaramond/EBGaramond12-Regular.woff') format('woff');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/static/fonts/ebgaramond/EBGaramond12-Italic.woff2') format('woff2'),
+       url('/static/fonts/ebgaramond/EBGaramond12-Italic.woff') format('woff');
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+}
+
 * {
   box-sizing: border-box;
   overflow-wrap: break-word;
@@ -15,6 +55,18 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  font-family: "EB Garamond", serif;
+  line-height: 1.5;
+}
+
+::selection {
+  background-color: #6797d0;
+  color: #fff;
+}
+
+h1, h2, h3 {
+  font-family: "Lato Heavy", sans-serif;
+  font-weight: normal;
 }
 
 img {
@@ -167,13 +219,6 @@ footer .admin a {
   color: #bbb;
 }
 
-.post h1,
-.post h2,
-.post h3,
-.post h4 {
-  font-family: sans-serif;
-}
-
 .post header h1,
 .post header h2 {
   margin: 0;
@@ -184,7 +229,7 @@ footer .admin a {
 }
 
 .published {
-  font-size: .9em;
+  font-size: .85em;
 }
 
 article.post ~ article.post {
