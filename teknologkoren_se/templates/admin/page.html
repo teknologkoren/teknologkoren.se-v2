@@ -1,12 +1,14 @@
 {% extends "admin/base.html" %}
 
+{% set title = "Redigera /" + page.path %}
+
 {% from "macros.html" import form_entry, form_entry_row %}
 
 {% block body %}
 
 <h1>Admin</h1>
 
-<h2>teknologkoren.se/{{ page.path }}</h2>
+<h2>{{ page.title_sv }} - teknologkoren.se/{{ page.path }}</h2>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
