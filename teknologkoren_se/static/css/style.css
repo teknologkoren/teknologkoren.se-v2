@@ -152,6 +152,11 @@ a:hover {
   padding: .3rem 1rem;
 }
 
+.nav .active {
+  text-decoration: none;
+  color: #316bb1;
+}
+
 .pager {
   display: flex;
   justify-content: space-between;

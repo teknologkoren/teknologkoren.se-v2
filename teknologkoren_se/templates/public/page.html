@@ -1,6 +1,7 @@
 {% extends "public/base.html" %}
 
 {% set title = page.title %}
+{% set active_page = endpoint %}
 
 {% if page.image %}
 {% set cover_image = page.image.filename %}

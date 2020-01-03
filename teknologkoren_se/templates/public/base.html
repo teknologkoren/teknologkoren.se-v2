@@ -1,3 +1,12 @@
+{% set nav = [
+('public.index', _('nav-home')),
+('public.about', _('nav-about')),
+('public.events', _('nav-events')),
+('public.hire', _('nav-hire')),
+('public.apply', _('nav-apply')),
+('public.contact', _('nav-contact')),
+] %}
+
 <!DOCTYPE html>
 <html lang="{{ locale.get_locale() }}">
   <head>
@@ -36,12 +45,9 @@
       <nav class="nav">
         {% set active_page = active_page %}
         <ul>
-          <li><a class="inverted-link" href="{{ url_for('public.index') }}">{{ _('nav-home') }}</a></li>
-          <li><a class="inverted-link" href="{{ url_for('public.about') }}">{{ _('nav-about') }}</a></li>
-          <li><a class="inverted-link" href="{{ url_for('public.events') }}">{{ _('nav-events') }}</a></li>
-          <li><a class="inverted-link" href="{{ url_for('public.hire') }}">{{ _('nav-hire') }}</a></li>
-          <li><a class="inverted-link" href="{{ url_for('public.apply') }}">{{ _('nav-apply') }}</a></li>
-          <li><a class="inverted-link" href="{{ url_for('public.contact') }}">{{ _('nav-contact') }}</a></li>
+          {% for endpoint, title in nav %}
+          <li><a class="inverted-link{% if active_page == endpoint %} active{% endif %}" href="{{ url_for(endpoint) }}">{{ title }}</a></li>
+          {% endfor %}
           <li>
             {% if locale.get_locale() == 'sv' %}
             <a id="lang" class="inline-icon inverted-link" href="{{ url_for_lang(request.endpoint, 'en', request.view_args) }}">

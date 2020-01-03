@@ -118,7 +118,11 @@ def view_page_factory(path, endpoint):
         )
 
         template = 'public/page.html'
-        return flask.render_template(template, page=page)
+        return flask.render_template(
+            template,
+            page=page,
+            endpoint=flask.request.endpoint
+        )
 
     return (path, endpoint, view_page)
 

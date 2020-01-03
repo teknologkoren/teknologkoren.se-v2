@@ -2,6 +2,12 @@
 
 {% set title = post.title %}
 
+{% if post.type == 'event' %}
+{% set active_page = "public.events" %}
+{% else %}
+{% set active_page = "public.index" %}
+{% endif %}
+
 {% from "public/macros.html" import post_article, event_article %}
 
 {% block body %}
