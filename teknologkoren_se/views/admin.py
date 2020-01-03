@@ -255,6 +255,11 @@ def post(post_id=None):
     if post and post.image:
         form.portrait.data = post.image.portrait
 
+    # If form was submitted, display the new form data, else convert utc to cet
+    # Gets converted back to utc from cet on submit that got through validation
+    if post and not form.is_submitted():
+        form.published.data = utc_to_cet(post.published)
+
     return flask.render_template('admin/post.html', post=post, form=form)
 
 
@@ -325,6 +330,12 @@ def event(event_id=None):
 
     if event and event.image:
         form.portrait.data = event.image.portrait
+
+    # If form was submitted, display the new form data, else convert utc to cet
+    # Gets converted back to utc from cet on submit that got through validation
+    if event and not form.is_submitted():
+        form.start_time.data = utc_to_cet(event.start_time)
+        form.published.data = utc_to_cet(event.published)
 
     return flask.render_template('admin/event.html', event=event, form=form)
 
