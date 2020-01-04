@@ -22,7 +22,7 @@ def url_for_image(filename, width=None):
     base = image_uploads.config.base_url
 
     if width and not flask.current_app.debug:
-        url = urljoin(base, 'img{}/'.format(width), filename)
+        url = urljoin(base, 'img{}/{}'.format(width, filename))
     else:
         url = urljoin(base, filename)
 
