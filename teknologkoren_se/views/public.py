@@ -19,7 +19,7 @@ def setup_jinja(app):
 
 
 @mod.route('/', defaults={'page': 1})
-@mod.route('/blogg/sida/<int:page>/')
+@mod.route('/blogg/sida/<int:page>')
 def index(page):
     posts = (
         models.Post.query
@@ -54,7 +54,7 @@ def events(page):
 
 
 @mod.route('/blogg/<int:post_id>/')
-@mod.route('/blogg/<int:post_id>/<slug>/')
+@mod.route('/blogg/<int:post_id>/<slug>')
 def view_post(post_id, slug=None):
     post = models.BlogPost.query.get_or_404(post_id)
 
@@ -75,7 +75,7 @@ def view_post(post_id, slug=None):
 
 
 @mod.route('/konserter/<int:event_id>/')
-@mod.route('/konserter/<int:event_id>/<slug>/')
+@mod.route('/konserter/<int:event_id>/<slug>')
 def view_event(event_id, slug=None):
     event = models.Event.query.get_or_404(event_id)
 
