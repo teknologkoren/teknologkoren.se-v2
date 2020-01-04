@@ -276,6 +276,10 @@ article.post > header, article.post > h1 {
   clear: both;
 }
 
+.event-detail p {
+  margin: 0;
+}
+
 .event-detail time.hidden {
   display: none;
 }
