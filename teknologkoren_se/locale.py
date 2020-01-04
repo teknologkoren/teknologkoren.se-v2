@@ -35,7 +35,9 @@ def get_locale():
     lang_code = (flask.g.get('lang_code') or flask.session.get('lang_code'))
 
     if not lang_code:
-        lang_code = flask.request.accept_languages.best_match(['sv', 'en'])
+        lang_code = (
+            flask.request.accept_languages.best_match(['sv', 'en'], 'sv')
+        )
 
     return lang_code
 
