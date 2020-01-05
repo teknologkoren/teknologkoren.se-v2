@@ -16,8 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
-    <link rel="alternate" type="application/rss+xml" title="{{ _('news feed') }}" href="EDITME">
-
     {% if 'sv' in locale.get_locale() %}
     <link rel="alternate" hreflang="en" href="{{ url_for_lang(request.endpoint, 'en', request.view_args, _external=True) }}" />
     {% else %}
