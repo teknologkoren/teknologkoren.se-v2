@@ -3,7 +3,7 @@ from pathlib import Path
 DEBUG = True
 SECRET_KEY = 'super secret secret'
 
-SERVER_NAME = 'cortado.localdomain:5000'
+SERVER_NAME = 'localhost.localdomain:5000'
 
 BASEDIR = Path(__file__).parent.resolve()
 
