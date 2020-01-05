@@ -71,10 +71,14 @@ class Post(db.Model):
 
         flask.abort(500)
 
-    def html(self, offset=2):
+    def html(self, offset=0):
         return markdown.markdown(
             self.text,
-            extensions=['teknologkoren_se.lib.mdx_headdown'],
+            extensions=[
+                'nl2br',
+                'teknologkoren_se.lib.mdx_headdown',
+                'teknologkoren_se.lib.mdx_urlize'
+            ],
             extension_configs={
                 'mdx_headdown': {
                     'offset': offset
@@ -156,13 +160,17 @@ class Event(Post):
         flask.abort(500)
 
     @property
-    def time_html(self):
+    def time_html(self, offset=0):
         return markdown.markdown(
             self.time_text,
-            extensions=['teknologkoren_se.lib.mdx_headdown'],
+            extensions=[
+                'nl2br',
+                'teknologkoren_se.lib.mdx_headdown',
+                'teknologkoren_se.lib.mdx_urlize'
+            ],
             extension_configs={
                 'mdx_headdown': {
-                    'offset': 2
+                    'offset': offset
                 }
             }
         )
