@@ -216,8 +216,13 @@ class Page(db.Model):
 
     @property
     def html(self):
-        return markdown.markdown(self.text)
-
+        return markdown.markdown(
+            self.text,
+            extensions=[
+                'nl2br',
+                'teknologkoren_se.lib.mdx_urlize'
+            ]
+        )
 
     @property
     def title(self):
