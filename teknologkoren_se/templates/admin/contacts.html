@@ -27,15 +27,13 @@
   <table>
     <tr>
       <th>Titel</th>
-      <th>Förnamn</th>
-      <th>Efternamn</th>
+      <th>Namn</th>
       <th>E-postadress</th>
       <th>Sorteringsvikt</th>
     {% for contact in contacts %}
     <tr>
       <td><a href="{{ url_for('admin.edit_contact', contact_id=contact.id) }}">{{ contact.title }}</td>
-      <td>{{ contact.first_name }}</td>
-      <td>{{ contact.last_name }}</td>
+      <td>{{ contact.name }}</td>
       <td>{{ contact.email }}</td>
       <td>{{ contact.weight }}</td>
     </tr>

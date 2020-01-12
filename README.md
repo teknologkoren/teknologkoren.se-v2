@@ -48,3 +48,11 @@ are generated from some paragraphs of "lorem ipsum" and a bit of random
 flask createadmin
 ```
 You will be prompted for a username and password.
+
+
+## Migrations
+From the root directory, run
+```sh
+python3 -m migrations.<name_of_migration>
+```
+As it is run as a module, do not include the file extension (`.py`).

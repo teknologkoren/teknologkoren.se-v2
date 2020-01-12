@@ -86,51 +86,44 @@ def populate_testdb():
     contacts = [
         models.Contact(
             title="Ordförande",
-            first_name="King",
-            last_name="Arthur",
+            name="King Arthur",
             email="ordf@teknologkoren.se",
             phone="0711098765",
             weight="100"
         ),
         models.Contact(
             title="Vice ordförande",
-            first_name="Sir Bedevere",
-            last_name="the Wise",
+            name="Sir Bedevere the Wise",
             email="vice@teknologkoren.se",
             weight="90"
         ),
         models.Contact(
             title="Sekreterare",
-            first_name="Patsy",
-            last_name="Squire",
+            name="Patsy Squire",
             email="sekr@teknologkoren.se",
             weight="80"
         ),
         models.Contact(
             title="Kassör",
-            first_name="Sir Lancelot",
-            last_name="the Brave",
+            name="Sir Lancelot the Brave",
             email="pengar@teknologkoren.se",
             weight="70"
         ),
         models.Contact(
             title="Qlubbmästare",
-            first_name="Sir Galahad",
-            last_name="the Pure",
+            name="Sir Galahad the Pure",
             email="qm@teknologkoren.se",
             weight="60"
         ),
         models.Contact(
             title="Notfisqual",
-            first_name="Sir Robin",
-            last_name="the Not-Quite-So-Brave-as-Sir-Lancelot",
+            name="Sir Robin the Not-Quite-So-Brave-as-Sir-Lancelot",
             email="ordf@teknologkoren.se",
             weight="50"
         ),
         models.Contact(
             title="Proletär",
-            first_name="Sir",
-            last_name="Not-Appearing-on-this-Page",
+            name="Sir Not-Appearing-on-this-Page",
             email="pr@teknologkoren.se",
             weight="40"
         )

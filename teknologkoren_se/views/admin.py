@@ -158,8 +158,7 @@ def edit_contact(contact_id=None):
             contact = models.Contact()
 
         contact.title = form.title.data
-        contact.first_name = form.first_name.data
-        contact.last_name = form.last_name.data
+        contact.name = form.name.data
         contact.email = form.email.data
         contact.phone = form.phone.data
         contact.weight = form.weight.data

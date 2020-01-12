@@ -251,8 +251,7 @@ class Contact(db.Model):
     """
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=True)
+    name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(254), nullable=False)
     phone = db.Column(db.String(20), nullable=True)
     weight = db.Column(db.Integer, nullable=False)
@@ -276,10 +275,6 @@ class Contact(db.Model):
         )
 
         return formatted
-
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class AdminUser(flask_login.UserMixin, db.Model):

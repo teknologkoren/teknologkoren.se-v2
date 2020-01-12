@@ -207,14 +207,8 @@ class EditContactForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
-    first_name = fields.StringField(
-        'Förnamn',
-        validators=[
-            validators.InputRequired()
-        ]
-    )
-    last_name = fields.StringField(
-        'Efternamn',
+    name = fields.StringField(
+        'Namn',
         validators=[
             validators.InputRequired()
         ]

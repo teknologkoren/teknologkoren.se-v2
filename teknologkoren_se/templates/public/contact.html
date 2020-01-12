@@ -13,7 +13,7 @@
       {% for person in contacts %}
       <tr>
         <td>{{ person.title }}</td>
-        <td>{{ person.first_name }} {{ person.last_name }}</td>
+        <td>{{ person.name }}</td>
         <td><a href="mailto:{{ person.email }}">{{ person.email }}</a></td>
       </tr>
       {% endfor %}
