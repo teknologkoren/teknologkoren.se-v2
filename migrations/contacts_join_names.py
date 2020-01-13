@@ -16,11 +16,6 @@ def migration():
     c.execute('SELECT * FROM contact')
     contacts = c.fetchall()
 
-    c.execute('''\
-    CREATE TEMPORARY TABLE contact_backup
-    (id integer, title text, first_name text, last_name text, email text, phone text, weight integer)
-    ''')
-    c.execute('INSERT INTO contact_backup SELECT * FROM contact')
     c.execute('DROP TABLE contact')
     conn.commit()  # commit before sqlalchemy creates table
 
