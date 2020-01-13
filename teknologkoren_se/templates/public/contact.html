@@ -23,7 +23,7 @@
   {% if ordf is defined and ordf.formatted_phone %}
   <p>
     {{ _('contact-chairman').format(
-          name=ordf.full_name,
+          name=ordf.name,
           phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone
           )|safe }}
   </p>
