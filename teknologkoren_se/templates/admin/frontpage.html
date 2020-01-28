@@ -15,9 +15,9 @@
   <div>
     <h3>Bild</h3>
     {{ form.frontpage_image.csrf_token }}
-    {% if config.image %}
+    {% if config.frontpage_image %}
     <p>Nuvarande bild:</p>
-    <img class="edit-post-current-img" src="{{ url_for_image(config.image.filename, 400) }}" alt="">
+    <img class="edit-post-current-img" src="{{ url_for_image(config.frontpage_image.filename, 400) }}" alt="">
     {% endif %}
     {{ form_entry(form.frontpage_image.image) }}
   </div>
