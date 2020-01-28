@@ -20,8 +20,6 @@ def create_app(config=None, instance_config=None):
     from teknologkoren_se import models, views, util
 
     models.db.init_app(app)
-    with app.app_context():
-        init_db(app)
 
     util.bcrypt.init_app(app)
 

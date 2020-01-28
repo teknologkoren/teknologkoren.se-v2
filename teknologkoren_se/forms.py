@@ -181,13 +181,15 @@ class EditPageForm(UploadForm):
 class EditFrontpageForm(flask_wtf.FlaskForm):
     frontpage_image = fields.FormField(UploadForm)
 
-    flash = fields.StringField(
+    flash_sv = fields.StringField(
         'Flash',
         description=(
             'Text i flashen. Kan innehålla html, som '
             '<a href="https://example.com">en länk</a>.'
         )
     )
+    flash_en = fields.StringField('Flash (engelska)')
+
     flash_type = fields.SelectField(
         'Flash-typ',
         description='Vilken färg flashen har',

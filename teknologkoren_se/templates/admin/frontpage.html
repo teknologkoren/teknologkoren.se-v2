@@ -24,15 +24,19 @@
 
   <h3>Flash</h3>
 
-  <ul class="flashes">
-    <li class="flash success">Grön flash (success)</li>
-    <li class="flash warning">Gul flash (warning)</li>
-    <li class="flash error">Röd flash (error)</li>
-    <li class="flash info">Blå flash (info)</li>
-  </ul>
+  <p>Om endast ett av språken är ifyllt visas det oavsett språkval.</p>
 
-  {{ form_entry(form.flash) }}
+
+  {{ form_entry(form.flash_sv) }}
+  {{ form_entry(form.flash_en) }}
   {{ form_entry(form.flash_type) }}
+
+  <ul class="flashes">
+    <li class="flash success">Grön flash ("success")</li>
+    <li class="flash warning">Gul flash ("warning")</li>
+    <li class="flash error">Röd flash ("error")</li>
+    <li class="flash info">Blå flash ("info")</li>
+  </ul>
 
   <div class="form-field">
     <button>Spara</button> | <a href="{{ url_for('admin.index') }}">Avbryt</a>

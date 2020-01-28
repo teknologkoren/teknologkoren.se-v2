@@ -107,7 +107,8 @@ def frontpage():
 
             config.frontpage_image = image
 
-        config.flash = forms.none_if_space(form.flash.data)
+        config.flash_sv = forms.none_if_space(form.flash_sv.data)
+        config.flash_en = forms.none_if_space(form.flash_en.data)
         config.flash_type = form.flash_type.data
 
         models.db.session.commit()

@@ -29,7 +29,7 @@ def index(page):
 
     config = models.Config.query.first()
     if config.flash:
-        flask.flash(config.flash, config.flash_type)
+        flask.flash(config.flash, config.flash_type or 'info')
 
     pagination = posts.paginate(page, 5)
     return flask.render_template('public/index.html',

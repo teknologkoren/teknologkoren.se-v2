@@ -19,8 +19,21 @@ class Config(db.Model):
     frontpage_image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
     frontpage_image = db.relationship('Image', foreign_keys=frontpage_image_id)
 
-    flash = db.Column(db.String(100), nullable=True)
+    flash_sv = db.Column(db.String(100), nullable=True)
+    flash_en = db.Column(db.String(100), nullable=True)
     flash_type = db.Column(db.String(10), nullable=True)
+
+    @property
+    def flash(self):
+        lang = get_locale()
+
+        if lang == 'sv':
+            return self.flash_sv or self.flash_en
+
+        if lang == 'en':
+            return self.flash_en or self.flash_sv
+
+        flask.abort(500)
 
 
 class Post(db.Model):
