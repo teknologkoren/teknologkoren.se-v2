@@ -257,7 +257,7 @@ def post(post_id=None):
 
     # If form was submitted, display the new form data, else convert utc to cet
     # Gets converted back to utc from cet on submit that got through validation
-    if post and not form.is_submitted():
+    if post and post.published and not form.is_submitted():
         form.published.data = utc_to_cet(post.published)
 
     return flask.render_template('admin/post.html', post=post, form=form)
