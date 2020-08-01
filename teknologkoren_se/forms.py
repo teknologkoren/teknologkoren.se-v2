@@ -107,7 +107,7 @@ class EditPostForm(UploadForm):
         validators.Optional()
     ])
 
-    published = html5_fields.DateTimeField(
+    published = html5_fields.DateTimeLocalField(
         'Publicerad',
         description=(
             "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
@@ -122,7 +122,7 @@ class EditPostForm(UploadForm):
 
 
 class EditEventForm(EditPostForm):
-    start_time = html5_fields.DateTimeField(
+    start_time = html5_fields.DateTimeLocalField(
         'Tid',
         description=(
             "Om tidsbeskrivning lämnas tomt så syns denna som tid "
