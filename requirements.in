@@ -4,7 +4,7 @@ flask-babel
 flask-bcrypt
 flask-login
 flask-sqlalchemy
-flask-uploads
+flask-reuploaded
 flask-wtf
 markdown
 phonenumbers
