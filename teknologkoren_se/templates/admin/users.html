@@ -19,7 +19,7 @@
         <th>Nytt lösenord (minst 8 tecken)</th>
         <th>Ta bort</th>
       </tr>
-      {% for user_form in form %}
+      {% for user_form in form if not user_form.name == 'csrf_token' %}
       <tr>
         <td>
           {{ user_form.csrf_token }}
