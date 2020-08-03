@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+
+{% set title = "Användare" %}
+
+{% block body %}
+
+<h1>Admin</h1>
+
+<h2>Användare</h2>
+
+<p>Om du tar bort den användare du är inloggad med kommer du att loggas ut. Du kan inte ta bort den sista kvarvarande användaren.</p>
+
+<form class="users-form" method="POST">
+  {{ form.csrf_token }}
+  <div class="table">
+    <table>
+      <tr>
+        <th>Användarnamn</th>
+        <th>Nytt lösenord (minst 8 tecken)</th>
+        <th>Ta bort</th>
+      </tr>
+      {% for user_form in form %}
+      <tr>
+        <td>
+          {{ user_form.csrf_token }}
+          {{ user_form.username }}
+        </td>
+        <td>{{ user_form.password }}</td>
+        <td>{{ user_form.delete }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <button type="submit">Spara</button>
+</form>
+
+{% endblock %}

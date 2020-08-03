@@ -51,3 +51,11 @@ input[type=number] {
 .edit-post-current-img {
   max-height: 20rem;
 }
+
+.users-form .table input {
+  margin: .3rem 0;
+}
+
+.users-form button {
+  margin-top: 1rem;
+}

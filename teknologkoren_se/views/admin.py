@@ -75,8 +75,8 @@ def logout():
     return flask.redirect(flask.url_for('public.index'))
 
 
-@flask_login.login_required
 @mod.route('/')
+@flask_login.login_required
 def index():
     pages = models.Page.query.all()
     posts = models.BlogPost.query.order_by(models.BlogPost.id.desc()).all()
@@ -89,8 +89,8 @@ def index():
     )
 
 
-@flask_login.login_required
 @mod.route('/frontpage', methods=['GET', 'POST'])
+@flask_login.login_required
 def frontpage():
     config = models.Config.query.first()
 
@@ -127,8 +127,8 @@ def frontpage():
     )
 
 
-@flask_login.login_required
 @mod.route('/contacts', methods=['GET', 'POST'])
+@flask_login.login_required
 def contacts():
     contacts = (
         models.Contact
@@ -143,9 +143,9 @@ def contacts():
     )
 
 
-@flask_login.login_required
 @mod.route('/contacts/new', methods=['GET', 'POST'])
 @mod.route('/contacts/<int:contact_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def edit_contact(contact_id=None):
     if contact_id:
         contact = models.Contact.query.get_or_404(contact_id)
@@ -185,8 +185,8 @@ def edit_contact(contact_id=None):
     )
 
 
-@flask_login.login_required
 @mod.route('/contacts/<int:contact_id>/remove')
+@flask_login.login_required
 def delete_contact(contact_id):
     contact = models.Contact.query.get_or_404(contact_id)
     title = contact.title
@@ -197,9 +197,9 @@ def delete_contact(contact_id):
     return flask.redirect(flask.url_for('admin.contacts'))
 
 
-@flask_login.login_required
 @mod.route('/post/new', methods=['GET', 'POST'])
 @mod.route('/post/<int:post_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def post(post_id=None):
     if post_id:
         post = models.BlogPost.query.get_or_404(post_id)
@@ -263,9 +263,9 @@ def post(post_id=None):
     return flask.render_template('admin/post.html', post=post, form=form)
 
 
-@flask_login.login_required
 @mod.route('/event/new', methods=['GET', 'POST'])
 @mod.route('/event/<int:event_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def event(event_id=None):
     if event_id:
         event = models.Event.query.get(event_id)
@@ -340,8 +340,8 @@ def event(event_id=None):
     return flask.render_template('admin/event.html', event=event, form=form)
 
 
-@flask_login.login_required
 @mod.route('/post/<int:post_id>/remove')
+@flask_login.login_required
 def delete_post(post_id):
     post = models.BlogPost.query.get_or_404(post_id)
     post_title = post.title_sv
@@ -352,8 +352,8 @@ def delete_post(post_id):
     return flask.redirect(flask.url_for('admin.index'))
 
 
-@flask_login.login_required
 @mod.route('/event/<int:event_id>/remove')
+@flask_login.login_required
 def delete_event(event_id):
     event = models.Event.query.get_or_404(event_id)
     event_title = event.title_sv
@@ -364,8 +364,8 @@ def delete_event(event_id):
     return flask.redirect(flask.url_for('admin.index'))
 
 
-@flask_login.login_required
 @mod.route('/page/<int:page_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def page(page_id=None):
     if page_id:
         page = models.Page.query.get_or_404(page_id)
@@ -398,3 +398,65 @@ def page(page_id=None):
         forms.flash_errors(form)
 
     return flask.render_template('admin/page.html', page=page, form=form)
+
+
+@mod.route('/users', methods=['GET', 'POST'])
+@flask_login.login_required
+def users():
+    users = models.AdminUser.query.all()
+    form = forms.editUsersFormFactory(users)()
+
+    if form.validate_on_submit():
+        users_len = len(users)
+        for sub_form in form:
+            if sub_form.name == 'csrf_token':
+                continue
+
+            if sub_form.name == 'new-user':
+                if sub_form.username.data.strip():
+                    if not sub_form.password.data:
+                        flask.flash(
+                            "Ange ett lösenord för den nya användaren!",
+                            'error'
+                        )
+                        return flask.render_template(
+                            'admin/users.html',
+                            form=form
+                        )
+                else:
+                    continue
+                user = models.AdminUser(
+                    username=sub_form.username.data.strip(),
+                    password=sub_form.password.data
+                )
+                models.db.session.add(user)
+                users_len += 1
+            else:
+                _, user_id = sub_form.name.split('-')
+                # 404 will probably never happen lol
+                # but better safe than sorry^W 500
+                user = models.AdminUser.query.get_or_404(user_id)
+
+                if sub_form.delete.data:
+                    users_len -= 1
+                    models.db.session.delete(user)
+                    continue
+
+                user.username = sub_form.username.data
+                if sub_form.password.data:
+                    user.password = sub_form.password.data
+
+        if users_len < 1:
+            # Don't allow removing all users, or the last user.
+            models.db.session.rollback()
+            flask.flash(
+                "Lämna åtminstone en användare som kan logga in!",
+                'error'
+            )
+        else:
+            models.db.session.commit()
+            return flask.redirect(flask.url_for('admin.users'))
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/users.html', form=form)

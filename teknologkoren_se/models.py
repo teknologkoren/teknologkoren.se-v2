@@ -323,9 +323,15 @@ class AdminUser(flask_login.UserMixin, db.Model):
 
     @staticmethod
     def authenticate(username, password):
-        user = AdminUser.query.filter_by(username=username).first()
+        # Allows multiple users with same username. If they have the
+        # same password you might get the "wrong" user when logging in,
+        # but that doesn't really matter. Users are (as of typing) only
+        # for logging in, nothing else. Better to have the flexibility
+        # of one username with multiple passwords. Like, why not?
+        users = AdminUser.query.filter_by(username=username)
 
-        if user and user.verify_password(password):
-            return user
+        for user in users:
+            if user and user.verify_password(password):
+                return user
 
         return None

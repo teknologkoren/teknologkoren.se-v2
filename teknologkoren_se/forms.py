@@ -1,7 +1,7 @@
 import flask
-import flask_wtf
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import fields, validators
+from wtforms import fields, validators, widgets
 from wtforms.fields import html5 as html5_fields
 from teknologkoren_se import models, util
 from teknologkoren_se.locale import get_string
@@ -55,11 +55,11 @@ class Exists:
             raise validators.ValidationError(self.message)
 
 
-class RedirectForm(flask_wtf.FlaskForm):
+class RedirectForm(FlaskForm):
     next = fields.HiddenField()
 
     def __init__(self, *args, **kwargs):
-        flask_wtf.FlaskForm.__init__(self, *args, **kwargs)
+        FlaskForm.__init__(self, *args, **kwargs)
         if not self.next.data:
             self.next.data = util.get_redirect_target() or ''
 
@@ -82,7 +82,7 @@ class LoginForm(RedirectForm):
     )
 
 
-class UploadForm(flask_wtf.FlaskForm):
+class UploadForm(FlaskForm):
     image = fields.FileField('Ladda upp ny bild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
     ])
@@ -178,7 +178,7 @@ class EditPageForm(UploadForm):
     ])
 
 
-class EditFrontpageForm(flask_wtf.FlaskForm):
+class EditFrontpageForm(FlaskForm):
     frontpage_image = fields.FormField(UploadForm)
 
     flash_sv = fields.StringField(
@@ -202,7 +202,7 @@ class EditFrontpageForm(flask_wtf.FlaskForm):
     )
 
 
-class EditContactForm(flask_wtf.FlaskForm):
+class EditContactForm(FlaskForm):
     title = fields.StringField(
         'Titel',
         validators=[
@@ -233,3 +233,56 @@ class EditContactForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
+
+
+class NewUserForm(FlaskForm):
+    username = fields.StringField(
+        'Användarnamn',
+        render_kw={'placeholder': "Ny användare"}
+    )
+    password = fields.PasswordField(
+        'Lösenord',
+        validators=[
+            validators.Optional(),
+            validators.Length(
+                8,
+                message="Åtminstone 8 tecken långa lösenord, tack!"
+            )
+        ]
+    )
+
+
+def editUserFormFactory(user):
+    class F(FlaskForm):
+        pass
+
+    F.username = fields.StringField(
+        'Användarnamn',
+        default=user.username,
+        render_kw={'placeholder': user.username},
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    F.password = fields.PasswordField(
+        'Lösenord',
+        validators=[
+            validators.Optional(),
+            validators.Length(8)
+        ]
+    )
+    F.delete = fields.BooleanField()
+    return F
+
+
+def editUsersFormFactory(users):
+    class F(FlaskForm):
+        pass
+
+    for user in users:
+        editUserForm = editUserFormFactory(user)
+        form_name = f"user-{user.id}"
+        setattr(F, form_name, fields.FormField(editUserForm))
+
+    setattr(F, "new-user", fields.FormField(NewUserForm))
+    return F
