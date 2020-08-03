@@ -143,17 +143,17 @@ def populate_testdb():
 
     pages = [
         {
-            'path': 'about',
+            'path': 'om-oss',
             'heading-sv': "Om oss",
             'heading-en': "About us"
         },
         {
-            'path': 'hire',
+            'path': 'boka',
             'heading-sv': "Boka oss",
             'heading-en': "Hire us"
         },
         {
-            'path': 'apply',
+            'path': 'sjung',
             'heading-sv': "Sjung med oss",
             'heading-en': "Apply"
         },
