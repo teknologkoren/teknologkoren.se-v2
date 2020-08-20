@@ -113,8 +113,8 @@ class EditPostForm(UploadForm):
             "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
             "publicera."
         ),
-        format='%Y-%m-%d %H:%M',
-        render_kw={'placeholder': 'YYYY-mm-dd HH:MM'},
+        format='%Y-%m-%dT%H:%M',
+        render_kw={'placeholder': 'YYYY-mm-ddTHH:MM'},
         validators=[
             validators.Optional()
         ]
@@ -129,8 +129,8 @@ class EditEventForm(EditPostForm):
             "(automatiskt formaterat), annars göms den och används bara för "
             "att sortera händelserna."
         ),
-        format='%Y-%m-%d %H:%M',
-        render_kw={'placeholder': 'YYYY-mm-dd HH:MM'},
+        format='%Y-%m-%dT%H:%M',
+        render_kw={'placeholder': 'YYYY-mm-ddTHH:MM'},
         validators=[
             validators.InputRequired()
         ]
