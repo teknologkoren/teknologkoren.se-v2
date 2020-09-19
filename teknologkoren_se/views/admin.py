@@ -131,70 +131,46 @@ def frontpage():
 @flask_login.login_required
 def contacts():
     contacts = (
-        models.Contact
-        .query
-        .order_by(models.Contact.weight.desc())
-        .all()
+        models.Contact.query.order_by(models.Contact.weight.desc()).all()
     )
-
-    return flask.render_template(
-        'admin/contacts.html',
-        contacts=contacts,
-    )
-
-
-@mod.route('/contacts/new', methods=['GET', 'POST'])
-@mod.route('/contacts/<int:contact_id>', methods=['GET', 'POST'])
-@flask_login.login_required
-def edit_contact(contact_id=None):
-    if contact_id:
-        contact = models.Contact.query.get_or_404(contact_id)
-    else:
-        contact = None
-
-    form = forms.EditContactForm(obj=contact)
+    form = forms.editContactsFormFactory(contacts)()
 
     if form.validate_on_submit():
-        if not contact_id:
-            contact = models.Contact()
+        for sub_form in form:
+            if sub_form.name == 'csrf_token':
+                continue
 
-        contact.title = form.title.data
-        contact.name = form.name.data
-        contact.email = form.email.data
-        contact.phone = form.phone.data
-        contact.weight = form.weight.data
+            if sub_form.name == 'new-contact':
+                if sub_form.filled_in:
+                    contact = models.Contact()
+                else:
+                    continue
+            else:
+                _, contact_id = sub_form.name.split('-')
+                # 404 could happen if multiple users edit at the same
+                # time or has edited the name of the form manually...
+                contact = models.Contact.query.get_or_404(contact_id)
 
-        if not contact_id:
-            models.db.session.add(contact)
+                if sub_form.delete.data:
+                    models.db.session.delete(contact)
+                    continue
+
+            contact.title = sub_form.form.title.data
+            contact.name = sub_form.form.name.data
+            contact.email = sub_form.form.email.data
+            contact.phone = sub_form.form.phone.data
+            contact.weight = sub_form.form.weight.data
+
+            if sub_form.name == 'new-contact':
+                models.db.session.add(contact)
 
         models.db.session.commit()
-
-        if not contact_id:
-            flask.flash("Kontakt tillagd!", 'success')
-        else:
-            flask.flash("Kontakt ändrad!", 'success')
-
+        flask.flash("Kontaker sparade!", 'success')
         return flask.redirect(flask.url_for('admin.contacts'))
     else:
         forms.flash_errors(form)
 
-    return flask.render_template(
-        'admin/edit_contact.html',
-        form=form,
-        contact=contact
-    )
-
-
-@mod.route('/contacts/<int:contact_id>/remove')
-@flask_login.login_required
-def delete_contact(contact_id):
-    contact = models.Contact.query.get_or_404(contact_id)
-    title = contact.title
-    models.db.session.delete(contact)
-    models.db.session.commit()
-
-    flask.flash("Kontakt {} borttagen!".format(title), 'success')
-    return flask.redirect(flask.url_for('admin.contacts'))
+    return flask.render_template('admin/contacts.html', form=form)
 
 
 @mod.route('/post/new', methods=['GET', 'POST'])

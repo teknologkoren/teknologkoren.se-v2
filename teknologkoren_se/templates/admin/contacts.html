@@ -21,24 +21,36 @@
   Högre sorteringsvikt stiger.
 </p>
 
-<p><a href="{{ url_for('admin.edit_contact') }}">Lägg till ny kontakt</a></p>
-
-<div class="table contacts">
-  <table>
-    <tr>
-      <th>Titel</th>
-      <th>Namn</th>
-      <th>E-postadress</th>
-      <th>Sorteringsvikt</th>
-    {% for contact in contacts %}
-    <tr>
-      <td><a href="{{ url_for('admin.edit_contact', contact_id=contact.id) }}">{{ contact.title }}</td>
-      <td>{{ contact.name }}</td>
-      <td>{{ contact.email }}</td>
-      <td>{{ contact.weight }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
+<form class="table-form" method="POST">
+  {{ form.csrf_token }}
+  <div class="table">
+    <table>
+      <tr>
+        <th>Titel</th>
+        <th>Namn</th>
+        <th>E-postadress</th>
+        <th>Telefonnummer</th>
+        <th>Sorteringsvikt</th>
+        <th>Ta bort</th>
+      </tr>
+      {% for contact_form in form if not contact_form.name == 'csrf_token' %}
+      <tr>
+        <td>
+          {{ contact_form.form.csrf_token }}
+          {{ contact_form.form.title }}
+        </td>
+        <td>{{ contact_form.form.name }}</td>
+        <td>{{ contact_form.form.email }}</td>
+        <td>{{ contact_form.form.phone }}</td>
+        <td>{{ contact_form.form.weight }}</td>
+        {% if contact_form.name != 'new-contact' %}
+          <td>{{ contact_form.form.delete }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <button type="submit">Spara</button>
+</form>
 
 {% endblock %}

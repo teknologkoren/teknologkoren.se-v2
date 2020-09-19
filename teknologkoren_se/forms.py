@@ -1,7 +1,7 @@
 import flask
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import fields, validators, widgets
+from wtforms import fields, validators
 from wtforms.fields import html5 as html5_fields
 from teknologkoren_se import models, util
 from teknologkoren_se.locale import get_string
@@ -202,37 +202,140 @@ class EditFrontpageForm(FlaskForm):
     )
 
 
-class EditContactForm(FlaskForm):
-    title = fields.StringField(
+def editContactFormFactory(contact):
+    class F(FlaskForm):
+        pass
+
+    F.title = fields.StringField(
         'Titel',
+        default=contact.title,
+        render_kw={'placeholder': contact.title},
         validators=[
             validators.InputRequired()
         ]
     )
-    name = fields.StringField(
+    F.name = fields.StringField(
         'Namn',
+        default=contact.name,
+        render_kw={'placeholder': contact.name},
         validators=[
             validators.InputRequired()
         ]
     )
-    email = fields.StringField(
+    F.email = fields.StringField(
         'E-postadress',
+        default=contact.email,
+        render_kw={'placeholder': contact.email},
         validators=[
             validators.InputRequired()
         ]
     )
-    phone = fields.StringField(
+    F.phone = fields.StringField(
         'Telefonnummer',
+        default=contact.phone,
+        render_kw={'placeholder': contact.phone or "Inget"},
         validators=[
             validators.Optional()
         ]
     )
-    weight = fields.IntegerField(
+    F.weight = fields.IntegerField(
         'Sorteringsvikt',
+        default=contact.weight,
+        render_kw={'placeholder': contact.weight},
         validators=[
             validators.InputRequired()
         ]
     )
+    F.delete = fields.BooleanField('Ta bort')
+
+    return F
+
+
+class OptionalForm(FlaskForm):
+    def validate(self):
+        # If at least one field is filled in, validate form as usual.
+        # Else we pass validation but set filled_in to false so that
+        # the view knows to ignore this form.
+        for fieldname, value in self.data.items():
+            if fieldname == 'csrf_token':
+                continue
+            if value and value.strip():
+                self.filled_in = True
+                print(fieldname, value)
+                return super().validate()
+
+        self.filled_in = False
+        return True
+
+
+def newContactFormFactory():
+    class F(OptionalForm):
+        pass
+
+    F.title = fields.StringField(
+        'Titel',
+        render_kw={
+            'placeholder': "Ny kontakt",
+            # Don't tell browsers to stop submit if not filled in.
+            'required': False
+        },
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    F.name = fields.StringField(
+        'Namn',
+        render_kw={
+            'placeholder': "Hedda Hopper",
+            'required': False
+        },
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    F.email = fields.StringField(
+        'E-postadress',
+        render_kw={
+            'placeholder': "hedda@teknologkoren.se",
+            'required': False
+        },
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+    F.phone = fields.StringField(
+        'Telefonnummer',
+        render_kw={'placeholder': "+46711234567"},
+        validators=[
+            validators.Optional()
+        ]
+    )
+    F.weight = fields.IntegerField(
+        'Sorteringsvikt',
+        render_kw={
+            'placeholder': "1337",
+            'required': False
+        },
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+
+    return F
+
+
+def editContactsFormFactory(contacts):
+    class F(FlaskForm):
+        pass
+
+    for contact in contacts:
+        form_name = f"contact-{contact.id}"
+        editContactForm = editContactFormFactory(contact)
+        setattr(F, form_name, fields.FormField(editContactForm))
+
+    newContactForm = newContactFormFactory()
+    setattr(F, "new-contact", fields.FormField(newContactForm))
+    return F
 
 
 class NewUserForm(FlaskForm):
