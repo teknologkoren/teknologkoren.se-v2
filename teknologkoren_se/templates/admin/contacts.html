@@ -2,6 +2,8 @@
 
 {% set title = "Kontakter" %}
 
+{% macro required() %}<span class="required">*</span>{% endmacro %}
+
 {% block body %}
 
 <h1>Admin</h1>
@@ -26,11 +28,11 @@
   <div class="table">
     <table>
       <tr>
-        <th>Titel</th>
-        <th>Namn</th>
-        <th>E-postadress</th>
+        <th>Titel {{ required() }}</th>
+        <th>Namn {{ required() }}</th>
+        <th>E-postadress {{ required() }}</th>
         <th>Telefonnummer</th>
-        <th>Sorteringsvikt</th>
+        <th>Sorteringsvikt {{ required() }}</th>
         <th>Ta bort</th>
       </tr>
       {% for contact_form in form if not contact_form.name == 'csrf_token' %}
