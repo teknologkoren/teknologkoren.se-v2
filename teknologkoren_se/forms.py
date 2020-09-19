@@ -305,7 +305,7 @@ def newContactFormFactory():
     )
     F.phone = fields.StringField(
         'Telefonnummer',
-        render_kw={'placeholder': "+46711234567"},
+        render_kw={'placeholder': "071 123 45 67"},
         validators=[
             validators.Optional()
         ]
