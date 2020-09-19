@@ -289,15 +289,15 @@ address.contact {
 }
 
 address hr {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem 20%;
 }
 
 hr {
   border: 0;
   height: 1px;
   background-color: #ddd;
-  max-width: 30rem;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .postal-address {
