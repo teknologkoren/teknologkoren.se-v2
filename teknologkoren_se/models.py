@@ -1,14 +1,16 @@
 import datetime
+
 import flask
+import flask_login
+import flask_sqlalchemy
+import markdown
 import phonenumbers
+import slugify
 import sqlalchemy as sqla
 from sqlalchemy.ext.hybrid import hybrid_property
-import flask_sqlalchemy
-import slugify
-import markdown
-import flask_login
+
 from teknologkoren_se import util
-from teknologkoren_se.locale import get_string, get_locale
+from teknologkoren_se.locale import get_locale
 
 db = flask_sqlalchemy.SQLAlchemy()
 
@@ -278,8 +280,8 @@ class Contact(db.Model):
         except phonenumbers.phonenumberutil.NumberParseException:
             return None
 
-        if not (phonenumbers.is_possible_number(parsed) and
-                phonenumbers.is_valid_number(parsed)):
+        if not (phonenumbers.is_possible_number(parsed)
+                and phonenumbers.is_valid_number(parsed)):
             return None
 
         formatted = phonenumbers.format_number(

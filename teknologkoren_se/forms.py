@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 from wtforms.fields import html5 as html5_fields
+
 from teknologkoren_se import models, util
 from teknologkoren_se.locale import get_string
 

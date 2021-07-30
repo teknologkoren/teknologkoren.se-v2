@@ -1,5 +1,6 @@
 import flask
 import werkzeug
+
 from teknologkoren_se.translations import translations
 
 

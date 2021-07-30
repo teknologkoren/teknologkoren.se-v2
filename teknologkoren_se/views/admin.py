@@ -1,7 +1,8 @@
 import flask
 import flask_login
 import pytz
-from teknologkoren_se import models, util, locale, forms
+
+from teknologkoren_se import forms, locale, models, util
 from teknologkoren_se.locale import get_string
 
 mod = flask.Blueprint(
