@@ -1,5 +1,4 @@
-"""This migrates the contacts table from having first_name and last_name
-(last commit 6354614) to only having name."""
+"""Adds multiple languages to flashes"""
 
 import datetime
 import sqlite3
