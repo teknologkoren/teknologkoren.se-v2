@@ -172,6 +172,7 @@ a:hover {
 .pager {
   display: flex;
   justify-content: space-between;
+  margin-top: 2rem;
 }
 
 .pager .hidden {
