@@ -8,7 +8,11 @@
 
 <h2>Användare</h2>
 
-<p>Om du tar bort den användare du är inloggad med kommer du att loggas ut. Du kan inte ta bort den sista kvarvarande användaren.</p>
+<p>
+Du kan inte ta bort den användare du är inloggad med, en annan användare
+måste alltså ta bort den. Detta försäkrar att det alltid finns en användare
+som kan logga in.
+</p>
 
 <form class="table-form" method="POST">
   {{ form.csrf_token }}
@@ -26,7 +30,15 @@
           {{ user_form.username }}
         </td>
         <td>{{ user_form.password }}</td>
-        <td>{{ user_form.delete }}</td>
+        <td>
+          {% if user_form.name != 'new-user' %}
+            {% if user_form.username.data == current_user.username %}
+              {{ user_form.delete(disabled=True) }}
+            {% else %}
+              {{ user_form.delete }}
+            {% endif %}
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </table>

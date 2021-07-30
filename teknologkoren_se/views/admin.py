@@ -384,7 +384,6 @@ def users():
     form = forms.editUsersFormFactory(users)()
 
     if form.validate_on_submit():
-        users_len = len(users)
         for sub_form in form:
             if sub_form.name == 'csrf_token':
                 continue
@@ -407,7 +406,6 @@ def users():
                     password=sub_form.password.data
                 )
                 models.db.session.add(user)
-                users_len += 1
             else:
                 _, user_id = sub_form.name.split('-')
                 # 404 will probably never happen lol
@@ -415,21 +413,22 @@ def users():
                 user = models.AdminUser.query.get_or_404(user_id)
 
                 if sub_form.delete.data:
-                    users_len -= 1
+                    if user == flask_login.current_user:
+                        flask.flash(
+                            "Du kan inte ta bort användaren du är inloggad med!",
+                            'error'
+                        )
+                        models.db.session.rollback()
+                        return flask.render_template(
+                            'admin/users.html',
+                            form=form
+                        )
                     models.db.session.delete(user)
                     continue
 
                 user.username = sub_form.username.data
                 if sub_form.password.data:
                     user.password = sub_form.password.data
-
-        if users_len < 1:
-            # Don't allow removing all users, or the last user.
-            models.db.session.rollback()
-            flask.flash(
-                "Lämna åtminstone en användare som kan logga in!",
-                'error'
-            )
         else:
             models.db.session.commit()
             return flask.redirect(flask.url_for('admin.users'))
