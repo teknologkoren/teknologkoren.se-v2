@@ -389,7 +389,17 @@ def users():
                 continue
 
             if sub_form.name == 'new-user':
-                if sub_form.username.data.strip():
+                username = sub_form.username.data.strip()
+                if username:
+                    if models.AdminUser.query.filter_by(username=username).first():
+                        flask.flash(
+                            "Användarnamnet \"{}\" är upptaget!".format(username),
+                            'error'
+                        )
+                        return flask.render_template(
+                            'admin/users.html',
+                            form=form
+                        )
                     if not sub_form.password.data:
                         flask.flash(
                             "Ange ett lösenord för den nya användaren!",

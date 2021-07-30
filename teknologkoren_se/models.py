@@ -294,7 +294,7 @@ class Contact(db.Model):
 
 class AdminUser(flask_login.UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(50), nullable=False, unique=True)
 
     # Do not change the following directly, use AdminUser.password
     _password_hash = db.Column(db.String(256), nullable=False)
@@ -325,15 +325,7 @@ class AdminUser(flask_login.UserMixin, db.Model):
 
     @staticmethod
     def authenticate(username, password):
-        # Allows multiple users with same username. If they have the
-        # same password you might get the "wrong" user when logging in,
-        # but that doesn't really matter. Users are (as of typing) only
-        # for logging in, nothing else. Better to have the flexibility
-        # of one username with multiple passwords. Like, why not?
-        users = AdminUser.query.filter_by(username=username)
-
-        for user in users:
-            if user and user.verify_password(password):
-                return user
-
+        user = AdminUser.query.filter_by(username=username).one_or_none()
+        if user and user.verify_password(password):
+            return user
         return None
