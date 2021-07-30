@@ -244,12 +244,15 @@ footer .admin a {
   font-size: .85em;
 }
 
-article.post ~ article.post {
-  border-top: 1px solid #ddd;
+article.post ~ article.post::before {
+  margin-top: 2rem;
+  display: block;
+  content: "//";
+  text-align: center;
 }
 
-article.post > header, article.post > h1 {
-  margin: 1rem 0;
+article.post > header {
+  margin: 2rem 0 1rem;
 }
 
 .landscape-image {
