@@ -156,7 +156,12 @@ a:hover {
 }
 
 .nav li {
-  padding: .3rem 1rem;
+   padding: 0 .3rem;
+}
+
+.nav a {
+  display: block;
+  padding: .5rem .7rem;
 }
 
 .nav .active {
