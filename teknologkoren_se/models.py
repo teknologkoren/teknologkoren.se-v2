@@ -53,7 +53,11 @@ class Post(db.Model):
     text_en = db.Column(db.Text, nullable=True)
 
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
-    image = db.relationship('Image', foreign_keys=image_id)
+    image = db.relationship(
+        'Image',
+        foreign_keys=image_id,
+        lazy='joined'
+    )
 
     type = db.Column(db.String(20))
 
