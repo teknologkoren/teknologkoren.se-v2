@@ -20,12 +20,12 @@
     </table>
   </div>
 
-  {% if ordf is defined and ordf.formatted_phone %}
+  {% set ordf_phone = ordf.formatted_phone() %}
+  {% if ordf is defined and ordf_phone %}
   <p>
-    {{ _('contact-chairman').format(
-          name=ordf.name,
-          phone=ordf.formatted_phone if ordf.formatted_phone else ordf.phone
-          )|safe }}
+  {{ (_('contact-chairman')
+      .format(name=ordf.name,
+              phone=ordf_phone if ordf_phone else ordf.phone))|safe }}
   </p>
   {% endif %}
 

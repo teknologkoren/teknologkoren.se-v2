@@ -1,6 +1,6 @@
 {% extends "public/base.html" %}
 
-{% set title = post.title %}
+{% set title = post.title() %}
 
 {% if post.type == 'event' %}
 {% set active_page = "public.events" %}

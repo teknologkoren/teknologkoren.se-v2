@@ -32,8 +32,9 @@ def index(page):
     )
 
     config = models.Config.query.first()
-    if config.flash:
-        flask.flash(config.flash, config.flash_type or 'info')
+    frontpage_flash = config.flash()
+    if frontpage_flash:
+        flask.flash(frontpage_flash, config.flash_type or 'info')
 
     pagination = posts.paginate(page, 5)
     return flask.render_template('public/index.html',
@@ -66,12 +67,13 @@ def view_post(post_id, slug=None):
         return flask.abort(404)
 
     # Redirect to url with correct slug if missing or incorrect
-    if slug != post.slug:
+    post_slug = post.slug()
+    if slug != post_slug:
         return flask.redirect(
             flask.url_for(
                 'public.view_post',
                 post_id=post_id,
-                slug=post.slug
+                slug=post_slug
             )
         )
 
@@ -87,12 +89,13 @@ def view_event(event_id, slug=None):
         return flask.abort(404)
 
     # Redirect to url with correct slug if missing or incorrect
-    if slug != event.slug:
+    event_slug = event.slug()
+    if slug != event_slug:
         return flask.redirect(
             flask.url_for(
                 'public.view_event',
                 event_id=event_id,
-                slug=event.slug
+                slug=event_slug
             )
         )
 

@@ -1,6 +1,6 @@
 {% extends "public/base.html" %}
 
-{% set title = page.title %}
+{% set title = page.title() %}
 {% set active_page = endpoint %}
 
 {% if page.image %}
@@ -9,6 +9,6 @@
 
 {% block body %}
 
-{{ page.html|safe }}
+{{ page.html()|safe }}
 
 {% endblock %}

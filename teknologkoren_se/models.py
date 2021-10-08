@@ -25,7 +25,6 @@ class Config(db.Model):
     flash_en = db.Column(db.String(100), nullable=True)
     flash_type = db.Column(db.String(10), nullable=True)
 
-    @property
     def flash(self):
         lang = get_locale()
 
@@ -66,7 +65,6 @@ class Post(db.Model):
         'polymorphic_on': type
     }
 
-    @property
     def title(self):
         lang = get_locale()
 
@@ -78,7 +76,6 @@ class Post(db.Model):
 
         flask.abort(500)
 
-    @property
     def text(self):
         lang = get_locale()
 
@@ -92,7 +89,7 @@ class Post(db.Model):
 
     def html(self, offset=0):
         return markdown.markdown(
-            self.text,
+            self.text(),
             extensions=[
                 'nl2br',
                 'teknologkoren_se.lib.mdx_headdown',
@@ -105,12 +102,10 @@ class Post(db.Model):
             }
         )
 
-    @property
     def url(self):
         """Return the path to the post."""
         return flask.url_for('public.post', id=self.id)
 
-    @property
     def slug(self):
         lang = get_locale()
 
@@ -154,7 +149,6 @@ class Event(Post):
         'polymorphic_identity': 'event'
     }
 
-    @property
     def location(self):
         lang = get_locale()
 
@@ -166,7 +160,6 @@ class Event(Post):
 
         flask.abort(500)
 
-    @property
     def time_text(self):
         lang = get_locale()
 
@@ -178,10 +171,9 @@ class Event(Post):
 
         flask.abort(500)
 
-    @property
     def time_html(self, offset=0):
         return markdown.markdown(
-            self.time_text,
+            self.time_text(),
             extensions=[
                 'nl2br',
                 'teknologkoren_se.lib.mdx_headdown',
@@ -221,7 +213,6 @@ class Page(db.Model):
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
     image = db.relationship('Image', foreign_keys=image_id)
 
-    @property
     def text(self):
         lang = get_locale()
 
@@ -233,17 +224,15 @@ class Page(db.Model):
 
         flask.abort(500)
 
-    @property
     def html(self):
         return markdown.markdown(
-            self.text,
+            self.text(),
             extensions=[
                 'nl2br',
                 'teknologkoren_se.lib.mdx_urlize'
             ]
         )
 
-    @property
     def title(self):
         lang = get_locale()
 
@@ -275,7 +264,6 @@ class Contact(db.Model):
     phone = db.Column(db.String(20), nullable=True)
     weight = db.Column(db.Integer, nullable=False)
 
-    @property
     def formatted_phone(self):
         """Returns formatted number or False if not a valid number."""
         try:
