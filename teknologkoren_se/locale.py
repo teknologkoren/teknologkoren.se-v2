@@ -71,8 +71,7 @@ def fix_missing_lang_code():
         # The new path does not match anything, we allow the request
         # to continue with the non-lang path. Probably 404. In case
         # this request results in something that does want a lang
-        # code (error pages need it as main.html builds urls for the
-        # nav), we set it to whatever was proposed by get_locale().
+        # code, we set it to whatever was proposed by get_locale().
         # If we don't set it AND the client does not have lang saved
         # in a cookie, we'd get a 500.
         flask.g.lang_code = proposed_lang
