@@ -6,11 +6,6 @@
 
 {% set title = _("sign in") %}
 
-{% block head %}
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-{% endblock %}
-
 {% block body %}
 <form method="POST">
   {{ form.csrf_token }}

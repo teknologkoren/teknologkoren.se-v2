@@ -1,6 +1,10 @@
 import datetime
+
 import flask
-from teknologkoren_se import models, util, locale
+import flask_login
+
+from teknologkoren_se import forms, models, util, locale
+from teknologkoren_se.locale import get_string
 
 mod = flask.Blueprint(
     'public',
@@ -133,3 +137,26 @@ def init_dynamic_pages():
     for endpoint, path in pages:
         view_func = view_page_factory(endpoint, path)
         mod.add_url_rule(*view_func)
+
+
+@mod.route('/login', methods=['GET', 'POST'])
+def login():
+    form = forms.LoginForm()
+
+    if flask_login.current_user.is_authenticated:
+        return flask.redirect(flask.url_for('admin.index'))
+
+    if form.validate_on_submit():
+        user = models.AdminUser.authenticate(
+            form.username.data,
+            form.password.data
+        )
+
+        if not user:
+            flask.flash(get_string('wrong-login'), 'error')
+            return flask.render_template('public/login.html', form=form)
+
+        flask_login.login_user(user, remember=form.remember.data)
+        return form.redirect('admin.index')
+
+    return flask.render_template('public/login.html', form=form)
