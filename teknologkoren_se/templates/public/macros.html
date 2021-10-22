@@ -59,7 +59,7 @@
   <header>
     {% if overview %}
     <h2>
-      <a href="{{ url_for('public.view_event', event_id=event.id, slug=event.slug) }}" class="inverted-link">{{ event.title() }}</a>
+      <a href="{{ url_for('public.view_event', event_id=event.id, slug=event.slug()) }}" class="inverted-link">{{ event.title() }}</a>
     </h2>
     {% else %}
     <h1>
