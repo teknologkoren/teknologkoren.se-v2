@@ -33,7 +33,7 @@ def get_string(name, lazy=False):
 
 
 def get_locale():
-    lang_code = (flask.g.get('lang_code') or flask.session.get('lang_code'))
+    lang_code = flask.g.get('lang_code') or flask.session.get('lang_code')
 
     if not lang_code:
         lang_code = (
@@ -81,23 +81,21 @@ def fix_missing_lang_code():
     return flask.redirect(new_path)
 
 
-def url_for_lang(endpoint, lang_code, view_args, fallback='index.index',
-                 **args):
-    if (endpoint and (flask.current_app.url_map
-                      .is_endpoint_expecting(endpoint, 'lang_code'))):
+def url_for_lang(endpoint, lang_code, view_args, fallback='index.index', **args):
+    view_args = view_args or {}
+    url_map = flask.current_app.url_map
 
-        return flask.url_for(endpoint, lang_code=lang_code,
-                             **view_args or {}, **args)
+    if endpoint and url_map.is_endpoint_expecting(endpoint, 'lang_code'):
+        return flask.url_for(endpoint, lang_code=lang_code, **view_args, **args)
 
-    return flask.url_for(fallback, lang_code=lang_code,
-                         **view_args or {}, **args)
+    return flask.url_for(fallback, lang_code=lang_code, **view_args, **args)
 
 
 def bp_url_processors(bp):
     @bp.url_defaults
     def add_language_code(endpoint, values):
-        if not values.get('lang_code', None):
-            values['lang_code'] = (getattr(flask.g, 'lang_code', None)
+        if not values.get('lang_code'):
+            values['lang_code'] = (flask.g.get('lang_code')
                                    or flask.session.get('lang_code'))
 
     @bp.url_value_preprocessor
