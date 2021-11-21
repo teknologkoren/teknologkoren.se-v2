@@ -7,6 +7,10 @@ SERVER_NAME = 'localhost.localdomain:5000'
 
 BASEDIR = Path(__file__).parent.resolve()
 
+SESSION_COOKIE_SECURE = False  # Change to True in production instance config
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + str(BASEDIR.joinpath('db.sqlite'))
 
 # FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant
