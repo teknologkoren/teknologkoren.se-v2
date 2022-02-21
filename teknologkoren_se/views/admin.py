@@ -282,7 +282,8 @@ def event(event_id=None):
     # Gets converted back to utc from cet on submit that got through validation
     if event and not form.is_submitted():
         form.start_time.data = utc_to_cet(event.start_time)
-        form.published.data = utc_to_cet(event.published)
+        if event.published:
+            form.published.data = utc_to_cet(event.published)
 
     return flask.render_template('admin/event.html', event=event, form=form)
 
