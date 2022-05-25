@@ -18,7 +18,7 @@ db = flask_sqlalchemy.SQLAlchemy()
 class Config(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    frontpage_image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    frontpage_image_id = db.Column(db.Integer, db.ForeignKey('file.id'))
     frontpage_image = db.relationship('Image', foreign_keys=frontpage_image_id)
 
     flash_sv = db.Column(db.String(100), nullable=True)
@@ -51,7 +51,7 @@ class Post(db.Model):
     text_sv = db.Column(db.Text, nullable=False)
     text_en = db.Column(db.Text, nullable=True)
 
-    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    image_id = db.Column(db.Integer, db.ForeignKey('file.id'))
     image = db.relationship(
         'Image',
         foreign_keys=image_id,
@@ -210,7 +210,7 @@ class Page(db.Model):
     title_sv = db.Column(db.String(50), nullable=False)
     title_en = db.Column(db.String(50), nullable=False)
 
-    image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
+    image_id = db.Column(db.Integer, db.ForeignKey('file.id'))
     image = db.relationship('Image', foreign_keys=image_id)
 
     def text(self):
@@ -245,9 +245,24 @@ class Page(db.Model):
         flask.abort(500)
 
 
-class Image(db.Model):
+class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(50))
+
     filename = db.Column(db.String(256), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'transaction',
+        'polymorphic_on': type,
+    }
+
+
+
+class Image(File):
+    __mapper_args__ = {
+        'polymorphic_identity': 'image'
+    }
+
     portrait = db.Column(db.Boolean, nullable=False)
 
 
