@@ -2,7 +2,6 @@ import flask
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
-from wtforms.fields import html5 as html5_fields
 
 from teknologkoren_se import models, util
 from teknologkoren_se.locale import get_string
@@ -108,7 +107,7 @@ class EditPostForm(UploadForm):
         validators.Optional()
     ])
 
-    published = html5_fields.DateTimeLocalField(
+    published = fields.DateTimeLocalField(
         'Publicerad',
         description=(
             "Vilken tid inlägget ska publiceras. Lämna tomt för att inte "
@@ -123,7 +122,7 @@ class EditPostForm(UploadForm):
 
 
 class EditEventForm(EditPostForm):
-    start_time = html5_fields.DateTimeLocalField(
+    start_time = fields.DateTimeLocalField(
         'Tid',
         description=(
             "Om tidsbeskrivning lämnas tomt så syns denna som tid "
