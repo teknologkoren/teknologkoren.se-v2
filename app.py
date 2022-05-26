@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from pathlib import Path
 from teknologkoren_se import factory
 
@@ -24,3 +26,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + str(BASEDIR.joinpath('db.sqlite'))
 """)
 
 app = factory.create_app(instance_config='config.py')
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
