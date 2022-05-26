@@ -1,7 +1,7 @@
 babel
+bcrypt
 flask
 flask-babel
-flask-bcrypt
 flask-login
 flask-sqlalchemy
 flask-reuploaded

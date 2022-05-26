@@ -1,5 +1,6 @@
 import datetime
 
+import bcrypt
 import flask
 import flask_login
 import flask_sqlalchemy
@@ -313,21 +314,13 @@ class AdminUser(flask_login.UserMixin, db.Model):
 
     @password.setter
     def password(self, plaintext):
-        self._password_hash = (
-            util.bcrypt
-            .generate_password_hash(plaintext, 12)
-            .decode()
-        )
-
+        hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(12))
+        self._password_hash = hash.decode()
         self._password_timestamp = datetime.datetime.utcnow()
 
     def verify_password(self, plaintext):
         """Return True if plaintext matches password, else False."""
-        correct = util.bcrypt.check_password_hash(
-            self._password_hash,
-            plaintext
-        )
-
+        correct = bcrypt.checkpw(plaintext.encode(), self._password_hash.encode())
         return correct
 
     @staticmethod

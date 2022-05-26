@@ -21,8 +21,6 @@ def create_app(config=None, instance_config=None):
 
     models.db.init_app(app)
 
-    util.bcrypt.init_app(app)
-
     views.admin.login_manager.init_app(app)
     views.public.setup_jinja(app)
 
