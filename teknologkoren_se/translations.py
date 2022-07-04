@@ -95,13 +95,17 @@ translations = {
     },
     'contacts-below': {
         'en': "You can find email adresses to our board members below:",
-        'sv': "Du kan hitta e-postadresser till våra styrelsemedlemmar nedan:",
+        'sv': "Du finner e-postadresser till våra styrelsemedlemmar nedan:",
     },
-    'contact-chairman': {
-        'en': ("Feel free to contact our chairman, {name}, phone "
-               "<a href=\"tel:{phone}\">{phone}</a>, if you have any questions."),
-        'sv': ("Kontakta gärna vår ordförande, {name}, telefon "
-               "<a href=\"tel:{phone}\">{phone}</a>, om du har någon fråga."),
+    'contact-chairperson': {
+        'en': (
+            "Feel free to contact our chairperson, {name}, phone "
+            "<a href=\"tel:{phone}\">{phone}</a>, if you have any questions."
+        ),
+        'sv': (
+            "Kontakta gärna vår ordförande, {name}, telefon "
+            "<a href=\"tel:{phone}\">{phone}</a>, om du har någon fråga."
+        ),
     },
     'reach-us-by-mail': {
         'en': "You can also reach us by regular mail",
