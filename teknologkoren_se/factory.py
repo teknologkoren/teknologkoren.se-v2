@@ -289,7 +289,9 @@ def setup_flask_uploads(app):
     from teknologkoren_se import util
 
     flask_uploads.configure_uploads(app, util.image_uploads)
+    flask_uploads.configure_uploads(app, util.file_uploads)
 
+    app.jinja_env.globals['url_for_file'] = util.url_for_file
     app.jinja_env.globals['url_for_image'] = util.url_for_image
 
 

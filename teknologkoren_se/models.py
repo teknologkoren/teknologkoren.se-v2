@@ -10,7 +10,6 @@ import slugify
 import sqlalchemy as sqla
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from teknologkoren_se import util
 from teknologkoren_se.locale import get_locale
 
 db = flask_sqlalchemy.SQLAlchemy()
@@ -253,10 +252,9 @@ class File(db.Model):
     filename = db.Column(db.String(256), nullable=False)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'transaction',
+        'polymorphic_identity': 'file',
         'polymorphic_on': type,
     }
-
 
 
 class Image(File):
@@ -264,7 +262,7 @@ class Image(File):
         'polymorphic_identity': 'image'
     }
 
-    portrait = db.Column(db.Boolean, nullable=False)
+    portrait = db.Column(db.Boolean, nullable=True)
 
 
 class Contact(db.Model):

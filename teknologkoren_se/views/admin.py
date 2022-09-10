@@ -151,14 +151,23 @@ def post(post_id=None):
     if post_id:
         post = models.BlogPost.query.get_or_404(post_id)
     else:
-        post = None
+        post = models.BlogPost()
 
-    form = forms.EditPostForm(obj=post)
+    if post.image:
+        current_image_choice = post.image.id
+    else:
+        current_image_choice = None
+
+    class F(forms.EditPostForm):
+        pass
+
+    images = models.Image.query.all()
+    choose_image_field = forms.choose_image_field(images, current_image_choice)
+    setattr(F, 'choose_image', choose_image_field)
+
+    form = F(obj=post)
 
     if form.validate_on_submit():
-        if not post:
-            post = models.BlogPost()
-
         published_cet = forms.none_if_space(form.published.data)
         if published_cet:
             published = cet_to_utc(published_cet)
@@ -180,6 +189,13 @@ def post(post_id=None):
 
             image.portrait = form.portrait.data
             post.image = image
+
+        elif int(form.choose_image.data) != post.image_id:
+            choose_image = int(form.choose_image.data)
+            if choose_image == -1:
+                post.image_id = None
+            else:
+                post.image_id = choose_image
 
         elif post.image:
             post.image.portrait = form.portrait.data
@@ -217,14 +233,23 @@ def event(event_id=None):
     if event_id:
         event = models.Event.query.get(event_id)
     else:
-        event = None
+        event = models.Event()
 
-    form = forms.EditEventForm(obj=event)
+    if event.image:
+        current_image_choice = event.image.id
+    else:
+        current_image_choice = None
+
+    class F(forms.EditEventForm):
+        pass
+
+    images = models.Image.query.all()
+    choose_image_field = forms.choose_image_field(images, current_image_choice)
+    setattr(F, 'choose_image', choose_image_field)
+
+    form = F(obj=event)
 
     if form.validate_on_submit():
-        if not event:
-            event = models.Event()
-
         published_cet = forms.none_if_space(form.published.data)
         if published_cet:
             published = cet_to_utc(published_cet)
@@ -256,6 +281,13 @@ def event(event_id=None):
 
             image.portrait = form.portrait.data
             event.image = image
+
+        elif int(form.choose_image.data) != event.image_id:
+            choose_image = int(form.choose_image.data)
+            if choose_image == -1:
+                event.image_id = None
+            else:
+                event.image_id = choose_image
 
         elif event.image:
             event.image.portrait = form.portrait.data
@@ -417,3 +449,71 @@ def users():
         forms.flash_errors(form)
 
     return flask.render_template('admin/users.html', form=form)
+
+
+@mod.route('/files/')
+def files():
+    files = models.File.query.filter_by(type='file').all()
+    images = models.Image.query.all()
+    return flask.render_template('admin/files.html', files=files, images=images)
+
+
+@mod.route('/files/file/', methods=['GET', 'POST'])
+@mod.route('/files/file/<int:file_id>', methods=['GET', 'POST'])
+def file(file_id=None):
+    if file_id:
+        file = models.File.query.get_or_404(file_id)
+    else:
+        file = None
+
+    form = forms.UploadFileForm(obj=file)
+
+    if form.validate_on_submit():
+        if not file:
+            if not form.file.data:
+                flask.flash("Välj en fil att ladda upp!", 'error')
+                return flask.render_template('admin/file.html', file=file, form=form)
+            file = models.File()
+
+        if form.file.data:
+            filename = util.file_uploads.save(form.file.data)
+            file.filename = filename
+
+        if not file_id:
+            models.db.session.add(file)
+        models.db.session.commit()
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/file.html', file=file, form=form)
+
+
+@mod.route('/files/image/', methods=['GET', 'POST'])
+@mod.route('/files/image/<int:file_id>', methods=['GET', 'POST'])
+def image(file_id=None):
+    if file_id:
+        image = models.Image.query.get_or_404(file_id)
+    else:
+        image = None
+
+    form = forms.UploadImageForm(obj=image)
+
+    if form.validate_on_submit():
+        if not image:
+            if not form.image.data:
+                flask.flash("Välj en bild att ladda upp!", 'error')
+                return flask.render_template('admin/image.html', image=image, form=form)
+            image = models.Image()
+
+        if form.image.data:
+            filename = util.image_uploads.save(form.image.data)
+            image.filename = filename
+        image.portrait = form.portrait.data
+
+        if not file_id:
+            models.db.session.add(image)
+        models.db.session.commit()
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/image.html', image=image, form=form)

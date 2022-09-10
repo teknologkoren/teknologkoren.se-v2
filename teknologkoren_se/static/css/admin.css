@@ -14,3 +14,22 @@ main {
 .table-form button {
   margin-top: 1rem;
 }
+
+.choose-image {
+  max-height: 400px;
+  max-width: 500px;
+  overflow-y: auto;
+}
+
+.choose-image ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.choose-image li {
+  margin: 10px 0;
+}
+
+.choose-image img {
+  max-width: 100px;
+}

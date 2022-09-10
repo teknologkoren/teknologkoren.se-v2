@@ -1,3 +1,34 @@
+{% macro choose_image(field, description=True) %}
+<fieldset class="form-entry choose-image">
+  <legend>{{ field.label(class='error' if field.errors else '') }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</legend>
+  {% for error in field.errors %}
+  <div class="field-description error">
+    {{ _("Fel:") }} {{ error }}
+  </div>
+  {% endfor %}
+  {% if description and field.description %}
+  <div class="field-description">
+    {{ field.description }}
+  </div>
+  {% endif %}
+  <div class="form-field">
+    <ul>
+    {% for subfield in field %}
+      <li>
+        {{ subfield }}
+        <label for="{{ subfield.id }}">
+          {% if subfield.data != -1 %}
+          <img src="{{ url_for_image(subfield.label.text, 100) }}">
+          {% endif %}
+          {{ subfield.label.text }}
+        </label>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+</fieldset>
+{% endmacro %}
+
 {% macro form_entry(field, description=True) %}
 <div class="form-entry">
   <div>{{ field.label(class='error' if field.errors else '') }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</div>
