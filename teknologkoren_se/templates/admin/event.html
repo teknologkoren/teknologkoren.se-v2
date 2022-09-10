@@ -6,14 +6,12 @@
 
 {% block body %}
 
-<h1>Admin</h1>
-
-<h2>Händelse</h2>
+<h1>Händelse</h1>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   <div>
-    <h3>Bild</h3>
+    <h2>Bild</h2>
     {% if event and event.image %}
     <p>Nuvarande bild:</p>
     <img class="edit-post-current-img" src="{{ url_for_image(event.image.filename, 400) }}" alt="">
@@ -24,7 +22,7 @@
   </div>
 
   <div>
-    <h3>Svenska</h3>
+    <h2>Svenska</h2>
     {{ form_entry(form.title_sv) }}
     {{ form_entry(form.text_sv, cols=60, rows=10) }}
     {{ form_entry(form.time_text_sv, cols=40, rows=7, placeholder=(
@@ -37,7 +35,7 @@
   </div>
 
   <div>
-    <h3>Engelska</h3>
+    <h2>Engelska</h2>
     {{ form_entry(form.title_en) }}
     {{ form_entry(form.text_en, cols=60, rows=10) }}
     {{ form_entry(form.time_text_en, cols=40, rows=7, placeholder=(
@@ -50,7 +48,7 @@
   </div>
 
   <div>
-    <h3>Meta</h3>
+    <h2>Meta</h2>
     {{ form_entry(form.start_time) }}
     {{ form_entry(form.location_link) }}
     {{ form_entry(form.published) }}

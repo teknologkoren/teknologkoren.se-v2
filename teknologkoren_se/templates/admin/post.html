@@ -2,36 +2,35 @@
 
 {% set title = "Redigera inlägg" %}
 
-{% from "macros.html" import form_entry, form_entry_row %}
+{% from "macros.html" import choose_image, form_entry, form_entry_row %}
 
 {% block body %}
 
-<h1>Admin</h1>
-
-<h2>Inlägg</h2>
+<h1>Inlägg</h1>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   {{ form_entry(form.published) }}
 
   <div>
-    <h3>Bild</h3>
+    <h2>Bild</h2>
     {% if post and post.image %}
     <p>Nuvarande bild:</p>
     <img class="edit-post-current-img" src="{{ url_for_image(post.image.filename, 400) }}" alt="">
     {% endif %}
     {{ form_entry(form.image) }}
-    {{ form_entry(form.portrait) }}
+    {{ form_entry_row(form.portrait) }}
+    {{ choose_image(form.choose_image) }}
   </div>
 
   <div>
-    <h3>Svenska</h3>
+    <h2>Svenska</h2>
     {{ form_entry(form.title_sv) }}
     {{ form_entry(form.text_sv, cols=60, rows=10) }}
   </div>
 
   <div>
-    <h3>Engelska</h3>
+    <h2>Engelska</h2>
     {{ form_entry(form.title_en) }}
     {{ form_entry(form.text_en, cols=60, rows=10) }}
   </div>

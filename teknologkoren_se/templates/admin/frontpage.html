@@ -6,14 +6,12 @@
 
 {% block body %}
 
-<h1>Admin</h1>
-
-<h2>Framsidan</h2>
+<h1>Framsidan</h1>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   <div>
-    <h3>Bild</h3>
+    <h2>Bild</h2>
     {{ form.frontpage_image.csrf_token }}
     {% if config.frontpage_image %}
     <p>Nuvarande bild:</p>
@@ -22,7 +20,7 @@
     {{ form_entry(form.frontpage_image.image) }}
   </div>
 
-  <h3>Flash</h3>
+  <h2>Flash</h2>
 
   <p>Om endast ett av språken är ifyllt visas det oavsett språkval.</p>
 
