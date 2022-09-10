@@ -6,14 +6,12 @@
 
 {% block body %}
 
-<h1>Admin</h1>
-
-<h2>{{ page.title_sv }} - teknologkoren.se/{{ page.path }}</h2>
+<h1>{{ page.title_sv }} - teknologkoren.se/{{ page.path }}</h1>
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   <div>
-    <h3>Bild</h3>
+    <h2>Bild</h2>
     {% if page and page.image %}
     <p>Nuvarande bild:</p>
     <img class="edit-post-current-img" src="{{ url_for_image(page.image.filename, 400) }}" alt="">
@@ -22,12 +20,12 @@
   </div>
 
   <div>
-    <h3>Svenska</h3>
+    <h2>Svenska</h2>
     {{ form_entry(form.text_sv, cols=60, rows=20) }}
   </div>
 
   <div>
-    <h3>Engelska</h3>
+    <h2>Engelska</h2>
     {{ form_entry(form.text_en, cols=60, rows=20) }}
   </div>
 
