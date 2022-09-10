@@ -2,6 +2,7 @@ import flask
 import flask_uploads
 from urllib.parse import urlparse, urljoin
 
+file_uploads = flask_uploads.UploadSet('files', flask_uploads.ALL)
 image_uploads = flask_uploads.UploadSet('images', flask_uploads.IMAGES)
 
 
@@ -10,6 +11,12 @@ def url_for_other_page(page):
     args = flask.request.view_args.copy()
     args['page'] = page
     return flask.url_for(flask.request.endpoint, **args)
+
+
+def url_for_file(filename):
+    base = file_uploads.config.base_url
+    url = urljoin(base, filename)
+    return url
 
 
 def url_for_image(filename, width=None):

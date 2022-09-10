@@ -2,7 +2,7 @@
 
 {% set title = "Redigera händelse" %}
 
-{% from "macros.html" import form_entry, form_entry_row %}
+{% from "macros.html" import choose_image, form_entry, form_entry_row %}
 
 {% block body %}
 
@@ -19,7 +19,8 @@
     <img class="edit-post-current-img" src="{{ url_for_image(event.image.filename, 400) }}" alt="">
     {% endif %}
     {{ form_entry(form.image) }}
-    {{ form_entry(form.portrait) }}
+    {{ form_entry_row(form.portrait) }}
+    {{ choose_image(form.choose_image) }}
   </div>
 
   <div>

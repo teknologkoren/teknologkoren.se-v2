@@ -82,17 +82,33 @@ class LoginForm(RedirectForm):
     )
 
 
-class UploadForm(FlaskForm):
+class UploadFileForm(FlaskForm):
+    file = fields.FileField('Ladda upp en ny fil', validators=[
+        FileAllowed(util.file_uploads)
+    ])
+
+
+class UploadImageForm(FlaskForm):
     image = fields.FileField('Ladda upp ny bild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
     ])
     portrait = fields.BooleanField(
         'Porträttläge',
-        description="Bilden hamnar till höger om texten istället för ovanför"
+        description="Bilden är i porträttläge (högre än den är bred)"
     )
 
 
-class EditPostForm(UploadForm):
+def choose_image_field(images, current_choice_id=None):
+    choices = [(-1, "None")] + [(image.id, image.filename) for image in images[::-1]]
+    field = fields.RadioField(
+        'Uppladdade bilder',
+        choices=choices,
+        default=current_choice_id or -1
+    )
+    return field
+
+
+class EditPostForm(UploadImageForm):
     text_sv = fields.TextAreaField('Text', validators=[
         validators.InputRequired()
     ])
@@ -169,7 +185,7 @@ class EditEventForm(EditPostForm):
     ])
 
 
-class EditPageForm(UploadForm):
+class EditPageForm(UploadImageForm):
     text_sv = fields.TextAreaField('Text', validators=[
         validators.InputRequired()
     ])
@@ -179,7 +195,7 @@ class EditPageForm(UploadForm):
 
 
 class EditFrontpageForm(FlaskForm):
-    frontpage_image = fields.FormField(UploadForm)
+    frontpage_image = fields.FormField(UploadImageForm)
 
     flash_sv = fields.StringField(
         'Flash',
@@ -261,7 +277,6 @@ class OptionalForm(FlaskForm):
                 continue
             if value and value.strip():
                 self.filled_in = True
-                print(fieldname, value)
                 return super().validate()
 
         self.filled_in = False
