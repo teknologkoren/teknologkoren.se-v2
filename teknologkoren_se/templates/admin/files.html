@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+
+{% set title = "Filer" %}
+
+{% block body %}
+
+<h1>Filer och bilder</h1>
+
+<h2>Filer</h2>
+<a href="{{ url_for('admin.file') }}">Ladda upp en fil</a>
+{% if files %}
+<ul>
+{% for file in files %}
+  <li>
+    <a href="{{ url_for('admin.file', file_id=file.id) }}">
+      {{ file.filename }}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+  <p>Inga filer uppladdade.</p>
+{% endif %}
+
+<h2 id="events">Bilder</h2>
+<a href="{{ url_for('admin.image') }}">Ladda upp en bild</a>
+{% if images %}
+<ul>
+{% for image in images %}
+  <li>
+    <a href="{{ url_for('admin.image', file_id=image.id) }}">
+      {{ image.filename }}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+  <p>Inga bilder uppladdade.</p>
+{% endif %}
+
+{% endblock %}
