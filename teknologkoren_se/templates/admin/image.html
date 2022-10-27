@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+
+{% set title = "Redigera inlägg" %}
+
+{% from "macros.html" import form_entry, form_entry_row %}
+
+{% block body %}
+
+<h1>Bild</h1>
+{% if image %}
+<p><code>{{ image.filename }}</code></p>
+<img class="edit-post-current-img" src="{{ url_for_image(image.filename, 400) }}" alt="">
+<p>URL till filen: <a href="{{ url_for_image(image.filename) }}">{{ url_for_image(image.filename) }}</a></p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+  {{ form.csrf_token }}
+
+  {% if image %}
+  <h2>Ändra bild</h2>
+  <p>Om du laddar upp en ny bild kommer den nuvarande bytas ut på alla platser den redan används. Den tidigare bilden kommer inte gå att nå utan att ha URL:en eller att fråga webmaster.</p>
+  {% endif %}
+  {{ form_entry(form.image) }}
+  {{ form_entry_row(form.portrait) }}
+
+  <div class="form-field">
+    <button>Spara</button> | <a href="{{ url_for('admin.files') }}">Avbryt</a>
+  </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% set title = "Redigera inlägg" %}
+
+{% from "macros.html" import form_entry, form_entry_row %}
+
+{% block body %}
+
+<h1>Fil</h1>
+{% if file %}
+<code>{{ file.filename }}</code>
+
+<p>URL till filen:
+  <a href="{{ url_for_file(file.filename) }}">{{ url_for_file(file.filename) }}</a>
+</p>
+{% endif %}
+
+{% if file %}
+<h2>Ersätt fil</h2>
+
+<p>Om du laddar upp en ny fil kommer den nuvarande bytas ut på alla platser den redan används. Den tidigare filen kommer inte gå att nå utan att ha URL:en eller att fråga webmaster.</p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+  {{ form.csrf_token }}
+
+  {{ form_entry(form.file) }}
+
+  <div class="form-field">
+    <button>Spara</button> | <a href="{{ url_for('admin.files') }}">Avbryt</a>
+  </div>
+</form>
+
+{% endblock %}
