@@ -252,7 +252,7 @@ def populate_testdb():
 
 def init_db(app):
     from teknologkoren_se import models
-    models.db.create_all(app=app)
+    models.db.create_all()
 
     pages = [
         ('om-oss', 'Om oss', 'About us'),
