@@ -94,7 +94,7 @@ class Post(db.Model):
             extensions=[
                 'nl2br',
                 'teknologkoren_se.lib.mdx_headdown',
-                'teknologkoren_se.lib.mdx_urlize'
+                'mdx_linkify'
             ],
             extension_configs={
                 'mdx_headdown': {
@@ -178,7 +178,7 @@ class Event(Post):
             extensions=[
                 'nl2br',
                 'teknologkoren_se.lib.mdx_headdown',
-                'teknologkoren_se.lib.mdx_urlize'
+                'mdx_linkify'
             ],
             extension_configs={
                 'mdx_headdown': {
@@ -230,7 +230,7 @@ class Page(db.Model):
             self.text(),
             extensions=[
                 'nl2br',
-                'teknologkoren_se.lib.mdx_urlize'
+                'mdx_linkify'
             ]
         )
 
