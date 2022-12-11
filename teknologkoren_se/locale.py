@@ -1,5 +1,6 @@
 import flask
-import werkzeug
+from werkzeug.exceptions import MethodNotAllowed, NotFound
+from werkzeug.routing import RequestRedirect
 
 from teknologkoren_se.translations import translations
 
@@ -64,10 +65,10 @@ def fix_missing_lang_code():
     try:
         # Does this new path match any view?
         urls.match(new_path)
-    except werkzeug.routing.RequestRedirect as e:
+    except RequestRedirect as e:
         # The new path results in a redirect.
         return flask.redirect(e.new_url)
-    except (werkzeug.routing.MethodNotAllowed, werkzeug.routing.NotFound):
+    except (MethodNotAllowed, NotFound):
         # The new path does not match anything, we allow the request
         # to continue with the non-lang path. Probably 404. In case
         # this request results in something that does want a lang
