@@ -26,6 +26,10 @@
 
   {{ form_entry(form.file) }}
 
+  {% if file %}
+  {{ form_entry_row(form.keep_filename) }}
+  {% endif %}
+
   <div class="form-field">
     <button>Spara</button> | <a href="{{ url_for('admin.files') }}">Avbryt</a>
   </div>
