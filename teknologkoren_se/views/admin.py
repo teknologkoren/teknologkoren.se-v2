@@ -1,3 +1,5 @@
+import os
+
 import flask
 import flask_login
 import pytz
@@ -463,10 +465,10 @@ def files():
 def file(file_id=None):
     if file_id:
         file = models.File.query.get_or_404(file_id)
+        form = forms.ReplaceFileForm(obj=file)
     else:
         file = None
-
-    form = forms.UploadFileForm(obj=file)
+        form = forms.UploadFileForm()
 
     if form.validate_on_submit():
         if not file:
@@ -476,12 +478,18 @@ def file(file_id=None):
             file = models.File()
 
         if form.file.data:
-            filename = util.file_uploads.save(form.file.data)
+            if file_id and form.keep_filename.data:
+                os.remove(util.file_uploads.path(file.filename))
+                filename = util.file_uploads.save(form.file.data, name=file.filename)
+            else:
+                filename = util.file_uploads.save(form.file.data)
             file.filename = filename
 
         if not file_id:
             models.db.session.add(file)
         models.db.session.commit()
+
+        return flask.redirect(flask.url_for('admin.file', file_id=file.id))
     else:
         forms.flash_errors(form)
 
@@ -493,10 +501,10 @@ def file(file_id=None):
 def image(file_id=None):
     if file_id:
         image = models.Image.query.get_or_404(file_id)
+        form = forms.ReplaceImageForm(obj=image)
     else:
         image = None
-
-    form = forms.UploadImageForm(obj=image)
+        form = forms.UploadImageForm()
 
     if form.validate_on_submit():
         if not image:
@@ -506,13 +514,20 @@ def image(file_id=None):
             image = models.Image()
 
         if form.image.data:
-            filename = util.image_uploads.save(form.image.data)
+            if file_id and form.keep_filename.data:
+                os.remove(util.image_uploads.path(image.filename))
+                filename = util.image_uploads.save(form.image.data, name=image.filename)
+            else:
+                filename = util.image_uploads.save(form.image.data)
             image.filename = filename
+
         image.portrait = form.portrait.data
 
         if not file_id:
             models.db.session.add(image)
         models.db.session.commit()
+
+        return flask.redirect(flask.url_for('admin.image', file_id=image.id))
     else:
         forms.flash_errors(form)
 

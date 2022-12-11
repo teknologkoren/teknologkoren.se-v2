@@ -88,6 +88,13 @@ class UploadFileForm(FlaskForm):
     ])
 
 
+class ReplaceFileForm(UploadFileForm):
+    keep_filename = fields.BooleanField(
+        'Behåll filnamn',
+        description="Länken blir densamma, den tidigare filen tas bort."
+    )
+
+
 class UploadImageForm(FlaskForm):
     image = fields.FileField('Ladda upp ny bild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
@@ -95,6 +102,13 @@ class UploadImageForm(FlaskForm):
     portrait = fields.BooleanField(
         'Porträttläge',
         description="Bilden är i porträttläge (högre än den är bred)"
+    )
+
+
+class ReplaceImageForm(UploadImageForm):
+    keep_filename = fields.BooleanField(
+        'Behåll filnamn',
+        description="Länken blir densamma, den tidigare filen tas bort."
     )
 
 

@@ -10,17 +10,26 @@
 {% if image %}
 <p><code>{{ image.filename }}</code></p>
 <img class="edit-post-current-img" src="{{ url_for_image(image.filename, 400) }}" alt="">
-<p>URL till filen: <a href="{{ url_for_image(image.filename) }}">{{ url_for_image(image.filename) }}</a></p>
+<p>URL till filen:
+  <a href="{{ url_for_image(image.filename) }}">{{ url_for_image(image.filename) }}</a>
+</p>
+{% endif %}
+
+{% if image %}
+<h2>Ändra bild</h2>
+
+<p>Om du laddar upp en ny bild kommer den nuvarande bytas ut på alla platser den redan används. Den tidigare bilden kommer inte gå att nå utan att ha URL:en eller att fråga webmaster.</p>
 {% endif %}
 
 <form method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
-  {% if image %}
-  <h2>Ändra bild</h2>
-  <p>Om du laddar upp en ny bild kommer den nuvarande bytas ut på alla platser den redan används. Den tidigare bilden kommer inte gå att nå utan att ha URL:en eller att fråga webmaster.</p>
-  {% endif %}
   {{ form_entry(form.image) }}
+
+  {% if image %}
+  {{ form_entry_row(form.keep_filename) }}
+  {% endif %}
+
   {{ form_entry_row(form.portrait) }}
 
   <div class="form-field">
