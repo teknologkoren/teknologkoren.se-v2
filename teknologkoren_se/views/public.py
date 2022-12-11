@@ -36,7 +36,7 @@ def index(page):
     if frontpage_flash:
         flask.flash(frontpage_flash, config.flash_type or 'info')
 
-    pagination = posts.paginate(page, 5)
+    pagination = posts.paginate(page=page, per_page=5)
     return flask.render_template('public/index.html',
                                  image=config.frontpage_image,
                                  pagination=pagination,
@@ -52,7 +52,7 @@ def events(page):
         .order_by(models.Event.published.desc())
     )
 
-    pagination = events.paginate(page, 5)
+    pagination = events.paginate(page=page, per_page=5)
     return flask.render_template('public/events.html',
                                  pagination=pagination,
                                  page=page)
