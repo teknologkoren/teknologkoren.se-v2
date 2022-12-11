@@ -1,6 +1,6 @@
 {% extends "admin/base.html" %}
 
-{% set title = "Redigera inlägg" %}
+{% set title = "Ladda upp fil" %}
 
 {% from "macros.html" import form_entry, form_entry_row %}
 
@@ -8,7 +8,7 @@
 
 <h1>Fil</h1>
 {% if file %}
-<code>{{ file.filename }}</code>
+<p><code>{{ file.filename }}</code></p>
 
 <p>URL till filen:
   <a href="{{ url_for_file(file.filename) }}">{{ url_for_file(file.filename) }}</a>
