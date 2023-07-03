@@ -44,6 +44,12 @@ events and pages are generated from some paragraphs of "lorem ipsum" and
 a bit of random "logic".
 
 
+### Running a test instance
+```sh
+FLASK_DEBUG=1 flask run
+```
+
+
 ### Create an admin user
 ```sh
 flask createadmin
