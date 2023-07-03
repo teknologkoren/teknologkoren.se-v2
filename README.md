@@ -36,11 +36,12 @@ pip-sync
 
 ### Populating a mock database
 ```sh
+flask initdb
 flask populatetestdb
 ```
-This will populate the database with some mock data. Posts, events and pages
-are generated from some paragraphs of "lorem ipsum" and a bit of random
-"logic".
+This will create the database and populate it with some mock data. Posts,
+events and pages are generated from some paragraphs of "lorem ipsum" and
+a bit of random "logic".
 
 
 ### Create an admin user
