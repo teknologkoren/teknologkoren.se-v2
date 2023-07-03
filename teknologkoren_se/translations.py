@@ -43,7 +43,7 @@ translations = {
     },
     'nav-apply': {
         'en': "Sing with us",
-        'sv': "Sjung med",
+        'sv': "Sjung med oss",
     },
     'nav-contact': {
         'en': "Contact",
