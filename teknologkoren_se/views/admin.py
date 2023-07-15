@@ -315,7 +315,8 @@ def event(event_id=None):
     # If form was submitted, display the new form data, else convert utc to cet
     # Gets converted back to utc from cet on submit that got through validation
     if event and not form.is_submitted():
-        form.start_time.data = utc_to_cet(event.start_time)
+        if event.start_time:
+            form.start_time.data = utc_to_cet(event.start_time)
         if event.published:
             form.published.data = utc_to_cet(event.published)
 
