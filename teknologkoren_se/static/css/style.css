@@ -273,6 +273,10 @@ article.post > header {
   object-fit: cover;
 }
 
+.bottom-margin-image {
+  margin-bottom: 1rem;
+}
+
 .portrait-image {
   float: right;
   width: 30%;
