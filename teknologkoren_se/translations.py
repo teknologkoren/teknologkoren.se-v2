@@ -30,7 +30,7 @@ translations = {
         'sv': "Hem",
     },
     'nav-about': {
-        'en': "About us",
+        'en': "About Us",
         'sv': "Om oss",
     },
     'nav-events': {
@@ -38,11 +38,11 @@ translations = {
         'sv': "Konserter",
     },
     'nav-hire': {
-        'en': "Hire us",
+        'en': "Hire Us",
         'sv': "Boka oss",
     },
     'nav-apply': {
-        'en': "Sing with us",
+        'en': "Sing With Us",
         'sv': "Sjung med oss",
     },
     'nav-contact': {
