@@ -49,3 +49,30 @@ From the root directory, run
 uv run python -m migrations.<name_of_migration>
 ```
 As it is run as a module, do not include the file extension (`.py`).
+
+
+## Deployment
+The site is deployed with Docker. On the server, put the production
+configuration in `instance/config.py` (`DEBUG = False`, secret key,
+`SERVER_NAME`, `SESSION_COOKIE_SECURE = True`, database path under
+`instance/` — note the checked-in default config sets `DEBUG = True`),
+then:
+
+```sh
+docker compose up -d --build
+```
+
+The app listens on `127.0.0.1:8000`; nginx on the host terminates TLS,
+proxies to it, and serves `teknologkoren_se/static/` (including the
+`img<width>/` resizing locations) directly from the repository checkout.
+`instance/` and `teknologkoren_se/static/uploads/` are bind mounts, so
+the database and uploads live on the host and are backed up as plain
+files.
+
+To run a one-off command (e.g. a migration or `flask createadmin`)
+inside the container:
+
+```sh
+docker compose exec app flask createadmin
+docker compose exec app python -m migrations.<name_of_migration>
+```

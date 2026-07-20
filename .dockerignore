@@ -1,0 +1,30 @@
+# .dockerignore is independent of .gitignore.
+
+# VCS and tooling state
+.git
+.github
+.claude
+.gitignore
+.venv
+venv
+__pycache__
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+.coverage
+.python-version
+
+# Runtime state — provided via bind mounts, never baked into the image
+instance
+teknologkoren_se/static/uploads
+db.sqlite
+
+# Not needed at runtime (migrations/ stays in: they are run in-container
+# with `python -m migrations.<name>` against the mounted instance db)
+tests
+
+# Docker files themselves
+Dockerfile
+docker-compose*.yml
+.dockerignore
