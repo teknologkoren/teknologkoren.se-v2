@@ -1,3 +1,9 @@
+[tool.ruff.lint]
+# Deliberately minimal, same set as flasquelistan: syntax errors,
+# undefined names, unused imports/variables (F), basic pycodestyle
+# errors (E4/E7/E9) and bare excepts (E722). Widen once useful.
+select = ["E4", "E7", "E9", "F", "E722"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "*_test.py"

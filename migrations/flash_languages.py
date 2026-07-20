@@ -1,6 +1,5 @@
 """Adds multiple languages to flashes"""
 
-import datetime
 import sqlite3
 
 from app import app
