@@ -15,6 +15,7 @@ dependencies = [
     "flask-reuploaded>=1.5",
     "flask-sqlalchemy>=3.1",
     "flask-wtf>=1.2",
+    "gunicorn>=26.0.0",
     "markdown>=3.8",
     "mdx-linkify>=2.1",
     "phonenumbers>=9.0",
