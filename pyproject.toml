@@ -7,3 +7,19 @@ select = ["E4", "E7", "E9", "F", "E722"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "*_test.py"
+
+[tool.coverage.run]
+branch = true
+source = ["teknologkoren_se"]
+
+[tool.coverage.report]
+show_missing = true
+# Ratchet: bump towards the current measured coverage (minus a small
+# margin) whenever new tests land. Never lower it. Measured 83% when
+# introduced.
+fail_under = 81
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+]

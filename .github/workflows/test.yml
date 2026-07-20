@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run tests
+        run: coverage run -m pytest -q
+
+      # Fails if coverage drops below the fail_under threshold in
+      # pyproject.toml.
+      - name: Coverage report
+        run: coverage report
+
+      - name: Lint
+        run: ruff check .
