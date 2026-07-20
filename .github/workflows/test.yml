@@ -4,27 +4,30 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
-          python-version: "3.13"
-          cache: pip
+          enable-cache: true
 
+      # --locked makes CI fail if uv.lock has drifted from pyproject.toml.
       - name: Install dependencies
-        run: pip install -r requirements.txt -r requirements-dev.txt
+        run: uv sync --locked
 
       - name: Run tests
-        run: coverage run -m pytest -q
+        run: uv run coverage run -m pytest -q
 
       # Fails if coverage drops below the fail_under threshold in
       # pyproject.toml.
       - name: Coverage report
-        run: coverage report
+        run: uv run coverage report
 
       - name: Lint
-        run: ruff check .
+        run: uv run ruff check .
