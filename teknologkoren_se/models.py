@@ -310,15 +310,24 @@ class AdminUser(flask_login.UserMixin, db.Model):
     def password(self):
         return self._password_hash
 
+    @staticmethod
+    def _bcrypt_input(plaintext):
+        # bcrypt only considers the first 72 bytes. bcrypt 4.x truncated
+        # silently; 5.x raises ValueError instead. Truncate explicitly to
+        # keep longer passwords working, and in the same way as the 4.x
+        # era hashes in the database were created.
+        return plaintext.encode()[:72]
+
     @password.setter
     def password(self, plaintext):
-        hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(12))
+        hash = bcrypt.hashpw(self._bcrypt_input(plaintext), bcrypt.gensalt(12))
         self._password_hash = hash.decode()
         self._password_timestamp = datetime.datetime.utcnow()
 
     def verify_password(self, plaintext):
         """Return True if plaintext matches password, else False."""
-        correct = bcrypt.checkpw(plaintext.encode(), self._password_hash.encode())
+        correct = bcrypt.checkpw(self._bcrypt_input(plaintext),
+                                 self._password_hash.encode())
         return correct
 
     @staticmethod
