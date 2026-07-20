@@ -65,3 +65,19 @@ def make_event(published=None, title_sv='En konsert', text_sv='Kom!',
     models.db.session.add(event)
     models.db.session.commit()
     return event
+
+
+def make_contact(title='Ordförande', name='Monty Python',
+                 email='ordf@teknologkoren.se', phone='0701234567',
+                 weight=100):
+    """Create a contact, commit it and return it."""
+    contact = models.Contact(
+        title=title,
+        name=name,
+        email=email,
+        phone=phone,
+        weight=weight,
+    )
+    models.db.session.add(contact)
+    models.db.session.commit()
+    return contact
