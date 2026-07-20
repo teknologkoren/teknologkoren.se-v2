@@ -1,43 +1,29 @@
 # teknologkoren.se-v2
 ## Setup a development environment
-Create a virtual environment:
+Dependencies are managed with [uv](https://docs.astral.sh/uv/), which
+also installs a suitable Python and creates the virtual environment
+for you:
 
 ```sh
-python3 -m venv venv
+uv sync
 ```
 
-Activate the environment:
+Prefix commands with `uv run` to run them inside the environment (or
+activate it with `. .venv/bin/activate`). Add or remove dependencies
+with `uv add <package>` / `uv remove <package>`; the resolved versions
+are pinned in `uv.lock`.
 
+### Running the tests
 ```sh
-. venv/bin/activate
-```
-
-Now you may either use `pip` directly to install the dependencies, or
-you can install `pip-tools`. The latter is recommended.
-
-### pip
-
-```sh
-pip install -r requirements.txt
-```
-
-
-### pip-tools
-[pip-tools](https://github.com/jazzband/pip-tools) can keep your virtual
-environment in sync with the `requirements.txt` file, as well as compiling a
-new `requirements.txt` when adding/removing a dependency in `requirements.in`.
-
-```sh
-pip install pip-tools
-pip-compile  # only necessary when adding/removing a dependency
-pip-sync
+uv run pytest
+uv run ruff check .
 ```
 
 
 ### Populating a mock database
 ```sh
-flask initdb
-flask populatetestdb
+uv run flask initdb
+uv run flask populatetestdb
 ```
 This will create the database and populate it with some mock data. Posts,
 events and pages are generated from some paragraphs of "lorem ipsum" and
@@ -46,13 +32,13 @@ a bit of random "logic".
 
 ### Running a test instance
 ```sh
-FLASK_DEBUG=1 flask run
+FLASK_DEBUG=1 uv run flask run
 ```
 
 
 ### Create an admin user
 ```sh
-flask createadmin
+uv run flask createadmin
 ```
 You will be prompted for a username and password.
 
@@ -60,6 +46,6 @@ You will be prompted for a username and password.
 ## Migrations
 From the root directory, run
 ```sh
-python3 -m migrations.<name_of_migration>
+uv run python -m migrations.<name_of_migration>
 ```
 As it is run as a module, do not include the file extension (`.py`).
