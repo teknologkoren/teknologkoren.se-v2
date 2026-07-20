@@ -321,6 +321,20 @@ def test_verify_password(app):
     assert user.verify_password('eggseggseggs') is False
 
 
+def test_password_longer_than_72_bytes_works(app):
+    """bcrypt only considers 72 bytes; longer must not raise.
+
+    bcrypt 4.x truncated silently, 5.x raises ValueError. AdminUser
+    truncates explicitly to stay compatible with hashes created under
+    4.x, which also means bytes beyond the 72nd are ignored.
+    """
+    long_password = 'x' * 100
+    user = helpers.make_admin(password=long_password)
+    assert user.verify_password(long_password) is True
+    assert user.verify_password('x' * 72) is True
+    assert user.verify_password('x' * 71) is False
+
+
 def test_setting_new_password_invalidates_old(app):
     user = helpers.make_admin(password='spamspamspam')
     user.password = 'eggseggseggs'
