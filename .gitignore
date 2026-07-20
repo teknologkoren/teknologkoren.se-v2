@@ -5,3 +5,5 @@ venv/
 teknologkoren_se/static/uploads
 .venv/
 .pytest_cache/
+.coverage
+.ruff_cache/
