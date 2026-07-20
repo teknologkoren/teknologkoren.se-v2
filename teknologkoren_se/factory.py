@@ -17,7 +17,7 @@ def create_app(config=None, instance_config=None):
     register_blueprints(app)
     register_cli(app)
 
-    from teknologkoren_se import models, views, util
+    from teknologkoren_se import models, views
 
     models.db.init_app(app)
 
@@ -128,10 +128,10 @@ def populate_testdb():
     models.db.session.add_all(contacts)
 
     with open('teknologkoren_se/lorem_lines.txt') as f:
-        lorem_lines = [l.strip() for l in f.readlines()]
+        lorem_lines = [line.strip() for line in f.readlines()]
 
     with open('teknologkoren_se/lorem_paragraphs.txt') as f:
-        lorem_paragraphs = [l.strip() for l in f.readlines()]
+        lorem_paragraphs = [line.strip() for line in f.readlines()]
 
     def lipsum_line():
         return random.choice(lorem_lines)

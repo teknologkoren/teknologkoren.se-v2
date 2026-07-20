@@ -2,3 +2,4 @@
 # these do not affect the deployed application.
 pytest
 coverage
+ruff
