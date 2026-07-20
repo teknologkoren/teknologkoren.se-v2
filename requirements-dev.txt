@@ -1,0 +1,4 @@
+# Development/test tools. Not compiled from requirements.in on purpose:
+# these do not affect the deployed application.
+pytest
+coverage
