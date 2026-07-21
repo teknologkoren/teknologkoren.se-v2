@@ -12,9 +12,9 @@ services:
       - ./instance:/app/instance
       - ./teknologkoren_se/static/uploads:/app/teknologkoren_se/static/uploads
     restart: unless-stopped
-    # The image runs as UID 1000; if the mounted directories are owned by
-    # another user on the host, uncomment and adjust:
-    # user: "1000:1000"
+    # The image runs as UID 1001; if the bind-mounted directories below are
+    # owned by a different uid on the host, uncomment and set it:
+    # user: "1001:1001"
     healthcheck:
       # / redirects to /sv/; urlopen follows it and raises on non-2xx. No
       # Host header needed: the app does not host-match (host_matching is
