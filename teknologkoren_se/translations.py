@@ -37,10 +37,6 @@ translations = {
         'en': "Concerts",
         'sv': "Konserter",
     },
-    'nav-jubileum': {
-        'en': "Jubilee",
-        'sv': "Jubileum",
-    },
     'nav-hire': {
         'en': "Hire Us",
         'sv': "Boka oss",

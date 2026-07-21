@@ -369,8 +369,6 @@ class TestDynamicPages:
         with app.test_request_context('/sv/'):
             for url, endpoint, _, _ in self.pages:
                 assert flask.url_for(endpoint, lang_code='sv') == url
-            assert (flask.url_for('public.jubileum', lang_code='sv')
-                    == '/sv/jubileum')
 
     def test_each_url_serves_its_own_page(self, client):
         # Give every Page row unmistakable content, then check that
@@ -391,15 +389,6 @@ class TestDynamicPages:
                 if other_path != path:
                     assert ('Unik text för sidan {}.'.format(other_path)
                             not in text)
-
-    def test_jubileum_404s_without_page_row(self, client):
-        # The route exists, but `flask initdb` does not seed a Page row
-        # with path 'jubileum', so first_or_404() aborts.
-        assert models.Page.query.filter_by(path='jubileum').first() is None
-
-        response = client.get('/sv/jubileum')
-        assert response.status_code == 404
-
 
 class TestLogin:
     def test_get(self, client):

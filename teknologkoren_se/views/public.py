@@ -136,8 +136,7 @@ def view_page_factory(path, endpoint):
 
 def init_dynamic_pages():
     pages = [('om-oss', 'about'), ('boka', 'hire'),
-             ('sjung', 'apply'), ('lucia', 'lucia'),
-             ('jubileum', 'jubileum')]
+             ('sjung', 'apply'), ('lucia', 'lucia')]
     for endpoint, path in pages:
         view_func = view_page_factory(endpoint, path)
         mod.add_url_rule(*view_func)
