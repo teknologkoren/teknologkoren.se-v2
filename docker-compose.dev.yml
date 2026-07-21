@@ -1,0 +1,17 @@
+# Development override: run the production image but with the source tree
+# bind-mounted and gunicorn reloading on changes. Useful for prod-parity
+# testing (gunicorn, the pinned Python); for the fastest day-to-day loop
+# use `uv run flask run` outside Docker instead — see README.md.
+#
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# With the whole repo mounted over /app the app runs from your working
+# tree, and FLASK_DEBUG registers the debug-only image-resize redirect
+# routes so uploaded images render without nginx in front.
+services:
+  app:
+    volumes:
+      - .:/app  # safe: the virtualenv lives in /opt/venv, outside /app
+    environment:
+      FLASK_DEBUG: "1"
+    command: gunicorn -w 1 -b 0.0.0.0:8000 --reload app:app
