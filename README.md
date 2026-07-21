@@ -35,6 +35,15 @@ a bit of random "logic".
 FLASK_DEBUG=1 uv run flask run
 ```
 
+To instead run the production Docker image against your working tree
+(gunicorn with live reload, useful for prod-parity checks), use the
+development compose override:
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+This is reachable on `http://127.0.0.1:8001/`.
+
 
 ### Create an admin user
 ```sh
