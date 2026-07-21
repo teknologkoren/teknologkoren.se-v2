@@ -16,9 +16,10 @@ RUN uv sync --locked --no-dev --compile-bytecode
 
 COPY . .
 
-# UID 1000 matches the typical owner of the bind-mounted instance/ and
-# uploads/ directories on the host; override with `user:` in compose if not.
-RUN useradd --create-home --uid 1000 app
+# Run as an unprivileged user. Its UID should match the owner of the
+# bind-mounted instance/ and uploads/ directories; override with `user:`
+# in compose if that owner's uid differs.
+RUN useradd --create-home --uid 1001 app
 USER app
 
 EXPOSE 8000
