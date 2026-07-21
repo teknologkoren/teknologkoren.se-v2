@@ -39,6 +39,9 @@ def refresh():
     '/admin/event/new',
     '/admin/users',
     '/admin/page/1',
+    '/admin/files/',
+    '/admin/files/file/',
+    '/admin/files/image/',
 ])
 def test_admin_views_redirect_anonymous_to_login(client, path):
     response = client.get(path)
@@ -46,30 +49,18 @@ def test_admin_views_redirect_anonymous_to_login(client, path):
     assert '/login' in response.headers['Location']
 
 
-@pytest.mark.parametrize('path', [
-    '/admin/files/',
-    '/admin/files/file/',
-    '/admin/files/image/',
+@pytest.mark.parametrize(('path', 'field', 'contents', 'filename'), [
+    ('/admin/files/file/', 'file', b'anonymous was here', 'anon-upload.txt'),
+    ('/admin/files/image/', 'image', PNG_BYTES, 'anon-upload.png'),
 ])
-def test_files_views_are_not_login_protected(client, path):
-    # KNOWN BUG (teknologkoren_se/views/admin.py:457, :464, :500): the
-    # files(), file() and image() views are the only admin views without
-    # @flask_login.login_required, so anonymous visitors can list all
-    # uploads and upload/replace files and images. These tests document
-    # the current (unprotected) behavior; when the views gain login
-    # protection they should be moved into the parametrize list above.
-    response = client.get(path)
-    assert response.status_code == 200
-
-
-def test_file_upload_is_not_login_protected(client):
-    # KNOWN BUG, see test_files_views_are_not_login_protected: this
-    # upload succeeds without any login.
-    response = client.post('/admin/files/file/', data={
-        'file': (io.BytesIO(b'anonymous was here'), 'anon-upload.txt'),
+def test_file_uploads_redirect_anonymous_to_login(
+        client, path, field, contents, filename):
+    response = client.post(path, data={
+        field: (io.BytesIO(contents), filename),
     })
     assert response.status_code == 302
-    assert models.File.query.filter_by(type='file').count() == 1
+    assert '/login' in response.headers['Location']
+    assert models.File.query.count() == 0
 
 
 # Admin index
