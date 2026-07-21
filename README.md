@@ -68,7 +68,7 @@ configuration in `instance/config.py` (`DEBUG = False`, secret key,
 then:
 
 ```sh
-docker compose up -d --build
+sudo docker compose up -d --build
 ```
 
 The app is published on `127.0.0.1:8001`; nginx on the host terminates
@@ -82,6 +82,6 @@ To run a one-off command (e.g. a migration or `flask createadmin`)
 inside the container:
 
 ```sh
-docker compose exec app flask createadmin
-docker compose exec app python -m migrations.<name_of_migration>
+sudo docker compose exec app flask createadmin
+sudo docker compose exec app python -m migrations.<name_of_migration>
 ```
