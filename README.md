@@ -62,8 +62,8 @@ then:
 docker compose up -d --build
 ```
 
-The app listens on `127.0.0.1:8000`; nginx on the host terminates TLS,
-proxies to it, and serves `teknologkoren_se/static/` (including the
+The app is published on `127.0.0.1:8001`; nginx on the host terminates
+TLS, proxies to it, and serves `teknologkoren_se/static/` (including the
 `img<width>/` resizing locations) directly from the repository checkout.
 `instance/` and `teknologkoren_se/static/uploads/` are bind mounts, so
 the database and uploads live on the host and are backed up as plain
