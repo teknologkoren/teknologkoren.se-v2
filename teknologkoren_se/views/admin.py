@@ -455,6 +455,7 @@ def users():
 
 
 @mod.route('/files/')
+@flask_login.login_required
 def files():
     files = models.File.query.filter_by(type='file').all()
     images = models.Image.query.all()
@@ -463,6 +464,7 @@ def files():
 
 @mod.route('/files/file/', methods=['GET', 'POST'])
 @mod.route('/files/file/<int:file_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def file(file_id=None):
     if file_id:
         file = models.File.query.get_or_404(file_id)
@@ -499,6 +501,7 @@ def file(file_id=None):
 
 @mod.route('/files/image/', methods=['GET', 'POST'])
 @mod.route('/files/image/<int:file_id>', methods=['GET', 'POST'])
+@flask_login.login_required
 def image(file_id=None):
     if file_id:
         image = models.Image.query.get_or_404(file_id)
