@@ -35,9 +35,8 @@ a bit of random "logic".
 FLASK_DEBUG=1 uv run flask run
 ```
 
-To instead run the production Docker image against your working tree
-(gunicorn with live reload, useful for prod-parity checks), use the
-development compose override:
+Alternatively, you can run the app in Docker against your working tree
+(gunicorn with live reload) using the development compose override:
 
 ```sh
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
@@ -61,27 +60,31 @@ As it is run as a module, do not include the file extension (`.py`).
 
 
 ## Deployment
-The site is deployed with Docker. On the server, put the production
-configuration in `instance/config.py` (`DEBUG = False`, secret key,
-`SERVER_NAME`, `SESSION_COOKIE_SECURE = True`, database path under
-`instance/` — note the checked-in default config sets `DEBUG = True`),
-then:
+In production the site runs with gunicorn (`gunicorn -w 3 app:app`) as a
+systemd service, from a virtual environment created by uv. Docker is not
+used in production. On the server, put the production configuration in
+`instance/config.py` (`DEBUG = False`, secret key, `SERVER_NAME`,
+`SESSION_COOKIE_SECURE = True`, database path under `instance/` — note
+the checked-in default config sets `DEBUG = True`). To deploy a new
+version:
 
 ```sh
-sudo docker compose up -d --build
+git pull
+uv sync --locked --no-dev
 ```
 
-The app is published on `127.0.0.1:8001`; nginx on the host terminates
-TLS, proxies to it, and serves `teknologkoren_se/static/` (including the
-`img<width>/` resizing locations) directly from the repository checkout.
-`instance/` and `teknologkoren_se/static/uploads/` are bind mounts, so
-the database and uploads live on the host and are backed up as plain
-files.
+and then restart the service.
 
-To run a one-off command (e.g. a migration or `flask createadmin`)
-inside the container:
+nginx on the host terminates TLS, proxies to gunicorn, and serves
+`teknologkoren_se/static/` (including the `img<width>/` resizing
+locations) directly from the repository checkout. The database
+(`instance/`) and uploads (`teknologkoren_se/static/uploads/`) are plain
+files in the checkout.
+
+Run one-off commands (e.g. a migration or `flask createadmin`) from the
+checkout with the environment's executables:
 
 ```sh
-sudo docker compose exec app flask createadmin
-sudo docker compose exec app python -m migrations.<name_of_migration>
+.venv/bin/flask createadmin
+.venv/bin/python -m migrations.<name_of_migration>
 ```
